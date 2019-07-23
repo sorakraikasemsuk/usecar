@@ -1,0 +1,106 @@
+﻿@import 'Login.scss';
+
+.layout-header {
+    display: flex;
+    justify-content: space-between;
+    height: 60px;
+    background-color: #35ad51;
+
+    .bar-menu {
+        color: white;
+        padding: 15px;
+
+        :hover {
+            cursor: pointer;
+        }
+    }
+
+    .profile {
+        padding: 15px;
+        color: white;
+        position: relative;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        .list-group{
+            position:absolute;
+            left:0;
+            top:80%;
+            width:100%;
+            display:none;
+            li{
+                color:black;
+                a{
+                    color:black;
+                    display:block;
+                    &:hover{
+                        text-decoration:none;
+                    }
+                    i{
+                        padding-top:4px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.layout-body {
+    display: flex;
+    height: calc(100vh - 60px);
+
+    .menu {
+        width: 25%;
+        background-color: white;
+        overflow:auto;
+
+        .list-menu {
+            list-style-type: none;
+            padding: 0;
+
+            .item-menu {
+                align-items: center;
+
+                a {
+                    display: block;
+                    color: black;
+                    padding:15px;
+                    i {
+                        padding-top: 4px;
+                    }
+
+                    &:hover {
+                        text-decoration: none;
+                        cursor: pointer;
+                        background-color: #eeeeee;
+                    }
+                }
+
+                ul.sub-menu {
+
+                    li.item-sub-menu {
+                        align-items: center;
+                        margin-left: 5px;
+
+                        a {
+                            display: block;
+                            color: black;
+                            padding:15px;
+                            &:hover {
+                                text-decoration: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .content {
+        padding: 15px;
+        background-color: #eeeeee;
+        width: 100%;
+    }
+}
