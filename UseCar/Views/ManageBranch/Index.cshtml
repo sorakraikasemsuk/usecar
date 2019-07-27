@@ -1,0 +1,117 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1><i class="fa fa-code-branch"></i> จัดการสาขา</h1>
+<hr />
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">ชื่อสาขา</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <button type="button" class="btn btn-primary"><i class="fa fa-search"></i> ค้นหา</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-1">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal"><i class="fa fa-plus"></i> เพิ่มสาขา</button>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-md-12">
+                <table id="branchTable" class="table table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>ชื่อสาขา</th>
+                            <th>ที่อยู่สาขา</th>
+                            <th>เบอร์โทร</th>
+                            <th>จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>สำนักงานใหญ่</td>
+                            <td>
+                                54/1 ถนน กม.3 ต.อรัญประเทศ
+                                อ.อรัญประเทศ จ.สระแก้ว 27120
+                            </td>
+                            <td>123456789</td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-sm"><i class="fa fa-edit"></i></button>
+                                <button type="button" class="btn btn-sm"><i class="fa fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">เพิ่ม/แก้ไขสาขา</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-sm-12 col-form-label">ชื่อสาขา</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-12 col-form-label">ที่อยู่</label>
+                    <div class="col-sm-12">
+                        <textarea rows="3" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-12 col-form-label">เบอร์โทร</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-times"></i> ปิด</button>
+                <button type="button" class="btn btn-primary"><i class="fa fa-save"></i> บันทึก</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#branchTable').DataTable({
+                order: [],
+                searching: false,
+                ordering: true,
+                lengthChange: false,
+                pagingType: 'full_numbers',
+                bSort: false,
+            });
+        });
+    </script>
+}
