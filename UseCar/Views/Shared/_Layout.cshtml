@@ -13,15 +13,12 @@
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
               crossorigin="anonymous"
-              integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE="/>
+              integrity="sha256-eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=" />
     </environment>
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/custom.min.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
-    <link rel="stylesheet" href="~/lib/datatable/css/datatable.min.css" />
-    <link rel="stylesheet" href="~/lib/datatable/css/datatable-bootstrap.min.css" />
-    <link rel="stylesheet" href="~/lib/datatable/css/datatable.min.css" />
-    <link rel="stylesheet" href="~/lib/datatable/css/datatable-bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/datatable-bs4/css/dataTables.bootstrap4.min.css" />
 </head>
 <body>
     <div class="layout-header">
@@ -48,19 +45,19 @@
                     <a href="/Setting"><i class="fa fa-cog"></i> ตั้งค่า</a>
                 </li>
                 @*<li class="item-menu">
-                    <a href="#">ผู้ดูแลระบบ <i class="fa fa-angle-down fa-pull-right"></i></a>
-                    <ul class="sub-menu">
-                        <li class="item-sub-menu">
-                            <a href="/User">ผู้ใช้งาน</a>
-                        </li>
-                        <li class="item-sub-menu">
-                            <a href="/Permission">สิทธิ์การใช้งาน</a>
-                        </li>
-                        <li class="item-sub-menu">
-                            <a href="/MasterData">ข้อมูลต่างๆ</a>
-                        </li>
-                    </ul>
-                </li>*@
+                        <a href="#">ผู้ดูแลระบบ <i class="fa fa-angle-down fa-pull-right"></i></a>
+                        <ul class="sub-menu">
+                            <li class="item-sub-menu">
+                                <a href="/User">ผู้ใช้งาน</a>
+                            </li>
+                            <li class="item-sub-menu">
+                                <a href="/Permission">สิทธิ์การใช้งาน</a>
+                            </li>
+                            <li class="item-sub-menu">
+                                <a href="/MasterData">ข้อมูลต่างๆ</a>
+                            </li>
+                        </ul>
+                    </li>*@
             </ul>
         </div>
         <div class="content">
@@ -96,8 +93,8 @@
     <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/lib/datatable/js/datatable.js"></script>
-    <script src="~/lib/datatable/js/datatable.jquery.js"></script>
+    <script src="~/lib/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/datatable-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script>
         $(document).ready(function () {
             $('.profile').click(function () {
