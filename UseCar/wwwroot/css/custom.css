@@ -14,6 +14,13 @@
     background-repeat: no-repeat;
     background-size: contain; }
 
+.settingModule .setting-item:link {
+  color: black; }
+
+.settingModule .setting-item:hover {
+  cursor: pointer;
+  background-color: #808080; }
+
 .layout-header {
   display: flex;
   justify-content: space-between;
