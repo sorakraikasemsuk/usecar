@@ -21,6 +21,9 @@
   cursor: pointer;
   background-color: #808080; }
 
+.settingModule .setting-item:visited {
+  color: black; }
+
 .layout-header {
   display: flex;
   justify-content: space-between;
