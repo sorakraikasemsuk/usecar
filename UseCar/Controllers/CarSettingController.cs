@@ -24,5 +24,9 @@ namespace UseCar.Controllers
         {
             return View();
         }
+        public IActionResult SubFace(int brandId,int generationId,int faceId)
+        {
+            return View();
+        }
     }
 }
