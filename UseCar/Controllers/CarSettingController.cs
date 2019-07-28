@@ -12,5 +12,9 @@ namespace UseCar.Controllers
         {
             return View();
         }
+        public IActionResult Brand()
+        {
+            return View();
+        }
     }
 }
