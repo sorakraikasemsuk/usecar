@@ -20,5 +20,9 @@ namespace UseCar.Controllers
         {
             return View();
         }
+        public IActionResult Face(int brandId,int generationId)
+        {
+            return View();
+        }
     }
 }
