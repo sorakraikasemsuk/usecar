@@ -1,11 +1,12 @@
-﻿@import 'Login.scss';
+﻿@import '_variable.scss';
+@import 'Login.scss';
 @import 'Setting.scss';
 @import 'CarSetting.scss';
 .layout-header {
     display: flex;
     justify-content: space-between;
     height: 60px;
-    background-color: #35ad51;
+    background-color: $main_color;
 
     .bar-menu {
         color: white;
@@ -66,7 +67,7 @@
 
                 a {
                     display: block;
-                    color: black;
+                    color: $main_color;
                     padding:15px;
                     i {
                         padding-top: 4px;
@@ -104,4 +105,11 @@
         background-color: #eeeeee;
         width: 100%;
     }
+}
+
+.border-width-5{
+    border-width:5px;
+}
+.line-height-60{
+    line-height:60px;
 }

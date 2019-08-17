@@ -1,12 +1,14 @@
 ﻿body {
   height: 100vh;
-  margin: 0; }
+  margin: 0;
+  background-color: #375ECE; }
 
 .login {
   height: 460px;
   width: 400px;
   border: solid 1px;
-  border-radius: 1%; }
+  border-radius: 1%;
+  background-color: #ffffff; }
   .login .img-login {
     height: 120px;
     background-image: url("../images/logo.jpg");
@@ -19,7 +21,8 @@
 
 .settingModule .setting-item:hover {
   cursor: pointer;
-  background-color: #808080; }
+  background-color: #808080;
+  text-decoration: none; }
 
 .settingModule .setting-item:visited {
   color: black; }
@@ -28,7 +31,7 @@
   display: flex;
   justify-content: space-between;
   height: 60px;
-  background-color: #35ad51; }
+  background-color: #375ECE; }
   .layout-header .bar-menu {
     color: white;
     padding: 15px; }
@@ -70,7 +73,7 @@
         align-items: center; }
         .layout-body .menu .list-menu .item-menu a {
           display: block;
-          color: black;
+          color: #375ECE;
           padding: 15px; }
           .layout-body .menu .list-menu .item-menu a i {
             padding-top: 4px; }
@@ -91,3 +94,9 @@
     padding: 15px;
     background-color: #eeeeee;
     width: 100%; }
+
+.border-width-5 {
+  border-width: 5px; }
+
+.line-height-60 {
+  line-height: 60px; }

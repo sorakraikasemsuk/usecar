@@ -1,13 +1,14 @@
 ﻿body{
     height:100vh;
     margin:0;
+    background-color:$main_color;
 }
 .login {
     height: 460px;
     width: 400px;
     border: solid 1px;
     border-radius: 1%;
-
+    background-color:$color_white;
     .img-login {
         height: 120px;
         background-image: url('../images/logo.jpg');
