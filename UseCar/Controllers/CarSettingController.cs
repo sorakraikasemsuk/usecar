@@ -60,5 +60,9 @@ namespace UseCar.Controllers
         {
             return View();
         }
+        public IActionResult Color()
+        {
+            return View();
+        }
     }
 }
