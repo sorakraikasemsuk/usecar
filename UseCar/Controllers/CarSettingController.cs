@@ -32,5 +32,9 @@ namespace UseCar.Controllers
         {
             return View();
         }
+        public IActionResult CapacityEngine()
+        {
+            return View();
+        }
     }
 }
