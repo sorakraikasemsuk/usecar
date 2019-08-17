@@ -28,5 +28,9 @@ namespace UseCar.Controllers
         {
             return View();
         }
+        public IActionResult Gear()
+        {
+            return View();
+        }
     }
 }
