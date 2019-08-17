@@ -48,5 +48,9 @@ namespace UseCar.Controllers
         {
             return View();
         }
+        public IActionResult Nature(int typeId)
+        {
+            return View();
+        }
     }
 }
