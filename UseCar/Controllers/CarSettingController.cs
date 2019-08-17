@@ -56,5 +56,9 @@ namespace UseCar.Controllers
         {
             return View();
         }
+        public IActionResult DriveSystem()
+        {
+            return View();
+        }
     }
 }
