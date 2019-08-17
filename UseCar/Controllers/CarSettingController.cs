@@ -52,5 +52,9 @@ namespace UseCar.Controllers
         {
             return View();
         }
+        public IActionResult Option()
+        {
+            return View();
+        }
     }
 }
