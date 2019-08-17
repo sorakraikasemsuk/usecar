@@ -64,5 +64,9 @@ namespace UseCar.Controllers
         {
             return View();
         }
+        public IActionResult EngineType()
+        {
+            return View();
+        }
     }
 }
