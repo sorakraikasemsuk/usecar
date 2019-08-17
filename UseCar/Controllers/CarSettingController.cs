@@ -40,5 +40,9 @@ namespace UseCar.Controllers
         {
             return View();
         }
+        public IActionResult Seat()
+        {
+            return View();
+        }
     }
 }
