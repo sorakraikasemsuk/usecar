@@ -63,14 +63,15 @@
   display: flex;
   height: calc(100vh - 60px); }
   .layout-body .menu {
-    width: 15%;
+    width: 20%;
     background-color: white;
     overflow: auto; }
     .layout-body .menu .list-menu {
       list-style-type: none;
       padding: 0; }
       .layout-body .menu .list-menu .item-menu {
-        align-items: center; }
+        align-items: center;
+        border-bottom: solid 1px #eeeeee; }
         .layout-body .menu .list-menu .item-menu a {
           display: block;
           color: #375ECE;
@@ -90,6 +91,8 @@
             padding: 15px; }
             .layout-body .menu .list-menu .item-menu ul.sub-menu li.item-sub-menu a:hover {
               text-decoration: none; }
+      .layout-body .menu .list-menu .active {
+        background-color: #eeeeee; }
   .layout-body .content {
     padding: 15px;
     background-color: #eeeeee;
