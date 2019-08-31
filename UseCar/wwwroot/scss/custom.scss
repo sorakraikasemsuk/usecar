@@ -2,6 +2,11 @@
 @import 'Login.scss';
 @import 'Setting.scss';
 @import 'CarSetting.scss';
+
+h1{
+    color:$font_color;
+}
+
 .layout-header {
     display: flex;
     justify-content: space-between;
@@ -117,4 +122,23 @@
 }
 .line-height-60{
     line-height:60px;
+}
+.border-left-color{
+    border-left-color:$main_color;
+}
+
+.setting-item {
+    &:link {
+        color: $main_color;
+    }
+
+    &:hover {
+        cursor: pointer;
+        background-color: #808080;
+        text-decoration: none;
+    }
+
+    &:visited {
+        color: $main_color;
+    }
 }
