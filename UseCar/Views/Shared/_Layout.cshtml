@@ -42,22 +42,34 @@
                     <a href="#"><i class="fa fa-home"></i> Dashboard</a>
                 </li>
                 <li class="item-menu">
+                    <a href="/Car"><i class="fa fa-car"></i> ข้อมูลรถ</a>
+                </li>
+                <li class="item-menu">
+                    <a href="/ReceiveCar"><i class="fa fa-car-side"></i> รับรถ</a>
+                </li>
+                <li class="item-menu">
+                    <a href="/MaintenanceCar"><i class="fa fa-wrench"></i> ส่งซ่อม</a>
+                </li>
+                <li class="item-menu">
                     <a href="/Setting"><i class="fa fa-cog"></i> ตั้งค่า</a>
                 </li>
+                <li class="item-menu">
+                    <a href="/Admin"><i class="fa fa-user-cog"></i> ผู้ดูแลระบบ</a>
+                </li>
                 @*<li class="item-menu">
-                        <a href="#">ผู้ดูแลระบบ <i class="fa fa-angle-down fa-pull-right"></i></a>
-                        <ul class="sub-menu">
-                            <li class="item-sub-menu">
-                                <a href="/User">ผู้ใช้งาน</a>
-                            </li>
-                            <li class="item-sub-menu">
-                                <a href="/Permission">สิทธิ์การใช้งาน</a>
-                            </li>
-                            <li class="item-sub-menu">
-                                <a href="/MasterData">ข้อมูลต่างๆ</a>
-                            </li>
-                        </ul>
-                    </li>*@
+            <a href="#">ผู้ดูแลระบบ <i class="fa fa-angle-down fa-pull-right"></i></a>
+            <ul class="sub-menu">
+                <li class="item-sub-menu">
+                    <a href="/User">ผู้ใช้งาน</a>
+                </li>
+                <li class="item-sub-menu">
+                    <a href="/Permission">สิทธิ์การใช้งาน</a>
+                </li>
+                <li class="item-sub-menu">
+                    <a href="/MasterData">ข้อมูลต่างๆ</a>
+                </li>
+            </ul>
+        </li>*@
             </ul>
         </div>
         <div class="content">
@@ -104,6 +116,11 @@
                 var sectionMenu = $('.menu');
                 sectionMenu.toggle('slide');
             });
+
+            $('.item-menu > a').click(function () {
+                $('.item-menu').removeClass('active');
+                $(this).parent().addClass('active');
+            })
             //$('.item-menu > a').click(function () {
             //    var hasChild = $(this).siblings('.sub-menu');
             //    if (hasChild.length > 0) {
