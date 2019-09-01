@@ -1,0 +1,178 @@
+﻿
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1><i class="fa fa-wrench"></i> เพิ่มข้อมูลส่งซ่อม</h1>
+<hr />
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/Home">หน้าแรก</a></li>
+        <li class="breadcrumb-item"><a href="/MaintenanceCar">ส่งซ่อม</a></li>
+        <li class="breadcrumb-item active" aria-current="page">เพิ่มข้อมูลส่งซ่อม</li>
+    </ol>
+</nav>
+
+<form>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fa fa-clipboard-list"></i> ข้อมูลส่งซ่อม</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>รหัสใบซ่อม</label>
+                                <input type="text" class="form-control" disabled value="MA201909-XXXX" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>รถที่ส่งซ่อม</label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i class="fa fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>ร้านที่ส่งซ่อม</label>
+                                <select class="form-control"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>วันที่ส่งซ่อม</label>
+                                <input type="text" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>วันที่เสร็จ</label>
+                                <input type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>หมายเหตุ</label>
+                                <textarea class="form-control" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fa fa-clipboard-list"></i> รายละเอียดการซ่อม</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal"><i class="fa fa-plus"></i> เพิ่มรายละเอียดการซ่อม</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-bordered mt-2">
+                                <thead>
+                                    <tr>
+                                        <th width="10%">รายการที่</th>
+                                        <th>รายละเอียด</th>
+                                        <th width="10%">ราคา</th>
+                                        <th width="20%">จัดการ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-center">1</td>
+                                        <td>ล้าง ขัดสีรอบคัน</td>
+                                        <td class="text-right">1,500</td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-light btn-sm"><i class="fa fa-edit"></i> แก้ไข</button>
+                                            <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center">1</td>
+                                        <td>พ่นสี</td>
+                                        <td class="text-right">3,500</td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-light btn-sm"><i class="fa fa-edit"></i> แก้ไข</button>
+                                            <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2" class="text-right">รวม</td>
+                                        <td class="text-right">5,000</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col-md-6">
+            <button type="button" class="btn btn-dark"><i class="fa fa-arrow-left"></i> กลับ</button>
+        </div>
+        <div class="col-md-6 text-right">
+            <button type="button" class="btn btn-danger"><i class="fa fa-times"></i> ยกเลิก</button>
+            <button type="button" class="btn btn-primary"><i class="fa fa-save"></i> บันทึก</button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">เพิ่ม/แก้ไขรายละเอียดการซ่อม</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-12 col-form-label">รายละเอียด</label>
+                        <div class="col-sm-12">
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="col-sm-12 col-form-label">ราคา</label>
+                    <div class="col-sm-12">
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> ปิด</button>
+                    <button type="button" class="btn btn-primary"><i class="fa fa-save"></i> ตกลง</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
