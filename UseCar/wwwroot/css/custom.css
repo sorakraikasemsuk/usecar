@@ -117,3 +117,6 @@ h1 {
 
 .setting-item:visited {
   color: #1CC88A; }
+
+table thead {
+  text-align: center; }
