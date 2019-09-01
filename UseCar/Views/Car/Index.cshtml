@@ -89,12 +89,14 @@
         </div>
         <div class="row mt-1">
             <div class="col-md-12">
-                <table id="optionTable" class="table table-bordered" style="width:100%">
+                <table id="carTable" class="table table-bordered table-hover" style="width:100%">
                     <thead>
                         <tr>
                             <th>รูปรถ</th>
                             <th>ชื่อรถ</th>
+                            <th>ราคาซื้อ</th>
                             <th>ราคาขาย</th>
+                            <th>สถานะ</th>
                             <th>
                                 จัดการ
                             </th>
@@ -102,8 +104,25 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>กระจกไฟฟ้า</td>
-                            <td class="text-center">
+                            <td><img src="https://www.checkraka.com/uploaded/logo/43/43f469bb05bcda9b93891a59816e9ac6.jpg" height="150" /></td>
+                            <td class="align-middle">[บษ 1234] toyota revo single cab</td>
+                            <td class="align-middle">350,000</td>
+                            <td class="align-middle">425,000</td>
+                            <td class="align-middle">ส่งซ่อม</td>
+                            <td class="text-center align-middle">
+                                <button type="button" class="btn btn-light btn-sm"><i class="fa fa-clipboard-list"></i> รายละเอียด</button>
+                                <button type="button" class="btn btn-light btn-sm"><i class="fa fa-edit"></i> แก้ไข</button>
+                                <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTE7LHnnbWJC0k7Q2hCkClCedjsu5xMYGODgvXHQOY9uvRvZ9pL" height="150" /></td>
+                            <td class="align-middle">[กท 999] isuzu dmax cab-4</td>
+                            <td class="align-middle">520,000</td>
+                            <td class="align-middle">590,000</td>
+                            <td class="align-middle">พร้อมขาย</td>
+                            <td class="text-center align-middle">
+                                <button type="button" class="btn btn-light btn-sm"><i class="fa fa-clipboard-list"></i> รายละเอียด</button>
                                 <button type="button" class="btn btn-light btn-sm"><i class="fa fa-edit"></i> แก้ไข</button>
                                 <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
                             </td>
@@ -114,3 +133,18 @@
         </div>
     </div>
 </div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#carTable').DataTable({
+                order: [],
+                searching: false,
+                ordering: true,
+                lengthChange: false,
+                pagingType: 'full_numbers',
+                bSort: false,
+            });
+        });
+    </script>
+}
