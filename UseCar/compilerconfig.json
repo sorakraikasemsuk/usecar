@@ -2,5 +2,9 @@
   {
     "outputFile": "wwwroot/css/custom.css",
     "inputFile": "wwwroot/scss/custom.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/Login.css",
+    "inputFile": "wwwroot/scss/Login.scss"
   }
 ]
