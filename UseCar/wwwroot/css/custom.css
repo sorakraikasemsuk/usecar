@@ -1,20 +1,6 @@
-﻿body {
-  height: 100vh;
-  margin: 0;
-  background-color: #1CC88A; }
-
-.login {
-  height: 460px;
-  width: 400px;
-  border: solid 1px;
-  border-radius: 1%;
-  background-color: #ffffff; }
-  .login .img-login {
-    height: 120px;
-    background-image: url("../images/logo.jpg");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain; }
+﻿html, body {
+  width: 100%;
+  height: 100%; }
 
 h1 {
   color: #5A5C69; }
@@ -53,7 +39,7 @@ h1 {
 
 .layout-body {
   display: flex;
-  height: calc(100vh - 60px); }
+  min-height: 90%; }
   .layout-body .menu {
     width: 20%;
     background-color: white;
@@ -89,6 +75,16 @@ h1 {
     padding: 15px;
     background-color: #eeeeee;
     width: 100%; }
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  line-height: 60px;
+  /* Vertically center the text there */ }
 
 .border-width-5 {
   border-width: 5px; }
