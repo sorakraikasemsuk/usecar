@@ -95,6 +95,18 @@ h1 {
 .border-left-color {
   border-left-color: #1CC88A; }
 
+.status-waiting {
+  color: #f6c23e; }
+
+.status-reject {
+  color: #e74a3b; }
+
+.status-success {
+  color: #1cc88a; }
+
+.status-pending {
+  color: #36b9cc; }
+
 .setting-item:link {
   color: #1CC88A; }
 

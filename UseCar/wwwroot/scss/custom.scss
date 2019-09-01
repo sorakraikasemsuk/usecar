@@ -142,6 +142,20 @@ h1{
     border-left-color:$main_color;
 }
 
+//color status
+.status-waiting{
+    color:$color_waiting;
+}
+.status-reject{
+    color:$color_reject;
+}
+.status-success{
+    color:$color_success;
+}
+.status-pending{
+    color:$color_pending;
+}
+
 .setting-item {
     &:link {
         color: $main_color;
