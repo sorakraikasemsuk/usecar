@@ -1,0 +1,128 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1><i class="fa fa-tasks"></i> เชครถ</h1>
+<hr />
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/Home">หน้าแรก</a></li>
+        <li class="breadcrumb-item active" aria-current="page">เชครถ</li>
+    </ol>
+</nav>
+
+<div class="card">
+    <div class="card-header">
+        <h5><i class="fa fa-search"></i> ค้นหาข้อมูล</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">ข้อมูลรถ</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">วันที่เชค</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary"><i class="fa fa-search"></i> ค้นหา</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-1">
+    <div class="card-header">
+        <h5><i class="fa fa-clipboard-list"></i> ข้อมูลเชครถ</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <a href="/CheckupCar/Create" class="btn btn-success"><i class="fa fa-plus"></i> เพิ่มข้อมูลเชครถ</a>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-md-12">
+                <table id="checkupCarTable" class="table table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>ข้อมูลรถ</th>
+                            <th>วันที่เชค</th>
+                            <th>เชคล่าสุดโดย</th>
+                            <th>
+                                จัดการ
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>[บษ 1234] toyota revo single cab</td>
+                            <td>2 ก.ย. 2562</td>
+                            <td>สมชาย คาร์ เซนเตอร์</td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-light btn-sm"><i class="fa fa-edit"></i> แก้ไข</button>
+                                <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>[กท 999] isuzu dmax cab-4</td>
+                            <td>10 ส.ค. 2562</td>
+                            <td>สมชาย คาร์ เซนเตอร์</td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-light btn-sm"><i class="fa fa-edit"></i> แก้ไข</button>
+                                <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>[กพ 5555] mazda 3</td>
+                            <td>3 ก.ย. 2562</td>
+                            <td>สมชาย คาร์ เซนเตอร์</td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-light btn-sm"><i class="fa fa-edit"></i> แก้ไข</button>
+                                <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>[กก 100] honda civic </td>
+                            <td>3 ก.ย. 2562</td>
+                            <td>สมชาย คาร์ เซนเตอร์</td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-light btn-sm"><i class="fa fa-edit"></i> แก้ไข</button>
+                                <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#checkupCarTable').DataTable({
+                order: [],
+                searching: false,
+                ordering: true,
+                lengthChange: false,
+                pagingType: 'full_numbers',
+                bSort: false,
+            });
+        });
+    </script>
+}
+
+
