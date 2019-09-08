@@ -1,0 +1,133 @@
+﻿
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1><i class="fa fa-id-card"></i> เพิ่มข้อมูลูกค้า</h1>
+<hr />
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/Home">หน้าแรก</a></li>
+        <li class="breadcrumb-item"><a href="/Customer">ข้อมูลลูกค้า</a></li>
+        <li class="breadcrumb-item active" aria-current="page">เพิ่มข้อมูลลูกค้า</li>
+    </ol>
+</nav>
+
+<form>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fa fa-clipboard-list"></i> ข้อมูลลูกค้า</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>ชื่อ-นามสกุล</label>
+                                <input type="text" class="form-control" value="" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>เลขบัตรประชาชน</label>
+                                <input type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>ที่อยู่</label>
+                                <textarea class="form-control" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label> หมายเลขโทรศัพท์</label>
+                                <input type="text" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>อีเมล์</label>
+                                <input type="text" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fa fa-clipboard-list"></i> เอกสารลูกค้า</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="button" class="btn btn-success" onclick="AddDocument();"><i class="fa fa-plus"></i> เพิ่มเอกสารลูกค้า</button>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>รูป</th>
+                                        <th>รายละเอียด</th>
+                                        <th>อัพโดย</th>
+                                        <th>จัดการ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tableDocument">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col-md-6">
+            <button type="button" class="btn btn-dark"><i class="fa fa-arrow-left"></i> กลับ</button>
+        </div>
+        <div class="col-md-6 text-right">
+            <button type="button" class="btn btn-danger"><i class="fa fa-times"></i> ยกเลิก</button>
+            <button type="button" class="btn btn-primary"><i class="fa fa-save"></i> บันทึก</button>
+        </div>
+    </div>
+</form>
+
+@section scripts{ 
+    <script>
+        var _countTr = 0;
+        $(document).ready(function () {
+
+        });
+        function AddDocument() {
+            _countTr = _countTr + 1;
+            var _element = '';
+            _element += '<tr id="document_' + _countTr + '">';
+            _element += '<td><input type="file" /></td>';
+            _element += '<td><input type="text" class="form-control" /></td>';
+            _element += '<td>admin</td>';
+            _element += '<td class="text-center"><button type="button" class="btn btn-danger btn-sm" onclick="RemoveDocument(' + _countTr+');"><i class="fa fa-trash"></i> ลบ</button></td>';
+            _element += '</tr>';
+            $('#tableDocument').append(_element);
+        }
+        function RemoveDocument(documentId) {
+            $('#document_' + documentId).remove();
+        }
+    </script>
+}
+
