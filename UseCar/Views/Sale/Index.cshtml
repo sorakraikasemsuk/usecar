@@ -1,0 +1,140 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1><i class="fa fa-file-invoice"></i> ข้อมูลการขาย</h1>
+<hr />
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/Home">หน้าแรก</a></li>
+        <li class="breadcrumb-item active" aria-current="page">ข้อมูลการขาย</li>
+    </ol>
+</nav>
+
+<div class="card">
+    <div class="card-header">
+        <h5><i class="fa fa-search"></i> ค้นหาข้อมูล</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">รหัสการขาย</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">ข้อมูลรถ</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">พนักงานขาย</label>
+                    <div class="col-sm-8">
+                        <select class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">ลูกค้า</label>
+                    <div class="col-sm-8">
+                        <select class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">สาขา</label>
+                    <div class="col-sm-8">
+                        <select class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">สถานะ</label>
+                    <div class="col-sm-8">
+                        <select class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 text-right">
+                <button class="btn btn-primary"><i class="fa fa-search"></i> ค้นหา</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-1">
+    <div class="card-header">
+        <h5><i class="fa fa-clipboard-list"></i> ข้อมูลการขาย</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <a href="/Sale/Create" class="btn btn-success"><i class="fa fa-plus"></i> เพิ่มข้อมูลการขาย</a>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-md-12">
+                <table id="saleTable" class="table table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>รหัสการขาย</th>
+                            <th>ข้อมูลรถ</th>
+                            <th>พนักงานขาย</th>
+                            <th>ลูกค้า</th>
+                            <th>สาขา</th>
+                            <th>สถานะ</th>
+                            <th>
+                                จัดการ
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>SO201909-0001</td>
+                            <td>[บษ 1234] toyota revo single cab</td>
+                            <td>ขายดิบ ขายดี</td>
+                            <td>ชอบรถ มือสอง</td>
+                            <td>สำนักงานใหญ่</td>
+                            <td>จอง</td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-light"><i class="fa fa-clipboard-list"></i> รายละเอียด</button>
+                                <button type="button" class="btn btn-light btn-sm"><i class="fa fa-edit"></i> แก้ไข</button>
+                                <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#saleTable').DataTable({
+                order: [],
+                searching: false,
+                ordering: true,
+                lengthChange: false,
+                pagingType: 'full_numbers',
+                bSort: false,
+            });
+        });
+    </script>
+}
+
+
