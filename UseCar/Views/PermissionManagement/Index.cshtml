@@ -1,0 +1,309 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1><i class="fa fa-user-lock"></i> สิทธิ์การใช้งานระบบ</h1>
+<hr />
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/Home">หน้าแรก</a></li>
+        <li class="breadcrumb-item"><a href="/Admin">ผู้ดูแลระบบ</a></li>
+        <li class="breadcrumb-item active" aria-current="page">สิทธิ์การใช้งานระบบ</li>
+    </ol>
+</nav>
+
+<div class="card">
+    <div class="card-header">
+        <h5><i class="fa fa-search"></i> ข้อมูลแผนก</h5>
+    </div>
+    <div class="card-body">
+       <div class="row justify-content-center">
+           <div class="col-md-6">
+               <div class="form-group row">
+                   <label class="col-sm-4 col-form-label">แผนก</label>
+                   <div class="col-sm-8">
+                       <select class="form-control"></select>
+                   </div>
+                   
+               </div>
+           </div>
+       </div>
+    </div>
+</div>
+
+<div class="card mt-2">
+    <div class="card-header">
+        <h5><i class="fa fa-clipboard-list"></i> สิทธิ์การใช้งานระบบ</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th width="20%">เมนู</th>
+                            <th width="80%">สิทธิ์การใช้งาน</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>ข้อมูลรถ</td>
+                            <td>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="view" checked>
+                                            <label class="form-check-label" for="view">
+                                                ดูข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="add" checked>
+                                            <label class="form-check-label" for="add">
+                                                เพิ่มข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="view" checked>
+                                            <label class="form-check-label" for="view">
+                                                แก้ไขข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="view" checked>
+                                            <label class="form-check-label" for="view">
+                                                ลบข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>ส่งซ่อม</td>
+                            <td>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="view" checked>
+                                            <label class="form-check-label" for="view">
+                                                ดูข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="add" checked>
+                                            <label class="form-check-label" for="add">
+                                                เพิ่มข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="view" checked>
+                                            <label class="form-check-label" for="view">
+                                                แก้ไขข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="view" checked>
+                                            <label class="form-check-label" for="view">
+                                                ลบข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>เช็ครถ</td>
+                            <td>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="view" checked>
+                                            <label class="form-check-label" for="view">
+                                                ดูข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="add" checked>
+                                            <label class="form-check-label" for="add">
+                                                เพิ่มข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="view" checked>
+                                            <label class="form-check-label" for="view">
+                                                แก้ไขข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="view" checked>
+                                            <label class="form-check-label" for="view">
+                                                ลบข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>ล้างทำความสะอาด</td>
+                            <td>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="view" checked>
+                                            <label class="form-check-label" for="view">
+                                                ดูข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="add" checked>
+                                            <label class="form-check-label" for="add">
+                                                เพิ่มข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="view" checked>
+                                            <label class="form-check-label" for="view">
+                                                แก้ไขข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="view" checked>
+                                            <label class="form-check-label" for="view">
+                                                ลบข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>ถ่ายรูป</td>
+                            <td>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="view" checked>
+                                            <label class="form-check-label" for="view">
+                                                ดูข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="add" checked>
+                                            <label class="form-check-label" for="add">
+                                                เพิ่มข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="view" checked>
+                                            <label class="form-check-label" for="view">
+                                                แก้ไขข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="view" checked>
+                                            <label class="form-check-label" for="view">
+                                                ลบข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>ข้อมูลการขาย</td>
+                            <td>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="view" checked>
+                                            <label class="form-check-label" for="view">
+                                                ดูข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="add" checked>
+                                            <label class="form-check-label" for="add">
+                                                เพิ่มข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="view" checked>
+                                            <label class="form-check-label" for="view">
+                                                แก้ไขข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="view" checked>
+                                            <label class="form-check-label" for="view">
+                                                ลบข้อมูล
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-2">
+    <div class="col-md-6">
+        <button type="button" class="btn btn-dark"><i class="fa fa-arrow-left"></i> กลับ</button>
+    </div>
+    <div class="col-md-6 text-right">
+        <button type="button" class="btn btn-danger"><i class="fa fa-times"></i> ยกเลิก</button>
+        <button type="button" class="btn btn-primary"><i class="fa fa-save"></i> บันทึก</button>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            
+        });
+    </script>
+}
+

@@ -145,6 +145,10 @@
                 $('.item-menu').removeClass('active');
                 $(this).parent().addClass('active');
             })
+
+            $('input[type=checkbox]').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+            })
             //$('.item-menu > a').click(function () {
             //    var hasChild = $(this).siblings('.sub-menu');
             //    if (hasChild.length > 0) {
