@@ -13,6 +13,14 @@
     {
       "library": "datatable@2.0.1",
       "destination": "wwwroot/lib/datatable/"
+    },
+    {
+      "library": "bootstrap-datepicker@1.9.0",
+      "destination": "wwwroot/lib/bootstrap-datepicker/"
+    },
+    {
+      "library": "moment.js@2.24.0",
+      "destination": "wwwroot/lib/moment.js/"
     }
   ]
 }
