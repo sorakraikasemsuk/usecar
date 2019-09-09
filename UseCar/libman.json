@@ -21,6 +21,18 @@
     {
       "library": "moment.js@2.24.0",
       "destination": "wwwroot/lib/moment.js/"
+    },
+    {
+      "library": "iCheck@1.0.2",
+      "destination": "wwwroot/lib/iCheck/"
+    },
+    {
+      "library": "select2@4.0.10",
+      "destination": "wwwroot/lib/select2/"
+    },
+    {
+      "library": "Chart.js@2.8.0",
+      "destination": "wwwroot/lib/Chart.js/"
     }
   ]
 }
