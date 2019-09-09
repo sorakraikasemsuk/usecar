@@ -1,0 +1,144 @@
+﻿
+@{
+    ViewData["Title"] = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1><i class="fa fa-user-alt"></i> รายละเอียดข้อมูลผู้ใช้งาน</h1>
+<hr />
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/Home">หน้าแรก</a></li>
+        <li class="breadcrumb-item"><a href="/Admin">ผู้ดูแลระบบ</a></li>
+        <li class="breadcrumb-item"><a href="/UserManagement">ข้อมูลผู้ใช้งาน</a></li>
+        <li class="breadcrumb-item active" aria-current="page">รายละเอียดข้อมูลผู้ใช้งาน</li>
+    </ol>
+</nav>
+
+<div class="row mb-2">
+    <div class="col-md-12">
+        <button type="button" class="btn btn-light"><i class="fa fa-edit"> แก้ไข</i></button>
+        <button type="button" class="btn btn-danger"><i class="fa fa-trash"> ลบ</i></button>
+    </div>
+</div>
+
+<form>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fa fa-clipboard-list"></i> ข้อมูลผู้ใช้งาน</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label>รหัสผู้ใช้งาน</label>
+                                        <input type="text" class="form-control" disabled value="USER-0001" />
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label>ชื่อ</label>
+                                        <input type="text" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label>นามสกุล</label>
+                                        <input type="text" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label>แผนก</label>
+                                        <select class="form-control"></select>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label>เบอร์โทร</label>
+                                        <input type="text" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label>อีเมล์</label>
+                                        <input type="text" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label>ชื่อเข้าใช้งานระบบ</label>
+                                        <input type="text" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label>รหัสผ่าน</label>
+                                        <input type="password" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label>ยืนยันรหัสผ่าน</label>
+                                        <input type="password" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                สถานะ
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="active" checked>
+                                                    <label class="form-check-label" for="active">
+                                                        ใช้งาน
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>รูปโปรไฟล์</label>
+                                <input type="file" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col-md-6">
+            <button type="button" class="btn btn-dark"><i class="fa fa-arrow-left"></i> กลับ</button>
+        </div>
+        <div class="col-md-6 text-right">
+            <button type="button" class="btn btn-danger"><i class="fa fa-times"></i> ยกเลิก</button>
+            <button type="button" class="btn btn-primary"><i class="fa fa-save"></i> บันทึก</button>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <script>
+        $(document).ready(function(){
+            $('#active').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+            });
+        });
+    </script>
+}
+

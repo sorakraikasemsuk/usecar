@@ -1,0 +1,154 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1><i class="fa fa-user-alt"></i> ข้อมูลผู้ใช้งาน</h1>
+<hr />
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/Home">หน้าแรก</a></li>
+        <li class="breadcrumb-item"><a href="/Admin">ผู้ดูแลระบบ</a></li>
+        <li class="breadcrumb-item active" aria-current="page">ข้อมูลผู้ใช้งาน</li>
+    </ol>
+</nav>
+
+<div class="card">
+    <div class="card-header">
+        <h5><i class="fa fa-search"></i> ค้นหาข้อมูล</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">รหัสผู้ใช้งาน</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">ชื่อ-นาสกุล</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">แผนก</label>
+                    <div class="col-sm-8">
+                        <select class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">สถานะ</label>
+                    <div class="col-sm-10">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="active" checked>
+                                    <label class="form-check-label" for="active">
+                                        ใช้งาน
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="inActive">
+                                    <label class="form-check-label" for="inActive">
+                                        ปิดการใช้งาน
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 text-right">
+                <button class="btn btn-primary"><i class="fa fa-search"></i> ค้นหา</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-1">
+    <div class="card-header">
+        <h5><i class="fa fa-clipboard-list"></i> ข้อมูลผู้ใช้งาน</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <a href="/UserManagement/Create" class="btn btn-success"><i class="fa fa-plus"></i> เพิ่มข้อมูลผู้ใช้งาน</a>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-md-12">
+                <table id="userTable" class="table table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>รูป</th>
+                            <th>รหัสผู้ใช้งาน</th>
+                            <th>ชื่อ-นามสกุล</th>
+                            <th>แผนก</th>
+                            <th>เบอร์โทร</th>
+                            <th>อีเมล์</th>
+                            <th>สถานะ</th>
+                            <th>
+                                จัดการ
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><img src="https://cdn4.vectorstock.com/i/1000x1000/08/33/profile-icon-male-user-person-avatar-symbol-vector-20910833.jpg" width="50" height="50" /></td>
+                            <td>USER-0001</td>
+                            <td>admin usecar</td>
+                            <td>ผู้ดูแลระบบ</td>
+                            <td>089-9999999</td>
+                            <td>admin@usecar.com</td>
+                            <td><i class="fa fa-circle status-success"></i> Active</td>
+                            <td class="text-center">
+                                <button type="button" class="btn btn-light btn-sm"><i class="fa fa-clipboard-list"></i> รายละเอียด</button>
+                                <button type="button" class="btn btn-light btn-sm"><i class="fa fa-edit"></i> แก้ไข</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#active,#inActive').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+            });
+
+            $('#userTable').DataTable({
+                order: [],
+                searching: false,
+                ordering: true,
+                lengthChange: false,
+                pagingType: 'full_numbers',
+                bSort: false,
+            });
+        });
+    </script>
+}
+
+
+
