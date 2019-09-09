@@ -32,7 +32,15 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">วันที่ส่งซ่อม</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" />
+                        <div class="input-group date" id="sendDate">
+                            <input type="text" class="form-control" id="sendDateShow" value="" readonly>
+                            <div class="input-group-append">
+                                <button class="btn btn-dark" type="button">
+                                    <i class="fa fa-calendar-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <input type="hidden" id="sendDateHidden" value="" />
                     </div>
                 </div>
             </div>
@@ -40,7 +48,15 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">วันที่เสร็จ</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" />
+                        <div class="input-group date" id="completeDate">
+                            <input type="text" class="form-control" id="completeDateShow" value="" readonly>
+                            <div class="input-group-append">
+                                <button class="btn btn-dark" type="button">
+                                    <i class="fa fa-calendar-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <input type="hidden" id="completeDateHidden" value="" />
                     </div>
                 </div>
             </div>
@@ -146,6 +162,18 @@
                 lengthChange: false,
                 pagingType: 'full_numbers',
                 bSort: false,
+            });
+
+            $('#sendDateShow').val(moment().locale('th').format('ll'));
+            $('#sendDateHidden').val(moment().format('YYYY-MM-DD'))
+            $('#sendDate.date').datepicker().on('changeDate', function (e) {
+                $('#sendDateHidden').val(moment(e.date).format('YYYY-MM-DD'));
+            });
+
+            $('#completeDateShow').val(moment().locale('th').format('ll'));
+            $('#completeDateHidden').val(moment().format('YYYY-MM-DD'))
+            $('#completeDate.date').datepicker().on('changeDate', function (e) {
+                $('#completeDateHidden').val(moment(e.date).format('YYYY-MM-DD'));
             });
         });
     </script>

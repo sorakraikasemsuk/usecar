@@ -164,6 +164,12 @@
                         <select class="form-control"></select>
                     </div>
                 </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>ทะเบียน</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -224,7 +230,15 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>วันจดทะเบียน</label>
-                        <input type="text" class="form-control" />
+                        <div class="input-group date" id="registerDate">
+                            <input type="text" class="form-control" id="registerDateShow" value="" readonly>
+                            <div class="input-group-append">
+                                <button class="btn btn-dark" type="button">
+                                    <i class="fa fa-calendar-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <input type="hidden" id="registerDateHidden" value="" />
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -238,7 +252,15 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>วันที่ต่อภาษีรถยนต์</label>
-                        <input type="text" class="form-control" />
+                        <div class="input-group date" id="extendTaxDate">
+                            <input type="text" class="form-control" id="extendTaxDateShow" value="" readonly>
+                            <div class="input-group-append">
+                                <button class="btn btn-dark" type="button">
+                                    <i class="fa fa-calendar-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <input type="hidden" id="extendTaxDateHidden" value="" />
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -252,7 +274,15 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>วันที่ซื้อเข้า</label>
-                        <input type="text" class="form-control" />
+                        <div class="input-group date" id="buyDate">
+                            <input type="text" class="form-control" id="buyDateShow" value="" readonly>
+                            <div class="input-group-append">
+                                <button class="btn btn-dark" type="button">
+                                    <i class="fa fa-calendar-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <input type="hidden" id="buyDateHidden" value="" />
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -289,5 +319,29 @@
         </div>
     </div>
 </form>
+
+@section scripts{ 
+    <script>
+        $(document).ready(function () {
+            $('#registerDateShow').val(moment().locale('th').format('ll'));
+            $('#registerDateHidden').val(moment().format('YYYY-MM-DD'))
+            $('#registerDate.date').datepicker().on('changeDate', function (e) {
+                $('#registerDateHidden').val(moment(e.date).format('YYYY-MM-DD'));
+            });
+
+            $('#extendTaxDateShow').val(moment().locale('th').format('ll'));
+            $('#extendTaxDateHidden').val(moment().format('YYYY-MM-DD'))
+            $('#extendTaxDate.date').datepicker().on('changeDate', function (e) {
+                $('#extendTaxDateHidden').val(moment(e.date).format('YYYY-MM-DD'));
+            });
+
+            $('#buyDateShow').val(moment().locale('th').format('ll'));
+            $('#buyDateHidden').val(moment().format('YYYY-MM-DD'))
+            $('#buyDate.date').datepicker().on('changeDate', function (e) {
+                $('#buyDateHidden').val(moment(e.date).format('YYYY-MM-DD'));
+            });
+        });
+    </script>
+}
 
 

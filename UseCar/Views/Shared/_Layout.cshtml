@@ -125,6 +125,11 @@
     <script src="~/lib/moment.js/moment.min.js"></script>
     <script src="~/lib/moment.js/moment-with-locales.min.js"></script>
     <script>
+        $.fn.datepicker.defaults.format = 'dd M yyyy';
+        $.fn.datepicker.defaults.language = 'th';
+        $.fn.datepicker.defaults.autoclose = true;
+        $.fn.datepicker.defaults.todayHighlight = true;
+        $.fn.datepicker.defaults.clearBtn = true;
         $(document).ready(function () {
             $('.profile').click(function () {
                 $('.list-group').toggle('slide', { direction: 'up' });

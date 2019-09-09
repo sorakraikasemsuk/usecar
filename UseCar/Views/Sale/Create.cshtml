@@ -50,8 +50,16 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>วันออกรถ</label>
-                                <input type="text" class="form-control" />
+                                <label>วันที่ออกรถ</label>
+                                <div class="input-group date" id="sendDate">
+                                    <input type="text" class="form-control" id="sendDateShow" value="" readonly>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-dark" type="button">
+                                            <i class="fa fa-calendar-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="sendDateHidden" value="" />
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -274,7 +282,11 @@
     <script>
         var _countTr = 0;
         $(document).ready(function () {
-
+            $('#sendDateShow').val(moment().locale('th').format('ll'));
+            $('#sendDateHidden').val(moment().format('YYYY-MM-DD'))
+            $('#sendDate.date').datepicker().on('changeDate', function (e) {
+                $('#sendDateHidden').val(moment(e.date).format('YYYY-MM-DD'));
+            });
         });
         function AddDocument() {
             _countTr = _countTr + 1;

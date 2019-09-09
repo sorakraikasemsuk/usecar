@@ -38,7 +38,15 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>วันที่เชครถ</label>
-                                <input type="text" class="form-control" />
+                                <div class="input-group date" id="checkupDate">
+                                    <input type="text" class="form-control" id="checkupDateShow" value="" readonly>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-dark" type="button">
+                                            <i class="fa fa-calendar-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="checkupDateHidden" value="" />
                             </div>
                         </div>
                     </div>
@@ -198,4 +206,16 @@
         </div>
     </div>
 </form>
+
+@section scripts{ 
+    <script>
+        $(document).ready(function(){
+            $('#checkupDateShow').val(moment().locale('th').format('ll'));
+            $('#checkupDateHidden').val(moment().format('YYYY-MM-DD'))
+            $('#checkupDate.date').datepicker().on('changeDate', function (e) {
+                $('#checkupDateHidden').val(moment(e.date).format('YYYY-MM-DD'));
+            });
+        });
+    </script>
+}
 
