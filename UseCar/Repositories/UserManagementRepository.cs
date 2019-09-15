@@ -21,7 +21,6 @@ namespace UseCar.Repositories
             return (from a in context.user
                     join b in context.department on a.departmentId equals b.departmentId
                     where a.isEnable
-                    && !a.isAdmin
                     && b.isEnable
                     && (a.code.Contains(filter.code) || filter.code == null)
                     && (a.firstName.Contains(filter.firstName) || filter.firstName == null)
@@ -42,7 +41,8 @@ namespace UseCar.Repositories
                         departmentName = b.departmentName,
                         tel = a.tel,
                         email = a.email,
-                        isActive = a.isActive
+                        isActive = a.isActive,
+                        isAdmin = a.isAdmin
                     }).ToList();
         }
         public UserManagementViewModel GetUserById(int userId)

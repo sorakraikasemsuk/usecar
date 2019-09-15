@@ -48,5 +48,6 @@ namespace UseCar.ViewModels
         public string tel { get; set; }
         public string email { get; set; }
         public bool isActive { get; set; }
+        public bool isAdmin { get; set; }
     }
 }

@@ -205,8 +205,8 @@
                         data: 'userId',
                         className: 'text-center',
                         render: function (data, type, row) {
-                            return '<button type="button" class="btn btn-warning btn-sm" onclick="Edit(' + row.userId + ')"><i class="fa fa-edit"></i> แก้ไข</button>' +
-                                ' <button type ="button" class="btn btn-danger btn-sm" onclick="Delete(' + row.userId + ')"><i class="fa fa-trash"></i> ลบ</button>';;
+                            return row.isAdmin ? '' : '<button type="button" class="btn btn-warning btn-sm" onclick="Edit(' + row.userId + ')"><i class="fa fa-edit"></i> แก้ไข</button>' +
+                                ' <button type ="button" class="btn btn-danger btn-sm" onclick="Delete(' + row.userId + ')"><i class="fa fa-trash"></i> ลบ</button>';
                         }
                     }
                 ]
