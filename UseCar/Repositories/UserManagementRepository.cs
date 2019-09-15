@@ -127,6 +127,7 @@ namespace UseCar.Repositories
         public string GenerateCode()
         {
             var count = (from a in context.user
+                         where !a.isAdmin
                          select a).Count();
             return "USER-" + (count + 1).ToString().PadLeft(4, '0');
         }
