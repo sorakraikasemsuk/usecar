@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using UseCar.Models;
+using UseCar.Repositories;
 
 namespace Car_Somchai
 {
@@ -33,10 +34,12 @@ namespace Car_Somchai
             //    options.MinimumSameSitePolicy = SameSiteMode.None;
             //});
             services.AddDbContext<UseCarDBContext>(options =>
-        options.UseMySql(Configuration.GetConnectionString("UseCarContext")));
+        options.UseMySql(Configuration.GetConnectionString("UseCarDBContext")));
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddTransient<DepartmentManagementRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
