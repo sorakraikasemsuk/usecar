@@ -29,4 +29,24 @@ namespace UseCar.ViewModels
         public string confirmPassword { get; set; }
         public bool isActive { get; set; }
     }
+    public class UserManagementSearchResultFilter
+    {
+        public string code { get; set; }
+        public string firstName { get; set; }
+        public string lastName { get; set; }
+        public int departmentId { get; set; }
+        public int statusId { get; set; }
+    }
+    public class UserManagementSearchResult
+    {
+        public int userId { get; set; }
+        public string code { get; set; }
+        public string firstName { get; set; }
+        public string lastName { get; set; }
+        public int departmentId { get; set; }
+        public string departmentName { get; set; }
+        public string tel { get; set; }
+        public string email { get; set; }
+        public bool isActive { get; set; }
+    }
 }

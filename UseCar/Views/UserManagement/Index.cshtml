@@ -1,4 +1,4 @@
-﻿
+﻿@inject UseCar.Helper.DropdownList dropdownList
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -31,15 +31,23 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">รหัสผู้ใช้งาน</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" id="code" />
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group row">
-                    <label class="col-sm-4 col-form-label">ชื่อ-นาสกุล</label>
+                    <label class="col-sm-4 col-form-label">ชื่อ</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" id="firstName" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">นาสกุล</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="lastName" />
                     </div>
                 </div>
             </div>
@@ -47,37 +55,26 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">แผนก</label>
                     <div class="col-sm-8">
-                        <select class="form-control"></select>
+                        <select class="form-control" id="departmentId" asp-items="@dropdownList.DeaprtmentAll()">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
                     </div>
                 </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-4">
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">สถานะ</label>
-                    <div class="col-sm-10">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="active" checked>
-                                    <label class="form-check-label" for="active">
-                                        ใช้งาน
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="inActive">
-                                    <label class="form-check-label" for="inActive">
-                                        ปิดการใช้งาน
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+                    <label class="col-sm-4 col-form-label">สถานะ</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="statusId">
+                            <option value="0">ทั้งหมด</option>
+                            <option value="1">ใช้งาน</option>
+                            <option value="2">ปิดการใช้งาน</option>
+                        </select>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 text-right">
-                <button class="btn btn-primary"><i class="fa fa-search"></i> ค้นหา</button>
+                <button class="btn btn-primary" onclick="ReloadDatatable();"><i class="fa fa-search"></i> ค้นหา</button>
             </div>
         </div>
     </div>
@@ -98,7 +95,7 @@
                 <table id="userTable" class="table table-bordered" style="width:100%">
                     <thead>
                         <tr>
-                            <th>รูป</th>
+                            <th>ลำดับ</th>
                             <th>รหัสผู้ใช้งาน</th>
                             <th>ชื่อ-นามสกุล</th>
                             <th>แผนก</th>
@@ -110,21 +107,6 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td><img src="https://cdn4.vectorstock.com/i/1000x1000/08/33/profile-icon-male-user-person-avatar-symbol-vector-20910833.jpg" width="50" height="50" /></td>
-                            <td>USER-0001</td>
-                            <td>admin usecar</td>
-                            <td>ผู้ดูแลระบบ</td>
-                            <td>089-9999999</td>
-                            <td>admin@usecar.com</td>
-                            <td><i class="fa fa-circle status-success"></i> Active</td>
-                            <td class="text-center">
-                                <button type="button" class="btn btn-light btn-sm"><i class="fa fa-clipboard-list"></i> รายละเอียด</button>
-                                <button type="button" class="btn btn-light btn-sm"><i class="fa fa-edit"></i> แก้ไข</button>
-                            </td>
-                        </tr>
-                    </tbody>
                 </table>
             </div>
         </div>
@@ -133,16 +115,106 @@
 
 @section scripts{
     <script>
+        var datatable;
         $(document).ready(function () {
-            $('#userTable').DataTable({
+            Datatable();
+
+            $('#code,#firstName,#lastName').keyup(function (e) {
+                if (e.keyCode === 13) {
+                    ReloadDatatable();
+                }
+            })
+        });
+        function Datatable() {
+            datatable = $('#userTable').DataTable({
                 order: [],
                 searching: false,
                 ordering: true,
                 lengthChange: false,
                 pagingType: 'full_numbers',
-                bSort: false,
+                ajax: {
+                    url: '/UserManagement/GetDatatable',
+                    type: 'GET',
+                    data: function (d) {
+                        d.code = $('#code').val(),
+                        d.firstName = $('#firstName').val(),
+                        d.lastName = $('#lastName').val()
+                        d.departmentId = $('#departmentId').val(),
+                        d.statusId = $('#statusId').val()
+                    },
+                    dataSrc: function (data) {
+                        return data;
+                    },
+                    statusCode: {
+                        401: function (xhr, error, thrown) {
+                            window.location.reload();
+                            return false;
+                        }
+                    }
+                },
+                columns: [
+                    {
+                        data: 'userId',
+                        className: 'text-center',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: 'code',
+                        className: 'text-center'
+                    },
+                    {
+                        data: 'firstName',
+                        render: function (data, type, row) {
+                            return row.firstName + ' ' + row.lastName;
+                        }
+                    },
+                    {
+                        data: 'departmentName',
+                        render: function (data, type, row) {
+                            return row.departmentName;
+                        }
+                    },
+                    {
+                        data: 'tel',
+                        render: function (data, type, row) {
+                            return row.tel;
+                        }
+                    },
+                    {
+                        data: 'email',
+                        render: function (data, type, row) {
+                            return row.email;
+                        }
+                    },
+                    {
+                        data: 'isActive',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            var _isActive = '';
+                            if (row.isActive) {
+                                _isActive = '<i class="fa fa-circle status-success"></i> Active</td>'
+                            } else {
+                                _isActive = '<i class="fa fa-circle status-reject"></i> InActive</td>'
+                            }
+                            return _isActive;
+                        }
+                    },
+                    {
+                        data: 'userId',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            return '<button type="button" class="btn btn-light btn-sm"><i class="fa fa-clipboard-list"></i> รายละเอียด</button>' +
+                                ' <button type="button" class="btn btn-light btn-sm"><i class="fa fa-edit"></i> แก้ไข</button>';
+                        }
+                    }
+                ]
             });
-        });
+        }
+        function ReloadDatatable() {
+            datatable.ajax.reload();
+        }
     </script>
 }
 

@@ -22,6 +22,10 @@ namespace UseCar.Controllers
         {
             return View();
         }
+        public JsonResult GetDatatable(UserManagementSearchResultFilter filter)
+        {
+            return Json(userManagementRepository.GetDatatable(filter));
+        }
         public IActionResult Create(int userId)
         {
             UserManagementViewModel user = new UserManagementViewModel();

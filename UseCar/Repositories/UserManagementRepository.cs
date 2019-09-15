@@ -16,6 +16,35 @@ namespace UseCar.Repositories
         {
             this.context = context;
         }
+        public List<UserManagementSearchResult> GetDatatable(UserManagementSearchResultFilter filter)
+        {
+            return (from a in context.user
+                    join b in context.department on a.departmentId equals b.departmentId
+                    where a.isEnable
+                    && !a.isAdmin
+                    && b.isEnable
+                    && (a.code.Contains(filter.code) || filter.code == null)
+                    && (a.firstName.Contains(filter.firstName) || filter.firstName == null)
+                    && (a.lastName.Contains(filter.lastName) || filter.lastName == null)
+                    && (a.departmentId == filter.departmentId || filter.departmentId == 0)
+                    && (
+                    (a.isActive && filter.statusId == 1)
+                    || (!a.isActive && filter.statusId == 2)
+                    || filter.statusId == 0
+                    )
+                    select new UserManagementSearchResult
+                    {
+                        userId = a.userId,
+                        code = a.code,
+                        firstName = a.firstName,
+                        lastName = a.lastName,
+                        departmentId = a.departmentId,
+                        departmentName = b.departmentName,
+                        tel = a.tel,
+                        email = a.email,
+                        isActive = a.isActive
+                    }).ToList();
+        }
         public ResponseResult Create(UserManagementViewModel data)
         {
             using(var Transaction = context.Database.BeginTransaction())
