@@ -85,5 +85,31 @@ namespace UseCar.Repositories
                 return result;
             }
         }
+        public ResponseResult Delete(int departmentId)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    var delDepart = (from a in context.department
+                                     where a.isEnable && a.departmentId == departmentId
+                                     select a).FirstOrDefault();
+                    delDepart.isEnable = false;
+                    delDepart.updateDate = DateTime.Now;
+                    delDepart.updateUser = 1;
+                    context.SaveChanges();
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
     }
 }

@@ -31,5 +31,10 @@ namespace UseCar.Controllers
         {
             return Json(departmentManagementRepository.Create(data));
         }
+        [HttpPost]
+        public JsonResult Delete(int departmentId)
+        {
+            return Json(departmentManagementRepository.Delete(departmentId));
+        }
     }
 }

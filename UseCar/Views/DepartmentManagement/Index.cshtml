@@ -160,7 +160,7 @@
                         className: 'text-center',
                         render: function (data, type, row) {
                             return '<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addModal" onclick="Add(' + row.departmentId + ')"><i class="fa fa-edit"></i> แก้ไข</button>' +
-                                ' <button type ="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>';
+                                ' <button type ="button" class="btn btn-danger btn-sm" onclick="Delete(' + row.departmentId + ')"><i class="fa fa-trash"></i> ลบ</button>';
                         }
                     }
                 ]
@@ -182,6 +182,28 @@
                 }
             })
         }
+        function Delete(departmentId) {
+            $.showConfirm({
+                title: "แจ้งเตือน",
+                body: "คุณต้องการลบข้อมูล ใช่หรือไม่?",
+                textTrue: "ใช่",
+                textFalse: "ไม่ใช่",
+                onSubmit: function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '/DepartmentManagement/Delete',
+                            type: 'POST',
+                            data: {
+                                departmentId: departmentId
+                            },
+                            success: function (data) {
+                                ResponseDialog(data.code, window.location.href);
+                            }
+                        })
+                    } 
+                }
+            })
+        }
         function Save() {
             $("#departmentForm").validate({
                 errorClass: 'text-danger'
@@ -195,23 +217,7 @@
         }
         function completed(res) {
             $('#addModal').modal('hide');
-            if (res.responseJSON.code === 200) {
-                $.showAlert({
-                    title: "แจ้งเตือน",
-                    body: "บันทึกข้อมูลสำเร็จ",
-                    onDispose: function () {
-                        window.location.reload();
-                    }
-                });
-            } else {
-                $.showAlert({
-                    title: "แจ้งเตือน",
-                    body: "บันทึกข้อมูลเกิดข้อผิดพลาด",
-                    onDispose: function () {
-                        window.location.reload();
-                    }
-                });
-            }
+            ResponseDialog(res.responseJSON.code, window.location.href);
         }
     </script>
 }
