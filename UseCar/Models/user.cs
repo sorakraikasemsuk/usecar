@@ -14,7 +14,6 @@ namespace UseCar.Models
         public string email { get; set; }
         public string userName { get; set; }
         public string password { get; set; }
-        public string salt { get; set; }
         public bool isActive { get; set; }
         public bool isAdmin { get; set; }
         public DateTime createDate { get; set; }
