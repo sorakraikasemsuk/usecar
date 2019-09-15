@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Car_Somchai.ViewModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UseCar.Helper;
 using UseCar.Models;
@@ -48,6 +49,7 @@ namespace Car_Somchai.Controllers
                 }
                 else
                 {
+                    HttpContext.Session.SetString(Session.userId, user.userId.ToString());
                     return Json(new ResponseResult
                     {
                         code = ResponseCode.ok,

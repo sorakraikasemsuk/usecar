@@ -37,6 +37,18 @@ namespace Car_Somchai
             services.AddDbContext<UseCarDBContext>(options =>
         options.UseMySql(Configuration.GetConnectionString("UseCarDBContext")));
 
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                // Set a short timeout for easy testing.
+                options.IdleTimeout = TimeSpan.FromSeconds(60);
+                options.Cookie.HttpOnly = true;
+                // Make the session cookie essential
+                options.Cookie.IsEssential = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            });
+
 
             services.AddMvc(options =>
         options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute())
@@ -64,7 +76,7 @@ namespace Car_Somchai
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
