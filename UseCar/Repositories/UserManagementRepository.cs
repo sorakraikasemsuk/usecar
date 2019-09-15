@@ -131,5 +131,33 @@ namespace UseCar.Repositories
                          select a).Count();
             return "USER-" + (count + 1).ToString().PadLeft(4, '0');
         }
+        public ResponseResult Delete(int userId)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    var delUser = (from a in context.user
+                                   where a.isEnable
+                                   && !a.isAdmin
+                                   && a.userId == userId
+                                   select a).FirstOrDefault();
+                    delUser.isEnable = false;
+                    delUser.updateDate = DateTime.Now;
+                    delUser.updateUser = 1;
+                    context.SaveChanges();
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
     }
 }

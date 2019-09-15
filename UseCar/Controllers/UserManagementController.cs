@@ -45,9 +45,10 @@ namespace UseCar.Controllers
         {
             return Json(userManagementRepository.Create(data));
         }
-        public IActionResult Detail()
+        [HttpPost]
+        public JsonResult Delete(int userId)
         {
-            return View();
+            return Json(userManagementRepository.Delete(userId));
         }
     }
 }

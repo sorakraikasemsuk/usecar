@@ -218,6 +218,28 @@
         function Edit(userId) {
             window.location.href = '/UserManagement/Create?userId=' + userId;
         }
+        function Delete(userId) {
+            $.showConfirm({
+                title: "แจ้งเตือน",
+                body: "คุณต้องการลบข้อมูล ใช่หรือไม่?",
+                textTrue: "ใช่",
+                textFalse: "ไม่ใช่",
+                onSubmit: function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '/UserManagement/Delete',
+                            type: 'POST',
+                            data: {
+                                userId: userId
+                            },
+                            success: function (data) {
+                                ResponseDialog(data.code, window.location.href);
+                            }
+                        })
+                    }
+                }
+            })
+        }
     </script>
 }
 
