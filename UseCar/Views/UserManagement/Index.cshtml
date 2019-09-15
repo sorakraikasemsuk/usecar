@@ -205,8 +205,8 @@
                         data: 'userId',
                         className: 'text-center',
                         render: function (data, type, row) {
-                            return '<button type="button" class="btn btn-light btn-sm"><i class="fa fa-clipboard-list"></i> รายละเอียด</button>' +
-                                ' <button type="button" class="btn btn-light btn-sm"><i class="fa fa-edit"></i> แก้ไข</button>';
+                            return '<button type="button" class="btn btn-warning btn-sm" onclick="Edit(' + row.userId + ')"><i class="fa fa-edit"></i> แก้ไข</button>' +
+                                ' <button type ="button" class="btn btn-danger btn-sm" onclick="Delete(' + row.userId + ')"><i class="fa fa-trash"></i> ลบ</button>';;
                         }
                     }
                 ]
@@ -214,6 +214,9 @@
         }
         function ReloadDatatable() {
             datatable.ajax.reload();
+        }
+        function Edit(userId) {
+            window.location.href = '/UserManagement/Create?userId=' + userId;
         }
     </script>
 }

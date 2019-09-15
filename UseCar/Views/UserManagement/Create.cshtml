@@ -69,27 +69,32 @@
                                         <input type="text" class="form-control" asp-for="email" />
                                     </div>
                                 </div>
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label>ชื่อเข้าใช้งานระบบ</label>
-                                        <input type="text" class="form-control" asp-for="userName"/>
-                                        <span asp-validation-for="userName" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label>รหัสผ่าน</label>
-                                        <input type="password" class="form-control" asp-for="password" />
-                                        <span asp-validation-for="password" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label>ยืนยันรหัสผ่าน</label>
-                                        <input type="password" class="form-control" asp-for="confirmPassword" />
-                                        <span asp-validation-for="confirmPassword" class="text-danger"></span>
-                                    </div>
-                                </div>
+                                @{
+                                    if (Model.userId == 0)
+                                    {
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label>ชื่อเข้าใช้งานระบบ</label>
+                                                <input type="text" class="form-control" asp-for="userName" />
+                                                <span asp-validation-for="userName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label>รหัสผ่าน</label>
+                                                <input type="password" class="form-control" asp-for="password" />
+                                                <span asp-validation-for="password" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label>ยืนยันรหัสผ่าน</label>
+                                                <input type="password" class="form-control" asp-for="confirmPassword" />
+                                                <span asp-validation-for="confirmPassword" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    }
+                                }
                                 <div class="col-12">
                                     <div class="form-group">
                                         <div class="row">

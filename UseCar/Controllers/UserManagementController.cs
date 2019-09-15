@@ -35,7 +35,7 @@ namespace UseCar.Controllers
             }
             else
             {
-
+                user = userManagementRepository.GetUserById(userId);
             }
             ViewBag.Department = dropdownList.DeaprtmentAll();
             return View(user);

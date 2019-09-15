@@ -45,6 +45,27 @@ namespace UseCar.Repositories
                         isActive = a.isActive
                     }).ToList();
         }
+        public UserManagementViewModel GetUserById(int userId)
+        {
+            return (from a in context.user
+                    where a.isEnable
+                    && !a.isAdmin
+                    && a.userId == userId
+                    select new UserManagementViewModel
+                    {
+                        userId = a.userId,
+                        code = a.code,
+                        firstName = a.firstName,
+                        lastName = a.lastName,
+                        departmentId = a.departmentId,
+                        tel = a.tel,
+                        email = a.email,
+                        userName = a.userName,
+                        password = a.password,
+                        confirmPassword = a.password,
+                        isActive = a.isActive
+                    }).FirstOrDefault();
+        }
         public ResponseResult Create(UserManagementViewModel data)
         {
             using(var Transaction = context.Database.BeginTransaction())
@@ -85,9 +106,6 @@ namespace UseCar.Repositories
                         user.departmentId = data.departmentId;
                         user.tel = data.tel;
                         user.email = data.email;
-                        user.userName = data.userName;
-                        user.password = GeneratePassword.PasswordCreate(data.password, salt);
-                        user.salt = Convert.ToBase64String(salt);
                         user.isActive = data.isActive;
                         user.isAdmin = false;
                         user.updateDate = DateTime.Now;
