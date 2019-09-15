@@ -16,7 +16,7 @@ namespace UseCar.Helper
         }
         public static bool PasswordCheck(string passwordInput,string salt,string password)
         {
-            string passInputHash = Convert.ToBase64String(GenerateSaltedHash(Encoding.ASCII.GetBytes(passwordInput), Encoding.ASCII.GetBytes(salt)));
+            string passInputHash = Convert.ToBase64String(GenerateSaltedHash(Encoding.ASCII.GetBytes(passwordInput), Convert.FromBase64String(salt)));
             return passInputHash.Equals(password);
         }
         private static byte[] GenerateSaltedHash(byte[] plainText, byte[] salt)
