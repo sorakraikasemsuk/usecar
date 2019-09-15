@@ -49,6 +49,7 @@ namespace Car_Somchai
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
             });
 
+            services.AddHttpContextAccessor();
 
             services.AddMvc(options =>
         options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute())
