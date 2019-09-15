@@ -30,7 +30,7 @@
                 <div class="col-12 img-login">
                 </div>
             </div>
-            <form class="p-3" asp-controller="Login" asp-action="Login" method="post">
+            <form class="p-3" asp-controller="Login" asp-action="Login" method="post" data-ajax="true" data-ajax-method="post" data-ajax-complete="completed">
                 <div class="form-group">
                     <label>Username</label>
                     <input type="text" asp-for="Username" class="form-control" placeholder="Username" />
@@ -43,6 +43,9 @@
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary w-100">Login</button>
+                </div>
+                <div class="text-center">
+                    <span class="text-danger" id="loginValid"></span>
                 </div>
             </form>
         </div>
@@ -67,6 +70,19 @@
     </environment>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        $(document).ready(function () {
+
+        });
+        function completed(res) {
+            if (res.responseJSON.code === 200) {
+                window.location.href = res.responseJSON.message;
+            } else {
+                $('#loginValid').text(res.responseJSON.message);
+            }   
+        }
+    </script>
 </body>
 </html>
