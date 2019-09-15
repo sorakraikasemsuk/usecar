@@ -18,10 +18,9 @@ namespace UseCar.Helper
         {
             return (from a in context.department
                     where a.isEnable
-                    select new SelectListItem
-                    {
-                        Value = a.departmentId.ToString(),
-                        Text = a.departmentName
+                    select new SelectListItem {
+                        Value=a.departmentId.ToString(),
+                        Text=a.departmentName
                     }).ToList();
         }
     }
