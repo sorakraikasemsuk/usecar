@@ -38,7 +38,9 @@ namespace Car_Somchai
         options.UseMySql(Configuration.GetConnectionString("UseCarDBContext")));
 
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(options =>
+        options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute())
+        ).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddTransient<DropdownList>();
             services.AddTransient<DepartmentManagementRepository>();
