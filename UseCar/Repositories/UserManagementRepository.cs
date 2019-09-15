@@ -86,6 +86,7 @@ namespace UseCar.Repositories
                             email = data.email,
                             userName = data.userName,
                             password = GeneratePassword.PasswordCreate(data.password,salt),
+                            salt= Convert.ToBase64String(salt),
                             isActive = data.isActive,
                             isAdmin = false,
                             createDate = DateTime.Now,
