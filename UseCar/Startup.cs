@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using UseCar.Helper;
 using UseCar.Models;
 using UseCar.Repositories;
 
@@ -39,7 +40,9 @@ namespace Car_Somchai
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.AddTransient<DropdownList>();
             services.AddTransient<DepartmentManagementRepository>();
+            services.AddTransient<UserManagementRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
