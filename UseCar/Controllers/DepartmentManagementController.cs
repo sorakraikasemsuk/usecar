@@ -19,9 +19,9 @@ namespace UseCar.Controllers
         {
             return View();
         }
-        public JsonResult GetDepartmentSearchResult(DepartmentManagementFilter filter)
+        public JsonResult GetDatatable(DepartmentManagementFilter filter)
         {
-            return Json(departmentManagementRepository.GetDepartmentSearchResult(filter));
+            return Json(departmentManagementRepository.GetDatatable(filter));
         }
         public JsonResult GetDepartmentId(int departmentId)
         {

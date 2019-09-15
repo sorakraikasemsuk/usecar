@@ -15,7 +15,7 @@ namespace UseCar.Repositories
         {
             this.context = context;
         }
-        public List<DepartmentManagementViewModel> GetDepartmentSearchResult(DepartmentManagementFilter filter)
+        public List<DepartmentManagementViewModel> GetDatatable(DepartmentManagementFilter filter)
         {
             return (from a in context.department
                     where a.isEnable
