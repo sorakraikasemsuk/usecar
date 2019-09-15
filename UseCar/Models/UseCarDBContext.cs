@@ -82,6 +82,10 @@ namespace UseCar.Models
                     .IsRequired()
                     .HasColumnType("text");
 
+                entity.Property(e => e.salt)
+                    .IsRequired()
+                    .HasColumnType("text");
+
                 entity.Property(e => e.tel).HasColumnType("varchar(20)");
 
                 entity.Property(e => e.updateDate).HasColumnType("datetime");
