@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,9 +13,11 @@ namespace UseCar.Repositories
     public class UserManagementRepository
     {
         readonly UseCarDBContext context;
-        public UserManagementRepository(UseCarDBContext context)
+        readonly HttpContext httpContext;
+        public UserManagementRepository(UseCarDBContext context, IHttpContextAccessor httpContext)
         {
             this.context = context;
+            this.httpContext = httpContext.HttpContext;
         }
         public List<UserManagementSearchResult> GetDatatable(UserManagementSearchResultFilter filter)
         {
@@ -90,7 +93,7 @@ namespace UseCar.Repositories
                             isActive = data.isActive,
                             isAdmin = false,
                             createDate = DateTime.Now,
-                            createUser = 1,
+                            createUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId)),
                             isEnable = true
                         };
                         context.user.Add(user);
@@ -109,7 +112,7 @@ namespace UseCar.Repositories
                         user.isActive = data.isActive;
                         user.isAdmin = false;
                         user.updateDate = DateTime.Now;
-                        user.updateUser = 1;
+                        user.updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId));
                         user.isEnable = true;
                         context.SaveChanges();
                     }
@@ -146,7 +149,7 @@ namespace UseCar.Repositories
                                    select a).FirstOrDefault();
                     delUser.isEnable = false;
                     delUser.updateDate = DateTime.Now;
-                    delUser.updateUser = 1;
+                    delUser.updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId));
                     context.SaveChanges();
                     Transaction.Commit();
 
