@@ -14,11 +14,10 @@ namespace UseCar.Helper
         {
             return Convert.ToBase64String(GenerateSaltedHash(Encoding.ASCII.GetBytes(password), salt));
         }
-        public static bool PasswordCheck(string passwordInput,string passwordHashSalt)
+        public static bool PasswordCheck(string passwordInput,string salt,string password)
         {
-            string passInputHash = Convert.ToBase64String(GenerateHash(Encoding.ASCII.GetBytes(passwordInput)));
-            string passHash = passwordHashSalt.Substring(0, (passwordHashSalt.Length - 1 - salt_length));
-            return passInputHash.Equals(passHash);
+            string passInputHash = Convert.ToBase64String(GenerateSaltedHash(Encoding.ASCII.GetBytes(passwordInput), Encoding.ASCII.GetBytes(salt)));
+            return passInputHash.Equals(password);
         }
         private static byte[] GenerateSaltedHash(byte[] plainText, byte[] salt)
         {
@@ -47,11 +46,6 @@ namespace UseCar.Helper
             }
 
             return salt;
-        }
-        private static byte[] GenerateHash(byte[] plainText)
-        {
-            HashAlgorithm algorithm = new SHA256Managed();
-            return algorithm.ComputeHash(plainText);
         }
     }
 }
