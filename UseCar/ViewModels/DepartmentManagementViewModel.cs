@@ -10,6 +10,7 @@ namespace UseCar.ViewModels
         public int departmentId { get; set; }
         public string departmentName { get; set; }
         public DateTime updateDate { get; set; }
+        public int userInDep { get; set; }
     }
     public class DepartmentManagementFilter
     {

@@ -27,7 +27,11 @@ namespace UseCar.Repositories
                     {
                         departmentId = a.departmentId,
                         departmentName = a.departmentName,
-                        updateDate = a.updateDate == null ? a.createDate : Convert.ToDateTime(a.updateDate)
+                        updateDate = a.updateDate == null ? a.createDate : Convert.ToDateTime(a.updateDate),
+                        userInDep = (from u in context.user
+                                     where u.isEnable
+                                     && u.departmentId == a.departmentId
+                                     select a).Count()
                     }).ToList();
         }
         public DepartmentManagementViewModel GetDepartmentById(int departmentId)

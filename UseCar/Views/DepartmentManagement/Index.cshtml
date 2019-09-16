@@ -159,8 +159,12 @@
                         data: 'departmentId',
                         className: 'text-center',
                         render: function (data, type, row) {
-                            return '<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addModal" onclick="Add(' + row.departmentId + ')"><i class="fa fa-edit"></i> แก้ไข</button>' +
-                                ' <button type ="button" class="btn btn-danger btn-sm" onclick="Delete(' + row.departmentId + ')"><i class="fa fa-trash"></i> ลบ</button>';
+                            if (row.userInDep == 0) {
+                                return '<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addModal" onclick="Add(' + row.departmentId + ')"><i class="fa fa-edit"></i> แก้ไข</button>' +
+                                    ' <button type ="button" class="btn btn-danger btn-sm" onclick="Delete(' + row.departmentId + ')"><i class="fa fa-trash"></i> ลบ</button>';
+                            } else {
+                                return '<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addModal" onclick="Add(' + row.departmentId + ')"><i class="fa fa-edit"></i> แก้ไข</button>';
+                            }
                         }
                     }
                 ]
