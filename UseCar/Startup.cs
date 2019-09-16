@@ -58,6 +58,7 @@ namespace Car_Somchai
             services.AddTransient<DropdownList>();
             services.AddTransient<DepartmentManagementRepository>();
             services.AddTransient<UserManagementRepository>();
+            services.AddTransient<PermissionManagementRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
