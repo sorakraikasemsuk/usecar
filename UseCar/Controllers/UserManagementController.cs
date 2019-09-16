@@ -51,5 +51,9 @@ namespace UseCar.Controllers
         {
             return Json(userManagementRepository.Delete(userId));
         }
+        public bool CheckUsername(int userId, string userName)
+        {
+            return userManagementRepository.CheckUsername(userId, userName);
+        }
     }
 }

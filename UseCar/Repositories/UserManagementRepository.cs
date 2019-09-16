@@ -163,5 +163,13 @@ namespace UseCar.Repositories
                 return result;
             }
         }
+        public bool CheckUsername(int userId, string userName)
+        {
+            return !(from a in context.user
+                    where a.isEnable
+                    && a.userId != userId
+                    && a.userName == userName
+                    select a).Any();
+        }
     }
 }

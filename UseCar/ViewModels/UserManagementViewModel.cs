@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace UseCar.ViewModels
         public string tel { get; set; }
         public string email { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
+        [Remote(action: "CheckUsername", controller: "UserManagement", AdditionalFields = "userId,userName", HttpMethod = "GET", ErrorMessage = "ชื่อผู้ใช้งานนี้มีอยู่ในระบบแล้ว")]
         public string userName { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
         [MinLength(8,ErrorMessage ="ความยาวของรหัสผ่านอย่างน้อย 8 ตัวอักษร")]
