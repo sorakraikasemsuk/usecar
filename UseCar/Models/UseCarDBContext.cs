@@ -16,6 +16,9 @@ namespace UseCar.Models
         }
 
         public virtual DbSet<department> department { get; set; }
+        public virtual DbSet<m_menu> m_menu { get; set; }
+        public virtual DbSet<m_menupermission> m_menupermission { get; set; }
+        public virtual DbSet<permission> permission { get; set; }
         public virtual DbSet<user> user { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -46,6 +49,63 @@ namespace UseCar.Models
                 entity.Property(e => e.updateDate).HasColumnType("datetime");
 
                 entity.Property(e => e.updateUser).HasColumnType("int(11)");
+            });
+
+            modelBuilder.Entity<m_menu>(entity =>
+            {
+                entity.HasKey(e => e.menuId)
+                    .HasName("PRIMARY");
+
+                entity.Property(e => e.menuId).HasColumnType("int(11)");
+
+                entity.Property(e => e.icon)
+                    .IsRequired()
+                    .HasColumnType("varchar(50)");
+
+                entity.Property(e => e.isEnable).HasColumnType("bit(1)");
+
+                entity.Property(e => e.menuControllerName)
+                    .IsRequired()
+                    .HasColumnType("varchar(50)");
+
+                entity.Property(e => e.menuName)
+                    .IsRequired()
+                    .HasColumnType("varchar(50)");
+
+                entity.Property(e => e.ord).HasColumnType("int(11)");
+
+                entity.Property(e => e.parentId).HasColumnType("int(11)");
+            });
+
+            modelBuilder.Entity<m_menupermission>(entity =>
+            {
+                entity.HasKey(e => e.menuPermissionId)
+                    .HasName("PRIMARY");
+
+                entity.Property(e => e.menuPermissionId).HasColumnType("int(11)");
+
+                entity.Property(e => e.isEnable).HasColumnType("bit(1)");
+
+                entity.Property(e => e.menuId).HasColumnType("int(11)");
+
+                entity.Property(e => e.ord).HasColumnType("int(11)");
+
+                entity.Property(e => e.permission)
+                    .IsRequired()
+                    .HasColumnType("varchar(50)");
+
+                entity.Property(e => e.permissionName)
+                    .IsRequired()
+                    .HasColumnType("varchar(50)");
+            });
+
+            modelBuilder.Entity<permission>(entity =>
+            {
+                entity.Property(e => e.permissionId).HasColumnType("int(11)");
+
+                entity.Property(e => e.departmentId).HasColumnType("int(11)");
+
+                entity.Property(e => e.menuPermissionId).HasColumnType("int(11)");
             });
 
             modelBuilder.Entity<user>(entity =>
