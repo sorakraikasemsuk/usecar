@@ -1,4 +1,4 @@
-﻿
+﻿@inject UseCar.Helper.DropdownList dropdownList
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -20,17 +20,17 @@
         <h5><i class="fa fa-search"></i> ข้อมูลแผนก</h5>
     </div>
     <div class="card-body">
-       <div class="row justify-content-center">
-           <div class="col-md-6">
-               <div class="form-group row">
-                   <label class="col-sm-4 col-form-label">แผนก</label>
-                   <div class="col-sm-8">
-                       <select class="form-control"></select>
-                   </div>
-                   
-               </div>
-           </div>
-       </div>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">แผนก</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="departmentId" asp-items="dropdownList.DeaprtmentAll()" onchange="DepartmentMenuPermission();"></select>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -48,8 +48,8 @@
                             <th width="80%">สิทธิ์การใช้งาน</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
+                    <tbody id="permission">
+                        @*<tr>
                             <td>ข้อมูลรถ</td>
                             <td>
                                 <div class="row">
@@ -282,7 +282,7 @@
                                     </div>
                                 </div>
                             </td>
-                        </tr>
+                        </tr>*@
                     </tbody>
                 </table>
             </div>
@@ -291,19 +291,92 @@
 </div>
 <div class="row mt-2">
     <div class="col-md-6">
-        <button type="button" class="btn btn-dark"><i class="fa fa-arrow-left"></i> กลับ</button>
+        <button type="button" class="btn btn-dark" onclick="window.history.back();"><i class="fa fa-arrow-left"></i> กลับ</button>
     </div>
     <div class="col-md-6 text-right">
-        <button type="button" class="btn btn-danger"><i class="fa fa-times"></i> ยกเลิก</button>
-        <button type="button" class="btn btn-primary"><i class="fa fa-save"></i> บันทึก</button>
+        <button type="button" class="btn btn-danger" onclick="window.history.back();"><i class="fa fa-times"></i> ยกเลิก</button>
+        <button type="button" class="btn btn-primary" onclick="Save();"><i class="fa fa-save"></i> บันทึก</button>
     </div>
 </div>
 
 @section scripts{
     <script>
         $(document).ready(function () {
-            
+            DepartmentMenuPermission();
         });
+        function DepartmentMenuPermission() {
+            $('#permission > tr').remove();
+            var _departmentId = $('#departmentId').val();
+            var _menu, _departmentMenuPermission;
+            $.ajax({
+                url: '/PermissionManagement/GetMenu',
+                type: 'GET',
+                async: false,
+                success: function (data) {
+                    _menu = data;
+                }
+            });
+            $.ajax({
+                url: '/PermissionManagement/GetDepartmentMenuPermission',
+                type: 'GET',
+                async: false,
+                data: {
+                    departmentId: _departmentId
+                },
+                success: function (data) {
+                    _departmentMenuPermission = data;
+                }
+            })
+            var _element = '';
+            _menu.forEach(function (menu) {
+                _element += '<tr>';
+                _element += '<td>' + menu.menuName + '</td>';
+                _element += '<td>';
+                var _menuPermission = _departmentMenuPermission.filter(function (permission) {
+                    return permission.menuId == menu.menuId;
+                });
+                _element += '<div class="row">';
+                _menuPermission.forEach(function (permission) {
+                    var _isCheck = permission.menuPermissionId == permission.departmentMenuPermissionId ? 'checked' : '';
+                    _element += '<div class="col-md-3">';
+                    _element += '<div class="form-check">';
+                    _element += '<input class="form-check-input" type="checkbox" value="' + permission.menuPermissionId+'" id="menuPermissionId_' + permission.menuPermissionId + '" ' + _isCheck+' >';
+                    _element += '<label class="form-check-label" for="">&nbsp;' + permission.permissionName + '</label>';
+                    _element += '</div>';
+                    _element += '</div>';
+                });
+                _element += '</div>';
+                _element += '</td>';
+                _element += '</tr>';
+            });
+            $('#permission').append(_element);
+            $('input[type=checkbox]').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+            })
+        }
+        function Save() {
+            var _menuPermissionId = '';
+            $('input[id^=menuPermissionId_]').each(function () {
+                if ($(this).is(':checked')) {
+                    if (_menuPermissionId == '') {
+                        _menuPermissionId = $(this).val();
+                    } else {
+                        _menuPermissionId = _menuPermissionId + ',' + $(this).val();
+                    }
+                }
+            });
+            $.ajax({
+                url: '/PermissionManagement/Create',
+                type: 'POST',
+                data: {
+                    departmentId: $('#departmentId').val(),
+                    menuPermissionId: _menuPermissionId
+                },
+                success: function (data) {
+                    ResponseDialog(data.code, window.location.href);
+                }
+            })
+        }
     </script>
 }
 
