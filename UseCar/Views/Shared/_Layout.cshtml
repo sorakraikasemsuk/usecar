@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http;
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -40,7 +41,7 @@
     <div class="layout-body">
         <div class="menu">
             <ul class="list-menu">
-                <li class="item-menu">
+                @*<li class="item-menu">
                     <a href="#"><i class="fa fa-home"></i> Dashboard</a>
                 </li>
                 <li class="item-menu">
@@ -69,7 +70,7 @@
                 </li>
                 <li class="item-menu">
                     <a href="/Admin"><i class="fa fa-user-cog"></i> ผู้ดูแลระบบ</a>
-                </li>
+                </li>*@
                 @*<li class="item-menu">
                         <a href="#">ผู้ดูแลระบบ <i class="fa fa-angle-down fa-pull-right"></i></a>
                         <ul class="sub-menu">
@@ -151,21 +152,20 @@
             $('input[type=checkbox]').iCheck({
                 checkboxClass: 'icheckbox_square-green',
             })
-            //$('.item-menu > a').click(function () {
-            //    var hasChild = $(this).siblings('.sub-menu');
-            //    if (hasChild.length > 0) {
-            //        if (hasChild.is(':visible')) {
-            //            hasChild.hide('slide', { direction: 'up' });
-            //            $(this).children('i').addClass('fa-angle-down');
-            //            $(this).children('i').removeClass('fa-angle-up')
-            //        } else {
-            //            hasChild.show('slide', { direction: 'up' });
-            //            $(this).children('i').addClass('fa-angle-up');
-            //            $(this).children('i').removeClass('fa-angle-down');
-            //        }
-            //    }
-            //})
+
+            GenerateMenu();
         });
+        function GenerateMenu() {
+            $('.list-menu > li').remove();
+            var _element = '';
+            var _menu = JSON.parse('@Html.Raw(Context.Session.GetString(UseCar.Helper.Session.menuPermission))');
+            _menu.forEach(function (menu) {
+                _element += ' <li class="item-menu">';
+                _element += '<a href="/' + menu.menuControllerName + '"><i class="fa ' + menu.icon + '"></i> ' + menu.menuName + '</a>';
+                _element += '</li>';
+            });
+            $('.list-menu').append(_element);
+        }
     </script>
     @RenderSection("Scripts", required: false)
 </body>
