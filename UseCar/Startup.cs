@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using UseCar.Filter;
 using UseCar.Helper;
 using UseCar.Models;
 using UseCar.Repositories;
@@ -51,9 +52,10 @@ namespace Car_Somchai
 
             services.AddHttpContextAccessor();
 
-            services.AddMvc(options =>
-        options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute())
-        ).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(options => {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                options.Filters.Add(new UseCarActionFilter());
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddTransient<DropdownList>();
             services.AddTransient<DepartmentManagementRepository>();
