@@ -32,6 +32,7 @@ namespace UseCar.Controllers
             return Json(departmentManagementRepository.Create(data));
         }
         [HttpPost]
+        [IgnoreAntiforgeryToken]
         public JsonResult Delete(int departmentId)
         {
             return Json(departmentManagementRepository.Delete(departmentId));
