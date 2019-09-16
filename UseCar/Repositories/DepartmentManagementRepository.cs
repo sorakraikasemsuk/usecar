@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,9 +12,11 @@ namespace UseCar.Repositories
     public class DepartmentManagementRepository
     {
         readonly UseCarDBContext context;
-        public DepartmentManagementRepository(UseCarDBContext context)
+        readonly HttpContext httpContext;
+        public DepartmentManagementRepository(UseCarDBContext context,IHttpContextAccessor httpContext)
         {
             this.context = context;
+            this.httpContext = httpContext.HttpContext;
         }
         public List<DepartmentManagementViewModel> GetDatatable(DepartmentManagementFilter filter)
         {
@@ -56,7 +59,7 @@ namespace UseCar.Repositories
                         {
                             departmentName = data.departmentName,
                             createDate = DateTime.Now,
-                            createUser = 1,
+                            createUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId)),
                             isEnable = true
                         };
                         context.department.Add(depart);
@@ -69,7 +72,7 @@ namespace UseCar.Repositories
                                           select a).FirstOrDefault();
                         department.departmentName = data.departmentName;
                         department.updateDate = DateTime.Now;
-                        department.updateUser = 1;
+                        department.updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId));
                         department.isEnable = true;
                         context.SaveChanges();
                     }
@@ -97,7 +100,7 @@ namespace UseCar.Repositories
                                      select a).FirstOrDefault();
                     delDepart.isEnable = false;
                     delDepart.updateDate = DateTime.Now;
-                    delDepart.updateUser = 1;
+                    delDepart.updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId));
                     context.SaveChanges();
                     Transaction.Commit();
 
