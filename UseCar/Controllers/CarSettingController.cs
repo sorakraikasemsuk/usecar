@@ -3,19 +3,51 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using UseCar.Repositories;
+using UseCar.ViewModels;
 
 namespace UseCar.Controllers
 {
     public class CarSettingController : Controller
     {
+        readonly CarSettingRepository carSettingRepository;
+        public CarSettingController(CarSettingRepository carSettingRepository)
+        {
+            this.carSettingRepository = carSettingRepository;
+        }
         public IActionResult Index()
         {
             return View();
         }
+        #region for brand
         public IActionResult Brand()
         {
             return View();
         }
+        public JsonResult GetDatatableBrand(BrandFilter filter)
+        {
+            return Json(carSettingRepository.GetDatatableBrand(filter));
+        }
+        public JsonResult GetBrandById(int brandId)
+        {
+            return Json(carSettingRepository.GetBrandById(brandId));
+        }
+        [HttpPost]
+        public JsonResult CreateBrand(BrandViewModel data)
+        {
+            return Json(carSettingRepository.CreateBrand(data));
+        }
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public JsonResult DeleteBrand(int brandId)
+        {
+            return Json(carSettingRepository.DeleteBrand(brandId));
+        }
+        public bool CheckBrandName(int brandId, string brandName)
+        {
+            return carSettingRepository.CheckBrandName(brandId, brandName);
+        }
+        #endregion
         public IActionResult Generation(int brandId)
         {
             return View();
