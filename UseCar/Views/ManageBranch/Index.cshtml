@@ -17,12 +17,12 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">ชื่อสาขา</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" id="textSearch" />
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <button type="button" class="btn btn-primary"><i class="fa fa-search"></i> ค้นหา</button>
+                <button type="button" class="btn btn-primary" onclick="ReloadDatatable();"><i class="fa fa-search"></i> ค้นหา</button>
             </div>
         </div>
     </div>
@@ -35,7 +35,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-12">
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal"><i class="fa fa-plus"></i> เพิ่มสาขา</button>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal" onclick="Add(0);"><i class="fa fa-plus"></i> เพิ่มสาขา</button>
             </div>
         </div>
         <div class="row mt-1">
@@ -43,26 +43,13 @@
                 <table id="branchTable" class="table table-bordered" style="width:100%">
                     <thead>
                         <tr>
+                            <th>ลำดับ</th>
                             <th>ชื่อสาขา</th>
                             <th>ที่อยู่สาขา</th>
                             <th>เบอร์โทร</th>
                             <th>จัดการ</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>สำนักงานใหญ่</td>
-                            <td>
-                                54/1 ถนน กม.3 ต.อรัญประเทศ
-                                อ.อรัญประเทศ จ.สระแก้ว 27120
-                            </td>
-                            <td>123456789</td>
-                            <td class="text-center">
-                                <button type="button" class="btn btn-light btn-sm"><i class="fa fa-edit"></i> แก้ไข</button>
-                                <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
-                            </td>
-                        </tr>
-                    </tbody>
                 </table>
             </div>
         </div>
@@ -80,28 +67,33 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label class="col-sm-12 col-form-label">ชื่อสาขา</label>
-                    <div class="col-sm-12">
-                        <input type="text" class="form-control" />
+                <form id="branchForm" asp-controller="ManageBranch" asp-action="Create" method="post" data-ajax="true" data-ajax-method="post" data-ajax-complete="completed">
+                    <input type="hidden" id="branchId" name="branchId" />
+                    <div class="form-group">
+                        <label class="col-sm-12 col-form-label">ชื่อสาขา</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="branchName" name="branchName" />
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-12 col-form-label">ที่อยู่</label>
-                    <div class="col-sm-12">
-                        <textarea rows="3" class="form-control"></textarea>
+                    <div class="form-group">
+                        <label class="col-sm-12 col-form-label">ที่อยู่</label>
+                        <div class="col-sm-12">
+                            <textarea rows="3" class="form-control" id="branchAddress" name="branchAddress"></textarea>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-12 col-form-label">เบอร์โทร</label>
-                    <div class="col-sm-12">
-                        <input type="text" class="form-control" />
+                    <div class="form-group">
+                        <label class="col-sm-12 col-form-label">เบอร์โทร</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="tel" name="tel" />
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> ปิด</button>
-                <button type="button" class="btn btn-primary"><i class="fa fa-save"></i> บันทึก</button>
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> ปิด</button>
+                            <button type="button" class="btn btn-primary" onclick="Save();"><i class="fa fa-save"></i> บันทึก</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -109,15 +101,163 @@
 
 @section scripts{
     <script>
+        var datatable;
         $(document).ready(function () {
-            $('#branchTable').DataTable({
+            Datatable();
+
+            $('#textSearch').keyup(function (e) {
+                if (e.keyCode === 13) {
+                    ReloadDatatable();
+                }
+            })
+        });
+        function Datatable() {
+            datatable = $('#branchTable').DataTable({
                 order: [],
                 searching: false,
                 ordering: true,
                 lengthChange: false,
                 pagingType: 'full_numbers',
-                bSort: false,
+                ajax: {
+                    url: '/ManageBranch/GetDatatable',
+                    type: 'GET',
+                    data: function (d) {
+                        d.branchName = $('#textSearch').val()
+                    },
+                    dataSrc: function (data) {
+                        return data;
+                    },
+                    statusCode: {
+                        401: function (xhr, error, thrown) {
+                            window.location.reload();
+                            return false;
+                        }
+                    }
+                },
+                columns: [
+                    {
+                        data: 'branchId',
+                        className: 'text-center',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: 'branchName',
+                    },
+                    {
+                        data: 'branchAddress',
+                        render: function (data, type, row) {
+                            return row.branchAddress;
+                        }
+                    },
+                    {
+                        data: 'tel',
+                        render: function (data, type, row) {
+                            return row.tel;
+                        }
+                    },
+                    {
+                        data: 'branchId',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            if (row.carInBranch == 0) {
+                                return '<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addModal" onclick="Add(' + row.branchId + ')"><i class="fa fa-edit"></i> แก้ไข</button>' +
+                                    ' <button type="button" class="btn btn-danger btn-sm" onclick="Delete(' + row.branchId + ')"><i class="fa fa-trash"></i> ลบ</button>';
+                            } else {
+                                return '<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addModal" onclick="Add(' + row.branchId + ')"><i class="fa fa-edit"></i> แก้ไข</button>';
+                            }
+                        }
+                    }
+                ]
             });
-        });
+        }
+        function ReloadDatatable() {
+            datatable.ajax.reload();
+        }
+        function Add(branchId) {
+            $.ajax({
+                url: '/ManageBranch/GetBranchById',
+                type: 'GET',
+                data: {
+                    branchId: branchId
+                },
+                success: function (data) {
+                    $('#branchId').val(data.branchId);
+                    $('#branchName').val(data.branchName);
+                    $('#branchAddress').val(data.branchAddress);
+                    $('#tel').val(data.tel);
+                }
+            })
+        }
+        function Delete(branchId) {
+            $.showConfirm({
+                title: "แจ้งเตือน",
+                body: "คุณต้องการลบข้อมูล ใช่หรือไม่?",
+                textTrue: "ใช่",
+                textFalse: "ไม่ใช่",
+                onSubmit: function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '/ManageBranch/Delete',
+                            type: 'POST',
+                            data: {
+                                branchId: branchId
+                            },
+                            success: function (data) {
+                                ResponseDialog(data.code, window.location.href);
+                            }
+                        })
+                    }
+                }
+            })
+        }
+        function Save() {
+            $("#branchForm").validate({
+                errorClass: 'text-danger',
+            }); //sets up the validator
+            $("#branchName").rules("add", {
+                required: true,
+                messages: {
+                    required: 'กรุณากรอกข้อมูล'
+                }
+            });
+            $("#branchAddress").rules("add", {
+                required: true,
+                messages: {
+                    required: 'กรุณากรอกข้อมูล'
+                }
+            });
+            $("#tel").rules("add", {
+                required: true,
+                messages: {
+                    required: 'กรุณากรอกข้อมูล'
+                }
+            });
+
+            var _checkBranchName = true;
+            $.ajax({
+                url: '/ManageBranch/CheckBranchName',
+                type: 'GET',
+                async: false,
+                data: {
+                    branchId: $('#branchId').val(),
+                    branchName: $('#branchName').val()
+                },
+                success: function (data) {
+                    _checkBranchName = data;
+                }
+            })
+            if (_checkBranchName) {
+                $('#branchForm').submit();
+            } else {
+                ExistDialog($('#branchName').val());
+            }
+            
+        }
+        function completed(res) {
+            $('#addModal').modal('hide');
+            ResponseDialog(res.responseJSON.code, window.location.href);
+        }
     </script>
 }
