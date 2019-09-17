@@ -139,14 +139,17 @@ namespace UseCar.Repositories
         public GenerationViewModel GetGenerationById(int brandId,int generationId)
         {
             return (from a in context.generation
+                    join b in context.brand on a.brandId equals b.brandId
                     where a.isEnable
                     && a.brandId == brandId
                     && a.generationId == generationId
+                    && b.isEnable
                     select new GenerationViewModel
                     {
                         generationId = a.generationId,
                         brandId = a.brandId,
-                        generationName = a.generationName
+                        generationName = a.generationName,
+                        brandName = b.brandName
                     }).FirstOrDefault() ?? new GenerationViewModel();
         }
         public ResponseResult CreateGeneration(GenerationViewModel data)
@@ -231,6 +234,125 @@ namespace UseCar.Repositories
                     && a.generationId != generationId
                     && a.generationName == generationName
                     select a).Any();
+        }
+        #endregion
+        #region for face
+        public List<FaceViewModel> GetDatatableFace(FaceFilter filter)
+        {
+            return (from a in context.face
+                    where a.isEnable
+                    && a.brandId == filter.brandId
+                    && a.generationId == filter.generationId
+                    && (a.faceName.Contains(filter.faceName) || filter.faceName == null)
+                    select new FaceViewModel
+                    {
+                        faceId = a.faceId,
+                        brandId = a.brandId,
+                        generationId = a.generationId,
+                        faceName = a.faceName,
+                        carInFace = 0
+                    }).ToList();
+        }
+        public FaceViewModel GetFaceById(int brandId,int generationId,int faceId)
+        {
+            return (from a in context.face
+                    where a.isEnable
+                    && a.brandId == brandId
+                    && a.generationId == generationId
+                    && a.faceId == faceId
+                    select new FaceViewModel
+                    {
+                        faceId = a.faceId,
+                        brandId = a.brandId,
+                        generationId = a.generationId,
+                        faceName = a.faceName
+                    }).FirstOrDefault() ?? new FaceViewModel();
+        }
+        public ResponseResult CreateFace(FaceViewModel data)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    if (data.faceId == 0)
+                    {
+                        face face = new face
+                        {
+                            brandId = data.brandId,
+                            generationId = data.generationId,
+                            faceName = data.faceName,
+                            createDate = DateTime.Now,
+                            createUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId)),
+                            isEnable = true
+                        };
+                        context.face.Add(face);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        var face = (from a in context.face
+                                    where a.isEnable
+                                    && a.brandId == data.brandId
+                                    && a.generationId == data.generationId
+                                    && a.faceId == data.faceId
+                                    select a).FirstOrDefault();
+                        face.faceName = data.faceName;
+                        face.updateDate = DateTime.Now;
+                        face.updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                        face.isEnable = true;
+                        context.SaveChanges();
+                    }
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public ResponseResult DeleteFace(int brandId,int generationId,int faceId)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    var face = (from a in context.face
+                                where a.isEnable
+                                && a.brandId == brandId
+                                && a.generationId == generationId
+                                && a.faceId == faceId
+                                select a).FirstOrDefault();
+                    face.isEnable = false;
+                    face.updateDate = DateTime.Now;
+                    face.updateUser= Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                    context.SaveChanges();
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public bool CheckFaceName(int brandId,int generationId,int faceId,string faceName)
+        {
+            return !(from a in context.face
+                     where a.isEnable
+                     && a.brandId == brandId
+                     && a.generationId == generationId
+                     && a.faceId != faceId
+                     && a.faceName == faceName
+                     select a).Any();
         }
         #endregion
     }

@@ -26,12 +26,29 @@ namespace UseCar.ViewModels
         public int generationId { get; set; }
         public int brandId { get; set; }
         public string generationName { get; set; }
+        public string brandName { get; set; }
         public int carInGeneration { get; set; }
     }
     public class GenerationFilter
     {
         public int brandId { get; set; }
         public string generationName { get; set; }
+    }
+    #endregion
+    #region for face
+    public class FaceViewModel
+    {
+        public int faceId { get; set; }
+        public int brandId { get; set; }
+        public int generationId { get; set; }
+        public string faceName { get; set; }
+        public int carInFace { get; set; }
+    }
+    public class FaceFilter
+    {
+        public int brandId { get; set; }
+        public int generationId { get; set; }
+        public string faceName { get; set; }
     }
     #endregion
 }

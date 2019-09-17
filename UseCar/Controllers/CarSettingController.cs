@@ -80,10 +80,40 @@ namespace UseCar.Controllers
             return carSettingRepository.CheckGenerationName(brandId, generationId, generationName);
         }
         #endregion
+        #region for face
         public IActionResult Face(int brandId,int generationId)
         {
+            var generation = carSettingRepository.GetGenerationById(brandId, generationId);
+            ViewBag.brandId = generation.brandId;
+            ViewBag.brandName = generation.brandName;
+            ViewBag.generationId = generation.generationId;
+            ViewBag.generationName = generation.generationName;
             return View();
         }
+        public JsonResult GetDatatableFace(FaceFilter filter)
+        {
+            return Json(carSettingRepository.GetDatatableFace(filter));
+        }
+        public JsonResult GetFaceById(int brandId, int generationId, int faceId)
+        {
+            return Json(carSettingRepository.GetFaceById(brandId, generationId, faceId));
+        }
+        [HttpPost]
+        public JsonResult CreateFace(FaceViewModel data)
+        {
+            return Json(carSettingRepository.CreateFace(data));
+        }
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public JsonResult DeleteFace(int brandId, int generationId, int faceId)
+        {
+            return Json(carSettingRepository.DeleteFace(brandId, generationId, faceId));
+        }
+        public bool CheckFaceName(int brandId, int generationId, int faceId, string faceName)
+        {
+            return carSettingRepository.CheckFaceName(brandId, generationId, faceId, faceName);
+        }
+        #endregion
         public IActionResult SubFace(int brandId,int generationId,int faceId)
         {
             return View();
