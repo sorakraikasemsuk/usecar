@@ -21,3 +21,9 @@ function ResponseDialog(code,location) {
         });
     }
 }
+function ExistDialog(text) {
+    $.showAlert({
+        title: 'แจ้งเตือน',
+        body: 'ข้อมูล <b>' + text + '</b> มีอยู่ในระบบแล้ว'
+    });
+}
