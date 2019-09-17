@@ -121,5 +121,117 @@ namespace UseCar.Repositories
                      select a).Any();
         }
         #endregion
+        #region for generation
+        public List<GenerationViewModel> GetDatatableGeneration(GenerationFilter filter)
+        {
+            return (from a in context.generation
+                    where a.isEnable
+                    && a.brandId == filter.brandId
+                    && (a.generationName.Contains(filter.generationName) || filter.generationName == null)
+                    select new GenerationViewModel
+                    {
+                        generationId = a.generationId,
+                        brandId = a.brandId,
+                        generationName = a.generationName,
+                        carInGeneration = 0
+                    }).ToList();
+        }
+        public GenerationViewModel GetGenerationById(int brandId,int generationId)
+        {
+            return (from a in context.generation
+                    where a.isEnable
+                    && a.brandId == brandId
+                    && a.generationId == generationId
+                    select new GenerationViewModel
+                    {
+                        generationId = a.generationId,
+                        brandId = a.brandId,
+                        generationName = a.generationName
+                    }).FirstOrDefault() ?? new GenerationViewModel();
+        }
+        public ResponseResult CreateGeneration(GenerationViewModel data)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    if (data.generationId == 0)
+                    {
+                        generation generation = new generation
+                        {
+                            brandId = data.brandId,
+                            generationName = data.generationName,
+                            createDate = DateTime.Now,
+                            createUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId)),
+                            isEnable = true
+                        };
+                        context.generation.Add(generation);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        var generation = (from a in context.generation
+                                          where a.isEnable
+                                          && a.brandId == data.brandId
+                                          && a.generationId == data.generationId
+                                          select a).FirstOrDefault();
+                        generation.brandId = data.brandId;
+                        generation.generationName = data.generationName;
+                        generation.updateDate = DateTime.Now;
+                        generation.updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                        generation.isEnable = true;
+                        context.SaveChanges();
+                    }
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public ResponseResult DeleteGeneration(int brandId,int generationId)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    var generation = (from a in context.generation
+                                      where a.isEnable
+                                      && a.brandId == brandId
+                                      && a.generationId == generationId
+                                      select a).FirstOrDefault();
+                    generation.isEnable = false;
+                    generation.updateDate = DateTime.Now;
+                    generation.updateUser= Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                    context.SaveChanges();
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public bool CheckGenerationName(int brandId,int generationId,string generationName)
+        {
+            return !(from a in context.generation
+                    where a.isEnable
+                    && a.brandId == brandId
+                    && a.generationId != generationId
+                    && a.generationName == generationName
+                    select a).Any();
+        }
+        #endregion
     }
 }

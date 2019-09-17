@@ -48,10 +48,38 @@ namespace UseCar.Controllers
             return carSettingRepository.CheckBrandName(brandId, brandName);
         }
         #endregion
+        #region for generation
         public IActionResult Generation(int brandId)
         {
+            var brand = carSettingRepository.GetBrandById(brandId);
+            ViewBag.brandId = brand.brandId;
+            ViewBag.brandName = brand.brandName;
             return View();
         }
+        public JsonResult GetDatatableGeneration(GenerationFilter filter)
+        {
+            return Json(carSettingRepository.GetDatatableGeneration(filter));
+        }
+        public JsonResult GetGenerationById(int brandId, int generationId)
+        {
+            return Json(carSettingRepository.GetGenerationById(brandId, generationId));
+        }
+        [HttpPost]
+        public JsonResult CreateGeneration(GenerationViewModel data)
+        {
+            return Json(carSettingRepository.CreateGeneration(data));
+        }
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public JsonResult DeleteGeneration(int brandId, int generationId)
+        {
+            return Json(carSettingRepository.DeleteGeneration(brandId, generationId));
+        }
+        public bool CheckGenerationName(int brandId, int generationId, string generationName)
+        {
+            return carSettingRepository.CheckGenerationName(brandId, generationId, generationName);
+        }
+        #endregion
         public IActionResult Face(int brandId,int generationId)
         {
             return View();

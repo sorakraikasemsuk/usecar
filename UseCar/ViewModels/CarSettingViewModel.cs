@@ -20,4 +20,18 @@ namespace UseCar.ViewModels
         public string brandName { get; set; }
     }
     #endregion
+    #region for generation
+    public class GenerationViewModel
+    {
+        public int generationId { get; set; }
+        public int brandId { get; set; }
+        public string generationName { get; set; }
+        public int carInGeneration { get; set; }
+    }
+    public class GenerationFilter
+    {
+        public int brandId { get; set; }
+        public string generationName { get; set; }
+    }
+    #endregion
 }
