@@ -400,9 +400,7 @@ namespace UseCar.Models
 
                 entity.Property(e => e.generationId).HasColumnType("int(11)");
 
-                entity.Property(e => e.isEnable)
-                    .IsRequired()
-                    .HasColumnType("varchar(45)");
+                entity.Property(e => e.isEnable).HasColumnType("bit(1)");
 
                 entity.Property(e => e.subfaceName)
                     .IsRequired()
