@@ -179,10 +179,35 @@ namespace UseCar.Controllers
             return carSettingRepository.CheckGearName(gearId, gearName);
         }
         #endregion
+        #region for capacityEngine
         public IActionResult CapacityEngine()
         {
             return View();
         }
+        public JsonResult GetDatatableCapacityEngine(CapacityEngineFilter filter)
+        {
+            return Json(carSettingRepository.GetDatatableCapacityEngine(filter));
+        }
+        public JsonResult GetCapacityEngineById(int capacityEngineId)
+        {
+            return Json(carSettingRepository.GetCapacityEngineById(capacityEngineId));
+        }
+        [HttpPost]
+        public JsonResult CreateCapacityEngine(CapacityEngineViewModel data)
+        {
+            return Json(carSettingRepository.CreateCapacityEngine(data));
+        }
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public JsonResult DeleteCapacityEngine(int capacityEngineId)
+        {
+            return Json(carSettingRepository.DeleteCapacityEngine(capacityEngineId));
+        }
+        public bool CheckCapacityEngineName(int capacityEngineId, string capacityEngineName)
+        {
+            return carSettingRepository.CheckCapacityEngineName(capacityEngineId, capacityEngineName);
+        }
+        #endregion
         public IActionResult Category()
         {
             return View();

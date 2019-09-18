@@ -594,5 +594,108 @@ namespace UseCar.Repositories
                      select a).Any();
         }
         #endregion
+        #region for capacityEngine
+        public List<CapacityEngineViewModel> GetDatatableCapacityEngine(CapacityEngineFilter filter)
+        {
+            return (from a in context.capacityengine
+                    where a.isEnable
+                    && (a.capacityEngineName.Contains(filter.capacityEngineName) || filter.capacityEngineName == null)
+                    select new CapacityEngineViewModel
+                    {
+                        capacityEngineId = a.capacityEngineId,
+                        capacityEngineName = a.capacityEngineName,
+                        carInCapacityEngine = 0
+                    }).ToList();
+        }
+        public CapacityEngineViewModel GetCapacityEngineById(int capacityEngineId)
+        {
+            return (from a in context.capacityengine
+                    where a.isEnable
+                    && a.capacityEngineId == capacityEngineId
+                    select new CapacityEngineViewModel
+                    {
+                        capacityEngineId = a.capacityEngineId,
+                        capacityEngineName = a.capacityEngineName
+                    }).FirstOrDefault() ?? new CapacityEngineViewModel();
+        }
+        public ResponseResult CreateCapacityEngine(CapacityEngineViewModel data)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    if (data.capacityEngineId == 0)
+                    {
+                        capacityengine capacityengine = new capacityengine
+                        {
+                            capacityEngineName = data.capacityEngineName,
+                            createDate = DateTime.Now,
+                            createUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId)),
+                            isEnable = true
+                        };
+                        context.capacityengine.Add(capacityengine);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        var capacityEngine = (from a in context.capacityengine
+                                              where a.isEnable
+                                              && a.capacityEngineId == data.capacityEngineId
+                                              select a).FirstOrDefault();
+                        capacityEngine.capacityEngineName = data.capacityEngineName;
+                        capacityEngine.updateDate = DateTime.Now;
+                        capacityEngine.updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                        capacityEngine.isEnable = true;
+                        context.SaveChanges();
+                    }
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public ResponseResult DeleteCapacityEngine(int capacityEngineId)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    var capacityEngine = (from a in context.capacityengine
+                                          where a.isEnable
+                                          && a.capacityEngineId == capacityEngineId
+                                          select a).FirstOrDefault();
+                    capacityEngine.isEnable = false;
+                    capacityEngine.updateDate = DateTime.Now;
+                    capacityEngine.updateUser= Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                    context.SaveChanges();
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public bool CheckCapacityEngineName(int capacityEngineId,string capacityEngineName)
+        {
+            return !(from a in context.capacityengine
+                     where a.isEnable
+                     && a.capacityEngineId != capacityEngineId
+                     && a.capacityEngineName == capacityEngineName
+                     select a).Any();
+        }
+        #endregion
     }
 }

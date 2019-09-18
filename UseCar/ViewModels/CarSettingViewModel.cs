@@ -83,4 +83,16 @@ namespace UseCar.ViewModels
         public string gearName { get; set; }
     }
     #endregion
+    #region for capacityEngine
+    public class CapacityEngineViewModel
+    {
+        public int capacityEngineId { get; set; }
+        public string capacityEngineName { get; set; }
+        public int carInCapacityEngine { get; set; }
+    }
+    public class CapacityEngineFilter
+    {
+        public string capacityEngineName { get; set; }
+    }
+    #endregion
 }
