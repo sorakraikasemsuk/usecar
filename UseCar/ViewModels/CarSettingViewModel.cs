@@ -71,4 +71,16 @@ namespace UseCar.ViewModels
         public string subfaceName { get; set; }
     }
     #endregion
+    #region for gear
+    public class GearViewModel
+    {
+        public int gearId { get; set; }
+        public string gearName { get; set; }
+        public int carInGear { get; set; }
+    }
+    public class GearFilter
+    {
+        public string gearName { get; set; }
+    }
+    #endregion
 }

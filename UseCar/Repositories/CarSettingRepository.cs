@@ -491,5 +491,108 @@ namespace UseCar.Repositories
                     select a).Any();
         }
         #endregion
+        #region for gear
+        public List<GearViewModel> GetDatatableGear(GearFilter filter)
+        {
+            return (from a in context.gear
+                    where a.isEnable
+                    && (a.gearName.Contains(filter.gearName) || filter.gearName == null)
+                    select new GearViewModel
+                    {
+                        gearId = a.gearId,
+                        gearName = a.gearName,
+                        carInGear = 0
+                    }).ToList();
+        }
+        public GearViewModel GetGearById(int gearId)
+        {
+            return (from a in context.gear
+                    where a.isEnable
+                    && a.gearId == gearId
+                    select new GearViewModel
+                    {
+                        gearId = a.gearId,
+                        gearName = a.gearName
+                    }).FirstOrDefault() ?? new GearViewModel();
+        }
+        public ResponseResult CreateGear(GearViewModel data)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    if (data.gearId == 0)
+                    {
+                        gear gear = new gear
+                        {
+                            gearName = data.gearName,
+                            createDate = DateTime.Now,
+                            createUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId)),
+                            isEnable = true
+                        };
+                        context.gear.Add(gear);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        var gear = (from a in context.gear
+                                    where a.isEnable
+                                    && a.gearId == data.gearId
+                                    select a).FirstOrDefault();
+                        gear.gearName = data.gearName;
+                        gear.updateDate = DateTime.Now;
+                        gear.updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                        gear.isEnable = true;
+                        context.SaveChanges();
+                    }
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public ResponseResult DeleteGear(int gearId)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    var gear = (from a in context.gear
+                                where a.isEnable
+                                && a.gearId == gearId
+                                select a).FirstOrDefault();
+                    gear.isEnable = false;
+                    gear.updateDate = DateTime.Now;
+                    gear.updateUser= Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                    context.SaveChanges();
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public bool CheckGearName(int gearId,string gearName)
+        {
+            return !(from a in context.gear
+                     where a.isEnable
+                     && a.gearId != gearId
+                     && a.gearName == gearName
+                     select a).Any();
+        }
+        #endregion
     }
 }

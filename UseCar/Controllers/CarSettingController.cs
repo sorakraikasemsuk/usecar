@@ -150,10 +150,35 @@ namespace UseCar.Controllers
             return carSettingRepository.CheckSubfaceName(brandId, generationId, faceId, subfaceId, subfaceName);
         }
         #endregion
+        #region for gear
         public IActionResult Gear()
         {
             return View();
         }
+        public JsonResult GetDatatableGear(GearFilter filter)
+        {
+            return Json(carSettingRepository.GetDatatableGear(filter));
+        }
+        public JsonResult GetGearById(int gearId)
+        {
+            return Json(carSettingRepository.GetGearById(gearId));
+        }
+        [HttpPost]
+        public JsonResult CreateGear(GearViewModel data)
+        {
+            return Json(carSettingRepository.CreateGear(data));
+        }
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public JsonResult DeleteGear(int gearId)
+        {
+            return Json(carSettingRepository.DeleteGear(gearId));
+        }
+        public bool CheckGearName(int gearId, string gearName)
+        {
+            return carSettingRepository.CheckGearName(gearId, gearName);
+        }
+        #endregion
         public IActionResult CapacityEngine()
         {
             return View();
