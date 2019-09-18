@@ -114,10 +114,42 @@ namespace UseCar.Controllers
             return carSettingRepository.CheckFaceName(brandId, generationId, faceId, faceName);
         }
         #endregion
+        #region for subface
         public IActionResult SubFace(int brandId,int generationId,int faceId)
         {
+            var face = carSettingRepository.GetFaceById(brandId, generationId, faceId);
+            ViewBag.brandId = face.brandId;
+            ViewBag.brandName = face.brandName;
+            ViewBag.generationId = face.generationId;
+            ViewBag.generationName = face.generationName;
+            ViewBag.faceId = face.faceId;
+            ViewBag.faceName = face.faceName;
             return View();
         }
+        public JsonResult GetDatatableSubface(SubFaceFilter filter)
+        {
+            return Json(carSettingRepository.GetDatatableSubface(filter));
+        }
+        public JsonResult GetSubfaceById(int brandId, int generationId, int faceId, int subfaceId)
+        {
+            return Json(carSettingRepository.GetSubfaceById(brandId, generationId, faceId, subfaceId));
+        }
+        [HttpPost]
+        public JsonResult CreateSubface(SubFaceViewModel data)
+        {
+            return Json(carSettingRepository.CreateSubface(data));
+        }
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public JsonResult DeleteSubface(int brandId, int generationId, int faceId, int subfaceId)
+        {
+            return Json(carSettingRepository.DeleteSubface(brandId, generationId, faceId, subfaceId));
+        }
+        public bool CheckSubfaceName(int brandId, int generationId, int faceId, int subfaceId, string subfaceName)
+        {
+            return carSettingRepository.CheckSubfaceName(brandId, generationId, faceId, subfaceId, subfaceName);
+        }
+        #endregion
         public IActionResult Gear()
         {
             return View();

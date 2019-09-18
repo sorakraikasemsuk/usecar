@@ -256,15 +256,21 @@ namespace UseCar.Repositories
         public FaceViewModel GetFaceById(int brandId,int generationId,int faceId)
         {
             return (from a in context.face
+                    join b in context.brand on a.brandId equals b.brandId
+                    join c in context.generation on a.generationId equals c.generationId
                     where a.isEnable
                     && a.brandId == brandId
                     && a.generationId == generationId
                     && a.faceId == faceId
+                    && b.isEnable
+                    && c.isEnable
                     select new FaceViewModel
                     {
                         faceId = a.faceId,
                         brandId = a.brandId,
+                        brandName = b.brandName,
                         generationId = a.generationId,
+                        generationName = c.generationName,
                         faceName = a.faceName
                     }).FirstOrDefault() ?? new FaceViewModel();
         }
@@ -353,6 +359,136 @@ namespace UseCar.Repositories
                      && a.faceId != faceId
                      && a.faceName == faceName
                      select a).Any();
+        }
+        #endregion
+        #region for subface
+        public List<SubFaceViewModel> GetDatatableSubface(SubFaceFilter filter)
+        {
+            return (from a in context.subface
+                    where a.isEnable
+                    && a.brandId == filter.brandId
+                    && a.generationId == filter.generationId
+                    && a.faceId == filter.faceId
+                    && (a.subfaceName.Contains(filter.subfaceName) || filter.subfaceName == null)
+                    select new SubFaceViewModel
+                    {
+                        subfaceId = a.subfaceId,
+                        brandId = a.brandId,
+                        generationId = a.generationId,
+                        faceId = a.faceId,
+                        subfaceName = a.subfaceName,
+                        carInSubface = 0
+                    }).ToList();
+        }
+        public SubFaceViewModel GetSubfaceById(int brandId,int generationId,int faceId,int subfaceId)
+        {
+            return (from a in context.subface
+                    where a.isEnable
+                    && a.brandId == brandId
+                    && a.generationId == generationId
+                    && a.faceId == faceId
+                    && a.subfaceId == subfaceId
+                    select new SubFaceViewModel
+                    {
+                        subfaceId = a.subfaceId,
+                        brandId = a.brandId,
+                        generationId = a.generationId,
+                        faceId = a.faceId,
+                        subfaceName = a.subfaceName
+                    }).FirstOrDefault() ?? new SubFaceViewModel();
+        }
+        public ResponseResult CreateSubface(SubFaceViewModel data)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    if (data.subfaceId == 0)
+                    {
+                        subface subface = new subface
+                        {
+                            brandId = data.brandId,
+                            generationId = data.generationId,
+                            faceId = data.faceId,
+                            subfaceName = data.subfaceName,
+                            createDate = DateTime.Now,
+                            createUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId)),
+                            isEnable = true
+                        };
+                        context.subface.Add(subface);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        var subface = (from a in context.subface
+                                       where a.isEnable
+                                       && a.brandId == data.brandId
+                                       && a.generationId == data.generationId
+                                       && a.faceId == data.faceId
+                                       && a.subfaceId == data.subfaceId
+                                       select a).FirstOrDefault();
+                        subface.brandId = data.brandId;
+                        subface.generationId = data.generationId;
+                        subface.faceId = data.faceId;
+                        subface.subfaceName = data.subfaceName;
+                        subface.updateDate = DateTime.Now;
+                        subface.updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                        subface.isEnable = true;
+                        context.SaveChanges();
+                    }
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public ResponseResult DeleteSubface(int brandId,int generationId,int faceId,int subfaceId)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    var subface = (from a in context.subface
+                                   where a.isEnable
+                                   && a.brandId == brandId
+                                   && a.generationId == generationId
+                                   && a.faceId == faceId
+                                   && a.subfaceId == subfaceId
+                                   select a).FirstOrDefault();
+                    subface.isEnable = false;
+                    subface.updateDate = DateTime.Now;
+                    subface.updateUser= Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                    context.SaveChanges();
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public bool CheckSubfaceName(int brandId,int generationId,int faceId,int subfaceId,string subfaceName)
+        {
+            return !(from a in context.subface
+                    where a.isEnable
+                    && a.brandId == brandId
+                    && a.generationId == generationId
+                    && a.faceId == faceId
+                    && a.subfaceId != subfaceId
+                    && a.subfaceName == subfaceName
+                    select a).Any();
         }
         #endregion
     }

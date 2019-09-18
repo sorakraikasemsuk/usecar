@@ -40,7 +40,9 @@ namespace UseCar.ViewModels
     {
         public int faceId { get; set; }
         public int brandId { get; set; }
+        public string brandName { get; set; }
         public int generationId { get; set; }
+        public string generationName { get; set; }
         public string faceName { get; set; }
         public int carInFace { get; set; }
     }
@@ -49,6 +51,24 @@ namespace UseCar.ViewModels
         public int brandId { get; set; }
         public int generationId { get; set; }
         public string faceName { get; set; }
+    }
+    #endregion
+    #region for subface
+    public class SubFaceViewModel
+    {
+        public int subfaceId { get; set; }
+        public int brandId { get; set; }
+        public int generationId { get; set; }
+        public int faceId { get; set; }
+        public string subfaceName { get; set; }
+        public int carInSubface { get; set; }
+    }
+    public class SubFaceFilter
+    {
+        public int brandId { get; set; }
+        public int generationId { get; set; }
+        public int faceId { get; set; }
+        public string subfaceName { get; set; }
     }
     #endregion
 }
