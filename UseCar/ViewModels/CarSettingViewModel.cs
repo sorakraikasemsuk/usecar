@@ -95,4 +95,16 @@ namespace UseCar.ViewModels
         public string capacityEngineName { get; set; }
     }
     #endregion
+    #region for category
+    public class CategoryViewModel
+    {
+        public int categoryId { get; set; }
+        public string categoryName { get; set; }
+        public int carInCate { get; set; }
+    }
+    public class CategoryFilter
+    {
+        public string categoryName { get; set; }
+    }
+    #endregion
 }

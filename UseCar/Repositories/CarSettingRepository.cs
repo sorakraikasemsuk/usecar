@@ -697,5 +697,108 @@ namespace UseCar.Repositories
                      select a).Any();
         }
         #endregion
+        #region for category
+        public List<CategoryViewModel> GetDatatableCategory(CategoryFilter filter)
+        {
+            return (from a in context.category
+                    where a.isEnable
+                    && (a.categoryName.Contains(filter.categoryName) || filter.categoryName == null)
+                    select new CategoryViewModel
+                    {
+                        categoryId = a.categoryId,
+                        categoryName = a.categoryName,
+                        carInCate = 0
+                    }).ToList();
+        }
+        public CategoryViewModel GetCategoryById(int categoryId)
+        {
+            return (from a in context.category
+                    where a.isEnable
+                    && a.categoryId == categoryId
+                    select new CategoryViewModel
+                    {
+                        categoryId = a.categoryId,
+                        categoryName = a.categoryName
+                    }).FirstOrDefault() ?? new CategoryViewModel();
+        }
+        public ResponseResult CreateCategory(CategoryViewModel data)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    if (data.categoryId == 0)
+                    {
+                        category category = new category
+                        {
+                            categoryName = data.categoryName,
+                            createDate = DateTime.Now,
+                            createUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId)),
+                            isEnable = true
+                        };
+                        context.category.Add(category);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        var category = (from a in context.category
+                                        where a.isEnable
+                                        && a.categoryId == data.categoryId
+                                        select a).FirstOrDefault();
+                        category.categoryName = data.categoryName;
+                        category.updateDate = DateTime.Now;
+                        category.updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                        category.isEnable = true;
+                        context.SaveChanges();
+                    }
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public ResponseResult DeleteCategory(int categoryId)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    var category = (from a in context.category
+                                    where a.isEnable
+                                    && a.categoryId == categoryId
+                                    select a).FirstOrDefault();
+                    category.isEnable = false;
+                    category.updateDate = DateTime.Now;
+                    category.updateUser= Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                    context.SaveChanges();
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public bool CheckCategoryName(int categoryId,string categoryName)
+        {
+            return !(from a in context.category
+                     where a.isEnable
+                     && a.categoryId != categoryId
+                     && a.categoryName == categoryName
+                     select a).Any();
+        }
+        #endregion
     }
 }

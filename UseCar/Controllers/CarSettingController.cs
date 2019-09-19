@@ -208,10 +208,35 @@ namespace UseCar.Controllers
             return carSettingRepository.CheckCapacityEngineName(capacityEngineId, capacityEngineName);
         }
         #endregion
+        #region for category
         public IActionResult Category()
         {
             return View();
         }
+        public JsonResult GetDatatableCategory(CategoryFilter filter)
+        {
+            return Json(carSettingRepository.GetDatatableCategory(filter));
+        }
+        public JsonResult GetCategoryById(int categoryId)
+        {
+            return Json(carSettingRepository.GetCategoryById(categoryId));
+        }
+        [HttpPost]
+        public JsonResult CreateCategory(CategoryViewModel data)
+        {
+            return Json(carSettingRepository.CreateCategory(data));
+        }
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public JsonResult DeleteCategory(int categoryId)
+        {
+            return Json(carSettingRepository.DeleteCategory(categoryId));
+        }
+        public bool CheckCategoryName(int categoryId, string categoryName)
+        {
+            return carSettingRepository.CheckCategoryName(categoryId, categoryName);
+        }
+        #endregion
         public IActionResult Seat()
         {
             return View();
