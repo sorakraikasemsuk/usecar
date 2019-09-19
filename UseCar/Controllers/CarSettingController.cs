@@ -274,10 +274,35 @@ namespace UseCar.Controllers
         {
             return View();
         }
+        #region for option
         public IActionResult Option()
         {
             return View();
         }
+        public JsonResult GetDatatableOption(OptionFilter filter)
+        {
+            return Json(carSettingRepository.GetDatatableOption(filter));
+        }
+        public JsonResult GetOptionById(int optionId)
+        {
+            return Json(carSettingRepository.GetOptionById(optionId));
+        }
+        [HttpPost]
+        public JsonResult CreateOption(OptionViewModel data)
+        {
+            return Json(carSettingRepository.CreateOption(data));
+        }
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public JsonResult DeleteOption(int optionId)
+        {
+            return Json(carSettingRepository.DeleteOption(optionId));
+        }
+        public bool CheckOptionName(int optionId, string optionName)
+        {
+            return carSettingRepository.CheckOptionName(optionId, optionName);
+        }
+        #endregion
         public IActionResult DriveSystem()
         {
             return View();

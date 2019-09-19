@@ -26,12 +26,12 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">ชื่ออุปกรณ์เสริม</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" id="textSearch" />
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <button class="btn btn-primary"><i class="fa fa-search"></i> ค้นหา</button>
+                <button class="btn btn-primary" onclick="ReloadDatatable();"><i class="fa fa-search"></i> ค้นหา</button>
             </div>
         </div>
     </div>
@@ -44,7 +44,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-12">
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal"><i class="fa fa-plus"></i> เพิ่มอุปกรณ์เสริม</button>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal" onclick="Add(0);"><i class="fa fa-plus"></i> เพิ่มอุปกรณ์เสริม</button>
             </div>
         </div>
         <div class="row mt-1">
@@ -52,13 +52,14 @@
                 <table id="optionTable" class="table table-bordered" style="width:100%">
                     <thead>
                         <tr>
+                            <th>ลำดับ</th>
                             <th>ชื่ออุปกรณ์เสริม</th>
                             <th>
                                 จัดการ
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    @*<tbody>
                         <tr>
                             <td>กระจกไฟฟ้า</td>
                             <td class="text-center">
@@ -66,7 +67,7 @@
                                 <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
                             </td>
                         </tr>
-                    </tbody>
+                    </tbody>*@
                 </table>
             </div>
         </div>
@@ -84,16 +85,21 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label class="col-sm-12 col-form-label">ชื่ออุปกรณ์เสริม</label>
-                    <div class="col-sm-12">
-                        <input type="text" class="form-control" />
+                <form id="optionForm" asp-controller="CarSetting" asp-action="CreateOption" method="post" data-ajax="true" data-ajax-method="post" data-ajax-complete="completed">
+                    <input type="hidden" id="optionId" name="optionId" />
+                    <div class="form-group">
+                        <label class="col-sm-12 col-form-label">ชื่ออุปกรณ์เสริม</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="optionName" name="optionName" />
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> ปิด</button>
-                <button type="button" class="btn btn-primary"><i class="fa fa-save"></i> บันทึก</button>
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> ปิด</button>
+                            <button type="button" class="btn btn-primary" onclick="Save();"><i class="fa fa-save"></i> บันทึก</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -101,16 +107,138 @@
 
 @section scripts{
     <script>
+        var datatable;
         $(document).ready(function () {
-            $('#optionTable').DataTable({
+            Datatable();
+
+            $('#textSearch').keyup(function (e) {
+                if (e.keyCode === 13) {
+                    ReloadDatatable();
+                }
+            })
+        });
+        function Datatable() {
+            datatable = $('#optionTable').DataTable({
                 order: [],
                 searching: false,
                 ordering: true,
                 lengthChange: false,
                 pagingType: 'full_numbers',
-                bSort: false,
+                ajax: {
+                    url: '/CarSetting/GetDatatableOption',
+                    type: 'GET',
+                    data: function (d) {
+                        d.optionName = $('#textSearch').val()
+                    },
+                    dataSrc: function (data) {
+                        return data;
+                    },
+                    statusCode: {
+                        401: function (xhr, error, thrown) {
+                            window.location.reload();
+                            return false;
+                        }
+                    }
+                },
+                columns: [
+                    {
+                        data: 'optionId',
+                        className: 'text-center',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: 'optionName',
+                    },
+                    {
+                        data: 'optionId',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            if (row.carInOption == 0) {
+                                return '<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addModal" onclick="Add(' + row.optionId + ')"><i class="fa fa-edit"></i> แก้ไข</button>' +
+                                    ' <button type="button" class="btn btn-danger btn-sm" onclick="Delete(' + row.optionId + ')"><i class="fa fa-trash"></i> ลบ</button>';
+                            } else {
+                                return '<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addModal" onclick="Add(' + row.optionId + ')"><i class="fa fa-edit"></i> แก้ไข</button>';
+                            }
+                        }
+                    }
+                ]
             });
-        });
+        }
+        function ReloadDatatable() {
+            datatable.ajax.reload();
+        }
+        function Add(optionId) {
+            $.ajax({
+                url: '/CarSetting/GetOptionById',
+                type: 'GET',
+                data: {
+                    optionId: optionId
+                },
+                success: function (data) {
+                    $('#optionId').val(data.optionId);
+                    $('#optionName').val(data.optionName);
+                }
+            })
+        }
+        function Delete(optionId) {
+            $.showConfirm({
+                title: "แจ้งเตือน",
+                body: "คุณต้องการลบข้อมูล ใช่หรือไม่?",
+                textTrue: "ใช่",
+                textFalse: "ไม่ใช่",
+                onSubmit: function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '/CarSetting/DeleteOption',
+                            type: 'POST',
+                            data: {
+                                optionId: optionId
+                            },
+                            success: function (data) {
+                                ResponseDialog(data.code, window.location.href);
+                            }
+                        })
+                    }
+                }
+            })
+        }
+        function Save() {
+            $("#optionForm").validate({
+                errorClass: 'text-danger',
+            }); //sets up the validator
+            $("#optionName").rules("add", {
+                required: true,
+                messages: {
+                    required: 'กรุณากรอกข้อมูล'
+                }
+            });
+
+            var _checkOptionName = true;
+            $.ajax({
+                url: '/CarSetting/CheckOptionName',
+                type: 'GET',
+                async: false,
+                data: {
+                    optionId: $('#optionId').val(),
+                    optionName: $('#optionName').val()
+                },
+                success: function (data) {
+                    _checkOptionName = data;
+                }
+            })
+            if (_checkOptionName) {
+                $('#optionForm').submit();
+            } else {
+                ExistDialog($('#optionName').val());
+            }
+
+        }
+        function completed(res) {
+            $('#addModal').modal('hide');
+            ResponseDialog(res.responseJSON.code, window.location.href);
+        }
     </script>
 }
 

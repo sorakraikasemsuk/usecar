@@ -903,5 +903,108 @@ namespace UseCar.Repositories
                      select a).Any();
         }
         #endregion
+        #region for option
+        public List<OptionViewModel> GetDatatableOption(OptionFilter filter)
+        {
+            return (from a in context.option
+                    where a.isEnable
+                    && (a.optionName.Contains(filter.optionName) || filter.optionName == null)
+                    select new OptionViewModel
+                    {
+                        optionId = a.optionId,
+                        optionName = a.optionName,
+                        carInOption = 0
+                    }).ToList();
+        }
+        public OptionViewModel GetOptionById(int optionId)
+        {
+            return (from a in context.option
+                    where a.isEnable
+                    && a.optionId == optionId
+                    select new OptionViewModel
+                    {
+                        optionId = a.optionId,
+                        optionName = a.optionName
+                    }).FirstOrDefault() ?? new OptionViewModel();
+        }
+        public ResponseResult CreateOption(OptionViewModel data)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    if (data.optionId == 0)
+                    {
+                        option option = new option
+                        {
+                            optionName = data.optionName,
+                            createDate = DateTime.Now,
+                            createUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId)),
+                            isEnable = true
+                        };
+                        context.option.Add(option);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        var option = (from a in context.option
+                                      where a.isEnable
+                                      && a.optionId == data.optionId
+                                      select a).FirstOrDefault();
+                        option.optionName = data.optionName;
+                        option.updateDate = DateTime.Now;
+                        option.updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                        option.isEnable = true;
+                        context.SaveChanges();
+                    }
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public ResponseResult DeleteOption(int optionId)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    var option = (from a in context.option
+                                  where a.isEnable
+                                  && a.optionId == optionId
+                                  select a).FirstOrDefault();
+                    option.isEnable = false;
+                    option.updateDate = DateTime.Now;
+                    option.updateUser= Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                    context.SaveChanges();
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public bool CheckOptionName(int optionId,string optionName)
+        {
+            return !(from a in context.option
+                     where a.isEnable
+                     && a.optionId != optionId
+                     && a.optionName == optionName
+                     select a).Any();
+        }
+        #endregion
     }
 }
