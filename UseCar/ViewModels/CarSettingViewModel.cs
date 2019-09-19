@@ -155,4 +155,16 @@ namespace UseCar.ViewModels
         public string colorName { get; set; }
     }
     #endregion
+    #region for engineType
+    public class EngineTypeViewModel
+    {
+        public int engineTypeId { get; set; }
+        public string engineTypeName { get; set; }
+        public int carInEngine { get; set; }
+    }
+    public class EngineTypeFilter
+    {
+        public string engineTypeName { get; set; }
+    }
+    #endregion
 }

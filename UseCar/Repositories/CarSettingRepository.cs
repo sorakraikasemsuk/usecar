@@ -1212,5 +1212,108 @@ namespace UseCar.Repositories
                      select a).Any();
         }
         #endregion
+        #region for engineType
+        public List<EngineTypeViewModel> GetDatatableEngineType(EngineTypeFilter filter)
+        {
+            return (from a in context.enginetype
+                    where a.isEnable
+                    && (a.engineTypeName.Contains(filter.engineTypeName) || filter.engineTypeName == null)
+                    select new EngineTypeViewModel
+                    {
+                        engineTypeId = a.engineTypeId,
+                        engineTypeName = a.engineTypeName,
+                        carInEngine = 0
+                    }).ToList();
+        }
+        public EngineTypeViewModel GetEngineTypeById(int engineTypeId)
+        {
+            return (from a in context.enginetype
+                    where a.isEnable
+                    && a.engineTypeId == engineTypeId
+                    select new EngineTypeViewModel
+                    {
+                        engineTypeId = a.engineTypeId,
+                        engineTypeName = a.engineTypeName
+                    }).FirstOrDefault() ?? new EngineTypeViewModel();
+        }
+        public ResponseResult CreateEngineType(EngineTypeViewModel data)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    if (data.engineTypeId == 0)
+                    {
+                        enginetype enginetype = new enginetype
+                        {
+                            engineTypeName = data.engineTypeName,
+                            createDate = DateTime.Now,
+                            createUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId)),
+                            isEnable = true
+                        };
+                        context.enginetype.Add(enginetype);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        var enginetype = (from a in context.enginetype
+                                          where a.isEnable
+                                          && a.engineTypeId == data.engineTypeId
+                                          select a).FirstOrDefault();
+                        enginetype.engineTypeName = data.engineTypeName;
+                        enginetype.updateDate = DateTime.Now;
+                        enginetype.updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                        enginetype.isEnable = true;
+                        context.SaveChanges();
+                    }
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public ResponseResult DeleteEngineType(int engineTypeId)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    var enginetype = (from a in context.enginetype
+                                      where a.isEnable
+                                      && a.engineTypeId == engineTypeId
+                                      select a).FirstOrDefault();
+                    enginetype.isEnable = false;
+                    enginetype.updateDate = DateTime.Now;
+                    enginetype.updateUser= Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                    context.SaveChanges();
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public bool CheckEngineTypeName(int engineTypeId,string engineTypeName)
+        {
+            return !(from a in context.enginetype
+                     where a.isEnable
+                     && a.engineTypeId != engineTypeId
+                     && a.engineTypeName == engineTypeName
+                     select a).Any();
+        }
+        #endregion
     }
 }

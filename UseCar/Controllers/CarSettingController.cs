@@ -361,9 +361,34 @@ namespace UseCar.Controllers
             return carSettingRepository.CheckColorName(colorId, colorName);
         }
         #endregion
+        #region for engineType
         public IActionResult EngineType()
         {
             return View();
         }
+        public JsonResult GetDatatableEngineType(EngineTypeFilter filter)
+        {
+            return Json(carSettingRepository.GetDatatableEngineType(filter));
+        }
+        public JsonResult GetEngineTypeById(int engineTypeId)
+        {
+            return Json(carSettingRepository.GetEngineTypeById(engineTypeId));
+        }
+        [HttpPost]
+        public JsonResult CreateEngineType(EngineTypeViewModel data)
+        {
+            return Json(carSettingRepository.CreateEngineType(data));
+        }
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public JsonResult DeleteEngineType(int engineTypeId)
+        {
+            return Json(carSettingRepository.DeleteEngineType(engineTypeId));
+        }
+        public bool CheckEngineTypeName(int engineTypeId, string engineTypeName)
+        {
+            return carSettingRepository.CheckEngineTypeName(engineTypeId, engineTypeName);
+        }
+        #endregion
     }
 }
