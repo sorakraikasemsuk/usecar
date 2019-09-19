@@ -1006,5 +1006,108 @@ namespace UseCar.Repositories
                      select a).Any();
         }
         #endregion
+        #region for driveSystem
+        public List<DriveSystemViewModel> GetDatatableDriveSystem(DriveSystemFilter filter)
+        {
+            return (from a in context.drivesystem
+                    where a.isEnable
+                    && (a.driveSystemName.Contains(filter.driveSystemName) || filter.driveSystemName == null)
+                    select new DriveSystemViewModel
+                    {
+                        driveSystemId = a.driveSystemId,
+                        driveSystemName = a.driveSystemName,
+                        carInDrive = 0
+                    }).ToList();
+        }
+        public DriveSystemViewModel GetDriveSystemById(int driveSystemId)
+        {
+            return (from a in context.drivesystem
+                    where a.isEnable
+                    && a.driveSystemId == driveSystemId
+                    select new DriveSystemViewModel
+                    {
+                        driveSystemId = a.driveSystemId,
+                        driveSystemName = a.driveSystemName
+                    }).FirstOrDefault() ?? new DriveSystemViewModel();
+        }
+        public ResponseResult CreateDriveSystem(DriveSystemViewModel data)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    if (data.driveSystemId == 0)
+                    {
+                        drivesystem drivesystem = new drivesystem
+                        {
+                            driveSystemName = data.driveSystemName,
+                            createDate = DateTime.Now,
+                            createUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId)),
+                            isEnable = true
+                        };
+                        context.drivesystem.Add(drivesystem);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        var drivesystem = (from a in context.drivesystem
+                                           where a.isEnable
+                                           && a.driveSystemId == data.driveSystemId
+                                           select a).FirstOrDefault();
+                        drivesystem.driveSystemName = data.driveSystemName;
+                        drivesystem.updateDate = DateTime.Now;
+                        drivesystem.updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                        drivesystem.isEnable = true;
+                        context.SaveChanges();
+                    }
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public ResponseResult DeleteDriveSystem(int driveSystemId)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    var driveSystem = (from a in context.drivesystem
+                                       where a.isEnable
+                                       && a.driveSystemId == driveSystemId
+                                       select a).FirstOrDefault();
+                    driveSystem.isEnable = false;
+                    driveSystem.updateDate = DateTime.Now;
+                    driveSystem.updateUser= Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                    context.SaveChanges();
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public bool CheckDriveSystemName(int driveSystemId,string driveSystemName)
+        {
+            return !(from a in context.drivesystem
+                     where a.isEnable
+                     && a.driveSystemId != driveSystemId
+                     && a.driveSystemName == driveSystemName
+                     select a).Any();
+        }
+        #endregion
     }
 }

@@ -119,7 +119,7 @@ namespace UseCar.ViewModels
         public string seatName { get; set; }
     }
     #endregion
-    #region fot option
+    #region for option
     public class OptionViewModel
     {
         public int optionId { get; set; }
@@ -129,6 +129,18 @@ namespace UseCar.ViewModels
     public class OptionFilter
     {
         public string optionName { get; set; }
+    }
+    #endregion
+    #region for driveSystem
+    public class DriveSystemViewModel
+    {
+        public int driveSystemId { get; set; }
+        public string driveSystemName { get; set; }
+        public int carInDrive { get; set; }
+    }
+    public class DriveSystemFilter
+    {
+        public string driveSystemName { get; set; }
     }
     #endregion
 }

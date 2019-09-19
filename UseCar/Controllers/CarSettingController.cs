@@ -303,10 +303,35 @@ namespace UseCar.Controllers
             return carSettingRepository.CheckOptionName(optionId, optionName);
         }
         #endregion
+        #region for driveSystem
         public IActionResult DriveSystem()
         {
             return View();
         }
+        public JsonResult GetDatatableDriveSystem(DriveSystemFilter filter)
+        {
+            return Json(carSettingRepository.GetDatatableDriveSystem(filter));
+        }
+        public JsonResult GetDriveSystemById(int driveSystemId)
+        {
+            return Json(carSettingRepository.GetDriveSystemById(driveSystemId));
+        }
+        [HttpPost]
+        public JsonResult CreateDriveSystem(DriveSystemViewModel data)
+        {
+            return Json(carSettingRepository.CreateDriveSystem(data));
+        }
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public JsonResult DeleteDriveSystem(int driveSystemId)
+        {
+            return Json(carSettingRepository.DeleteDriveSystem(driveSystemId));
+        }
+        public bool CheckDriveSystemName(int driveSystemId, string driveSystemName)
+        {
+            return carSettingRepository.CheckDriveSystemName(driveSystemId, driveSystemName);
+        }
+        #endregion
         public IActionResult Color()
         {
             return View();
