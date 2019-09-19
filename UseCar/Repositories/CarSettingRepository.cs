@@ -1109,5 +1109,108 @@ namespace UseCar.Repositories
                      select a).Any();
         }
         #endregion
+        #region for color
+        public List<ColorViewModel> GetDatatableColor(ColorFilter filter)
+        {
+            return (from a in context.color
+                    where a.isEnable
+                    && (a.colorName.Contains(filter.colorName) || filter.colorName == null)
+                    select new ColorViewModel
+                    {
+                        colorId = a.colorId,
+                        colorName = a.colorName,
+                        carInColor = 0
+                    }).ToList();
+        }
+        public ColorViewModel GetColorById(int colorId)
+        {
+            return (from a in context.color
+                    where a.isEnable
+                    && a.colorId == colorId
+                    select new ColorViewModel
+                    {
+                        colorId = a.colorId,
+                        colorName = a.colorName
+                    }).FirstOrDefault() ?? new ColorViewModel();
+        }
+        public ResponseResult CreateColor(ColorViewModel data)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    if (data.colorId == 0)
+                    {
+                        color color = new color
+                        {
+                            colorName = data.colorName,
+                            createDate = DateTime.Now,
+                            createUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId)),
+                            isEnable = true
+                        };
+                        context.color.Add(color);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        var color = (from a in context.color
+                                     where a.isEnable
+                                     && a.colorId == data.colorId
+                                     select a).FirstOrDefault();
+                        color.colorName = data.colorName;
+                        color.updateDate = DateTime.Now;
+                        color.updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                        color.isEnable = true;
+                        context.SaveChanges();
+                    }
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public ResponseResult DeleteColor(int colorId)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    var color = (from a in context.color
+                                 where a.isEnable
+                                 && a.colorId == colorId
+                                 select a).FirstOrDefault();
+                    color.isEnable = false;
+                    color.updateDate = DateTime.Now;
+                    color.updateUser= Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                    context.SaveChanges();
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public bool CheckColorName(int colorId,string colorName)
+        {
+            return !(from a in context.color
+                     where a.isEnable
+                     && a.colorId != colorId
+                     && a.colorName == colorName
+                     select a).Any();
+        }
+        #endregion
     }
 }

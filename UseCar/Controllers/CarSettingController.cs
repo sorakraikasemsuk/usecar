@@ -332,10 +332,35 @@ namespace UseCar.Controllers
             return carSettingRepository.CheckDriveSystemName(driveSystemId, driveSystemName);
         }
         #endregion
+        #region for color
         public IActionResult Color()
         {
             return View();
         }
+        public JsonResult GetDatatableColor(ColorFilter filter)
+        {
+            return Json(carSettingRepository.GetDatatableColor(filter));
+        }
+        public JsonResult GetColorById(int colorId)
+        {
+            return Json(carSettingRepository.GetColorById(colorId));
+        }
+        [HttpPost]
+        public JsonResult CreateColor(ColorViewModel data)
+        {
+            return Json(carSettingRepository.CreateColor(data));
+        }
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public JsonResult DeleteColor(int colorId)
+        {
+            return Json(carSettingRepository.DeleteColor(colorId));
+        }
+        public bool CheckColorName(int colorId, string colorName)
+        {
+            return carSettingRepository.CheckColorName(colorId, colorName);
+        }
+        #endregion
         public IActionResult EngineType()
         {
             return View();

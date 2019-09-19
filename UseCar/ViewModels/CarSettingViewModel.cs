@@ -143,4 +143,16 @@ namespace UseCar.ViewModels
         public string driveSystemName { get; set; }
     }
     #endregion
+    #region for color
+    public class ColorViewModel
+    {
+        public int colorId { get; set; }
+        public string colorName { get; set; }
+        public int carInColor { get; set; }
+    }
+    public class ColorFilter
+    {
+        public string colorName { get; set; }
+    }
+    #endregion
 }
