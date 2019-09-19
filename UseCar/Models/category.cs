@@ -10,7 +10,7 @@ namespace UseCar.Models
         public DateTime createDate { get; set; }
         public int createUser { get; set; }
         public DateTime? updateDate { get; set; }
-        public DateTime? updateUser { get; set; }
+        public int? updateUser { get; set; }
         public bool isEnable { get; set; }
     }
 }

@@ -128,7 +128,7 @@ namespace UseCar.Models
 
                 entity.Property(e => e.updateDate).HasColumnType("datetime");
 
-                entity.Property(e => e.updateUser).HasColumnType("datetime");
+                entity.Property(e => e.updateUser).HasColumnType("int(11)");
             });
 
             modelBuilder.Entity<color>(entity =>
