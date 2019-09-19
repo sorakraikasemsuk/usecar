@@ -800,5 +800,108 @@ namespace UseCar.Repositories
                      select a).Any();
         }
         #endregion
+        #region for seat
+        public List<SeatViewModel> GetDatatableSeat(SeatFilter filter)
+        {
+            return (from a in context.seat
+                    where a.isEnable
+                    && (a.seatName.Contains(filter.seatName) || filter.seatName == null)
+                    select new SeatViewModel
+                    {
+                        seatId = a.seatId,
+                        seatName = a.seatName,
+                        carInSeat = 0
+                    }).ToList();
+        }
+        public SeatViewModel GetSeatById(int seatId)
+        {
+            return (from a in context.seat
+                    where a.isEnable
+                    && a.seatId == seatId
+                    select new SeatViewModel
+                    {
+                        seatId = a.seatId,
+                        seatName = a.seatName
+                    }).FirstOrDefault() ?? new SeatViewModel();
+        }
+        public ResponseResult CreateSeat(SeatViewModel data)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    if (data.seatId == 0)
+                    {
+                        seat seat = new seat
+                        {
+                            seatName = data.seatName,
+                            createDate = DateTime.Now,
+                            createUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId)),
+                            isEnable = true
+                        };
+                        context.seat.Add(seat);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        var seat = (from a in context.seat
+                                    where a.isEnable
+                                    && a.seatId == data.seatId
+                                    select a).FirstOrDefault();
+                        seat.seatName = data.seatName;
+                        seat.updateDate = DateTime.Now;
+                        seat.updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                        seat.isEnable = true;
+                        context.SaveChanges();
+                    }
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public ResponseResult DeleteSeat(int seatId)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    var seat = (from a in context.seat
+                                where a.isEnable
+                                && a.seatId == seatId
+                                select a).FirstOrDefault();
+                    seat.isEnable = false;
+                    seat.updateDate = DateTime.Now;
+                    seat.updateUser= Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                    context.SaveChanges();
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public bool CheckSeatName(int seatId,string seatName)
+        {
+            return !(from a in context.seat
+                     where a.isEnable
+                     && a.seatId != seatId
+                     && a.seatName == seatName
+                     select a).Any();
+        }
+        #endregion
     }
 }

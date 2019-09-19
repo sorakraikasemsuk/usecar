@@ -237,10 +237,35 @@ namespace UseCar.Controllers
             return carSettingRepository.CheckCategoryName(categoryId, categoryName);
         }
         #endregion
+        #region for seat
         public IActionResult Seat()
         {
             return View();
         }
+        public JsonResult GetDatatableSeat(SeatFilter filter)
+        {
+            return Json(carSettingRepository.GetDatatableSeat(filter));
+        }
+        public JsonResult GetSeatById(int seatId)
+        {
+            return Json(carSettingRepository.GetSeatById(seatId));
+        }
+        [HttpPost]
+        public JsonResult CreateSeat(SeatViewModel data)
+        {
+            return Json(carSettingRepository.CreateSeat(data));
+        }
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public JsonResult DeleteSeat(int seatId)
+        {
+            return Json(carSettingRepository.DeleteSeat(seatId));
+        }
+        public bool CheckSeatName(int seatId, string seatName)
+        {
+            return carSettingRepository.CheckSeatName(seatId, seatName);
+        }
+        #endregion
         public IActionResult Type()
         {
             return View();

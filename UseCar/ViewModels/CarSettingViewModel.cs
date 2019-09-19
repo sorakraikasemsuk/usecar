@@ -107,4 +107,14 @@ namespace UseCar.ViewModels
         public string categoryName { get; set; }
     }
     #endregion
+    public class SeatViewModel
+    {
+        public int seatId { get; set; }
+        public string seatName { get; set; }
+        public int carInSeat { get; set; }
+    }
+    public class SeatFilter
+    {
+        public string seatName { get; set; }
+    }
 }
