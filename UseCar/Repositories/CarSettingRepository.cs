@@ -1418,5 +1418,117 @@ namespace UseCar.Repositories
                      select a).Any();
         }
         #endregion
+        #region for nature
+        public List<NatureViewModel> GetDatatableNature(NatureFilter filter)
+        {
+            return (from a in context.nature
+                    where a.isEnable
+                    && a.typeId == filter.typeId
+                    && (a.natureName.Contains(filter.natureName) || filter.natureName == null)
+                    select new NatureViewModel
+                    {
+                        natureId = a.natureId,
+                        typeId = a.typeId,
+                        natureName = a.natureName,
+                        carInNature = 0
+                    }).ToList();
+        }
+        public NatureViewModel GetNatureById(int typeId,int natureId)
+        {
+            return (from a in context.nature
+                    where a.isEnable
+                    && a.typeId == typeId
+                    && a.natureId == natureId
+                    select new NatureViewModel
+                    {
+                        natureId = a.natureId,
+                        typeId = a.typeId,
+                        natureName = a.natureName
+                    }).FirstOrDefault() ?? new NatureViewModel();
+        }
+        public ResponseResult CreateNature(NatureViewModel data)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    if (data.natureId == 0)
+                    {
+                        nature nature = new nature
+                        {
+                            typeId = data.typeId,
+                            natureName = data.natureName,
+                            createDate = DateTime.Now,
+                            createUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId)),
+                            isEnable = true
+                        };
+                        context.nature.Add(nature);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        var nature = (from a in context.nature
+                                      where a.isEnable
+                                      && a.typeId == data.typeId
+                                      && a.natureId == data.natureId
+                                      select a).FirstOrDefault();
+                        nature.typeId = data.typeId;
+                        nature.natureName = data.natureName;
+                        nature.updateDate = DateTime.Now;
+                        nature.updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                        nature.isEnable = true;
+                        context.SaveChanges();
+                    }
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public ResponseResult DeleteNature(int typeId,int natureId)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    var nature = (from a in context.nature
+                                  where a.isEnable
+                                  && a.typeId == typeId
+                                  && a.natureId == natureId
+                                  select a).FirstOrDefault();
+                    nature.isEnable = false;
+                    nature.updateDate = DateTime.Now;
+                    nature.updateUser= Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                    context.SaveChanges();
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public bool CheckNatureName(int typeId,int natureId,string natureName)
+        {
+            return !(from a in context.nature
+                     where a.isEnable
+                     && a.typeId == typeId
+                     && a.natureId != natureId
+                     && a.natureName == natureName
+                     select a).Any();
+        }
+        #endregion
     }
 }

@@ -295,10 +295,38 @@ namespace UseCar.Controllers
             return carSettingRepository.CheckTypeName(typeId, typeName);
         }
         #endregion
+        #region for nature
         public IActionResult Nature(int typeId)
         {
+            var type = carSettingRepository.GetTypeById(typeId);
+            ViewBag.typeId = type.typeId;
+            ViewBag.typeName = type.typeName;
             return View();
         }
+        public JsonResult GetDatatableNature(NatureFilter filter)
+        {
+            return Json(carSettingRepository.GetDatatableNature(filter));
+        }
+        public JsonResult GetNatureById(int typeId, int natureId)
+        {
+            return Json(carSettingRepository.GetNatureById(typeId, natureId));
+        }
+        [HttpPost]
+        public JsonResult CreateNature(NatureViewModel data)
+        {
+            return Json(carSettingRepository.CreateNature(data));
+        }
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public JsonResult DeleteNature(int typeId, int natureId)
+        {
+            return Json(carSettingRepository.DeleteNature(typeId, natureId));
+        }
+        public bool CheckNatureName(int typeId, int natureId, string natureName)
+        {
+            return carSettingRepository.CheckNatureName(typeId, natureId, natureName);
+        }
+        #endregion
         #region for option
         public IActionResult Option()
         {

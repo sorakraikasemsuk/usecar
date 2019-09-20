@@ -27,7 +27,7 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">ประเภทรถยนต์</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" value="รถยนต์ที่นั่งส่วนบุคคลไม่เกิน 7 คน (รย.1)" />
+                        <input type="text" class="form-control" value="@ViewBag.typeName" readonly />
                     </div>
                 </div>
             </div>
@@ -35,12 +35,12 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">ลักษณะรถ</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" id="textSearch" />
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <button class="btn btn-primary"><i class="fa fa-search"></i> ค้นหา</button>
+                <button class="btn btn-primary" onclick="ReloadDatatable();"><i class="fa fa-search"></i> ค้นหา</button>
             </div>
         </div>
     </div>
@@ -53,7 +53,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-12">
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal"><i class="fa fa-plus"></i> เพิ่มลักษณะรถ</button>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal" onclick="Add(0);"><i class="fa fa-plus"></i> เพิ่มลักษณะรถ</button>
             </div>
         </div>
         <div class="row mt-1">
@@ -61,13 +61,14 @@
                 <table id="natureTable" class="table table-bordered" style="width:100%">
                     <thead>
                         <tr>
+                            <th>ลำดับ</th>
                             <th>ลักษณะรถ</th>
                             <th>
                                 จัดการ
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    @*<tbody>
                         <tr>
                             <td>เก๋งสองตอน</td>
                             <td class="text-center">
@@ -75,7 +76,7 @@
                                 <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
                             </td>
                         </tr>
-                    </tbody>
+                    </tbody>*@
                 </table>
             </div>
         </div>
@@ -93,16 +94,22 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label class="col-sm-12 col-form-label">ลักษณะรถ</label>
-                    <div class="col-sm-12">
-                        <input type="text" class="form-control" />
+                <form id="natureForm" asp-controller="CarSetting" asp-action="CreateNature" method="post" data-ajax="true" data-ajax-method="post" data-ajax-complete="completed">
+                    <input type="hidden" id="natureId" name="natureId" />
+                    <input type="hidden" id="typeId" name="typeId" value="@ViewBag.typeId" />
+                    <div class="form-group">
+                        <label class="col-sm-12 col-form-label">ลักษณะรถ</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="natureName" name="natureName" />
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> ปิด</button>
-                <button type="button" class="btn btn-primary"><i class="fa fa-save"></i> บันทึก</button>
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> ปิด</button>
+                            <button type="button" class="btn btn-primary" onclick="Save();"><i class="fa fa-save"></i> บันทึก</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -110,16 +117,142 @@
 
 @section scripts{
     <script>
+        var datatable;
         $(document).ready(function () {
-            $('#natureTable').DataTable({
+            Datatable();
+
+            $('#textSearch').keyup(function (e) {
+                if (e.keyCode === 13) {
+                    ReloadDatatable();
+                }
+            })
+        });
+        function Datatable() {
+            datatable = $('#natureTable').DataTable({
                 order: [],
                 searching: false,
                 ordering: true,
                 lengthChange: false,
                 pagingType: 'full_numbers',
-                bSort: false,
+                ajax: {
+                    url: '/CarSetting/GetDatatableNature',
+                    type: 'GET',
+                    data: function (d) {
+                        d.typeId = $('#typeId').val(),
+                        d.natureName = $('#textSearch').val()
+                    },
+                    dataSrc: function (data) {
+                        return data;
+                    },
+                    statusCode: {
+                        401: function (xhr, error, thrown) {
+                            window.location.reload();
+                            return false;
+                        }
+                    }
+                },
+                columns: [
+                    {
+                        data: 'natureId',
+                        className: 'text-center',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: 'natureName',
+                    },
+                    {
+                        data: 'natureId',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            if (row.carInNature == 0) {
+                                return '<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addModal" onclick="Add(' + row.natureId + ')"><i class="fa fa-edit"></i> แก้ไข</button>' +
+                                    ' <button type="button" class="btn btn-danger btn-sm" onclick="Delete(' + row.natureId + ')"><i class="fa fa-trash"></i> ลบ</button>';
+                            } else {
+                                return '<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addModal" onclick="Add(' + row.natureId + ')"><i class="fa fa-edit"></i> แก้ไข</button>';
+                            }
+                        }
+                    }
+                ]
             });
-        });
+        }
+        function ReloadDatatable() {
+            datatable.ajax.reload();
+        }
+        function Add(natureId) {
+            $.ajax({
+                url: '/CarSetting/GetNatureById',
+                type: 'GET',
+                data: {
+                    typeId: $('#typeId').val(),
+                    natureId: natureId
+                },
+                success: function (data) {
+                    $('#natureId').val(data.natureId);
+                    $('#natureName').val(data.natureName);
+                }
+            })
+        }
+        function Delete(natureId) {
+            $.showConfirm({
+                title: "แจ้งเตือน",
+                body: "คุณต้องการลบข้อมูล ใช่หรือไม่?",
+                textTrue: "ใช่",
+                textFalse: "ไม่ใช่",
+                onSubmit: function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '/CarSetting/DeleteNature',
+                            type: 'POST',
+                            data: {
+                                typeId: $('#typeId').val(),
+                                natureId: natureId
+                            },
+                            success: function (data) {
+                                ResponseDialog(data.code, window.location.href);
+                            }
+                        })
+                    }
+                }
+            })
+        }
+        function Save() {
+            $("#natureForm").validate({
+                errorClass: 'text-danger',
+            }); //sets up the validator
+            $("#natureName").rules("add", {
+                required: true,
+                messages: {
+                    required: 'กรุณากรอกข้อมูล'
+                }
+            });
+
+            var _checkNatureName = true;
+            $.ajax({
+                url: '/CarSetting/CheckNatureName',
+                type: 'GET',
+                async: false,
+                data: {
+                    typeId: $('#typeId').val(),
+                    natureId: $('#natureId').val(),
+                    natureName: $('#natureName').val()
+                },
+                success: function (data) {
+                    _checkNatureName = data;
+                }
+            })
+            if (_checkNatureName) {
+                $('#natureForm').submit();
+            } else {
+                ExistDialog($('#natureName').val());
+            }
+
+        }
+        function completed(res) {
+            $('#addModal').modal('hide');
+            ResponseDialog(res.responseJSON.code, window.location.href);
+        }
     </script>
 }
 

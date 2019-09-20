@@ -179,4 +179,18 @@ namespace UseCar.ViewModels
         public string typeName { get; set; }
     }
     #endregion
+    #region for nature
+    public class NatureViewModel
+    {
+        public int natureId { get; set; }
+        public int typeId { get; set; }
+        public string natureName { get; set; }
+        public int carInNature { get; set; }
+    }
+    public class NatureFilter
+    {
+        public int typeId { get; set; }
+        public string natureName { get; set; }
+    }
+    #endregion
 }
