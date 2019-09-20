@@ -26,12 +26,12 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">ประเภทร้านซ่อม</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" id="textSearch" />
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <button class="btn btn-primary"><i class="fa fa-search"></i> ค้นหา</button>
+                <button class="btn btn-primary" onclick="ReloadDatatable();"><i class="fa fa-search"></i> ค้นหา</button>
             </div>
         </div>
     </div>
@@ -44,7 +44,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-12">
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal"><i class="fa fa-plus"></i> เพิ่มประเภทร้านซ่อม</button>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal" onclick="Add(0);"><i class="fa fa-plus"></i> เพิ่มประเภทร้านซ่อม</button>
             </div>
         </div>
         <div class="row mt-1">
@@ -52,13 +52,14 @@
                 <table id="categoryShopTable" class="table table-bordered" style="width:100%">
                     <thead>
                         <tr>
+                            <th>ลำดับ</th>
                             <th>ประเภทร้านซ่อม</th>
                             <th>
                                 จัดการ
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    @*<tbody>
                         <tr>
                             <td>อู่สี</td>
                             <td class="text-center">
@@ -66,7 +67,7 @@
                                 <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
                             </td>
                         </tr>
-                    </tbody>
+                    </tbody>*@
                 </table>
             </div>
         </div>
@@ -84,16 +85,21 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label class="col-sm-12 col-form-label">ประเภทร้านซ่อม</label>
-                    <div class="col-sm-12">
-                        <input type="text" class="form-control" />
+                <form id="categoryShopForm" asp-controller="RepairShop" asp-action="CreateCategoryShop" method="post" data-ajax="true" data-ajax-method="post" data-ajax-complete="completed">
+                    <input type="hidden" id="categoryShopId" name="categoryShopId" />
+                    <div class="form-group">
+                        <label class="col-sm-12 col-form-label">ประเภทร้านซ่อม</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="categoryShopName" name="categoryShopName" />
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> ปิด</button>
-                <button type="button" class="btn btn-primary"><i class="fa fa-save"></i> บันทึก</button>
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> ปิด</button>
+                            <button type="button" class="btn btn-primary" onclick="Save();"><i class="fa fa-save"></i> บันทึก</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -101,16 +107,138 @@
 
 @section scripts{
     <script>
+        var datatable;
         $(document).ready(function () {
-            $('#categoryShopTable').DataTable({
+            Datatable();
+
+            $('#textSearch').keyup(function (e) {
+                if (e.keyCode === 13) {
+                    ReloadDatatable();
+                }
+            })
+        });
+        function Datatable() {
+            datatable = $('#categoryShopTable').DataTable({
                 order: [],
                 searching: false,
                 ordering: true,
                 lengthChange: false,
                 pagingType: 'full_numbers',
-                bSort: false,
+                ajax: {
+                    url: '/RepairShop/GetDatatableCategoryShop',
+                    type: 'GET',
+                    data: function (d) {
+                        d.categoryShopName = $('#textSearch').val()
+                    },
+                    dataSrc: function (data) {
+                        return data;
+                    },
+                    statusCode: {
+                        401: function (xhr, error, thrown) {
+                            window.location.reload();
+                            return false;
+                        }
+                    }
+                },
+                columns: [
+                    {
+                        data: 'categoryShopId',
+                        className: 'text-center',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: 'categoryShopName',
+                    },
+                    {
+                        data: 'categoryShopId',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            if (row.shopInCate == 0) {
+                                return '<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addModal" onclick="Add(' + row.categoryShopId + ')"><i class="fa fa-edit"></i> แก้ไข</button>' +
+                                    ' <button type="button" class="btn btn-danger btn-sm" onclick="Delete(' + row.categoryShopId + ')"><i class="fa fa-trash"></i> ลบ</button>';
+                            } else {
+                                return '<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addModal" onclick="Add(' + row.categoryShopId + ')"><i class="fa fa-edit"></i> แก้ไข</button>';
+                            }
+                        }
+                    }
+                ]
             });
-        });
+        }
+        function ReloadDatatable() {
+            datatable.ajax.reload();
+        }
+        function Add(categoryShopId) {
+            $.ajax({
+                url: '/RepairShop/GetCategoryShopById',
+                type: 'GET',
+                data: {
+                    categoryShopId: categoryShopId
+                },
+                success: function (data) {
+                    $('#categoryShopId').val(data.categoryShopId);
+                    $('#categoryShopName').val(data.categoryShopName);
+                }
+            })
+        }
+        function Delete(categoryShopId) {
+            $.showConfirm({
+                title: "แจ้งเตือน",
+                body: "คุณต้องการลบข้อมูล ใช่หรือไม่?",
+                textTrue: "ใช่",
+                textFalse: "ไม่ใช่",
+                onSubmit: function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '/RepairShop/DeleteCategoryShop',
+                            type: 'POST',
+                            data: {
+                                categoryShopId: categoryShopId
+                            },
+                            success: function (data) {
+                                ResponseDialog(data.code, window.location.href);
+                            }
+                        })
+                    }
+                }
+            })
+        }
+        function Save() {
+            $("#categoryShopForm").validate({
+                errorClass: 'text-danger',
+            }); //sets up the validator
+            $("#categoryShopName").rules("add", {
+                required: true,
+                messages: {
+                    required: 'กรุณากรอกข้อมูล'
+                }
+            });
+
+            var _checkCategoryShopName = true;
+            $.ajax({
+                url: '/RepairShop/CheckCategoryShopName',
+                type: 'GET',
+                async: false,
+                data: {
+                    categoryShopId: $('#categoryShopId').val(),
+                    categoryShopName: $('#categoryShopName').val()
+                },
+                success: function (data) {
+                    _checkCategoryShopName = data;
+                }
+            })
+            if (_checkCategoryShopName) {
+                $('#categoryShopForm').submit();
+            } else {
+                ExistDialog($('#categoryShopName').val());
+            }
+
+        }
+        function completed(res) {
+            $('#addModal').modal('hide');
+            ResponseDialog(res.responseJSON.code, window.location.href);
+        }
     </script>
 }
 
