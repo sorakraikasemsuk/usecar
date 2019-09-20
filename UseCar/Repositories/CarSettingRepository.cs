@@ -1315,5 +1315,108 @@ namespace UseCar.Repositories
                      select a).Any();
         }
         #endregion
+        #region for type
+        public List<TypeViewModel> GetDatatableType(TypeFilter filter)
+        {
+            return (from a in context.type
+                    where a.isEnable
+                    && (a.typeName.Contains(filter.typeName) || filter.typeName == null)
+                    select new TypeViewModel
+                    {
+                        typeId = a.typeId,
+                        typeName = a.typeName,
+                        carInType = 0
+                    }).ToList();
+        }
+        public TypeViewModel GetTypeById(int typeId)
+        {
+            return (from a in context.type
+                    where a.isEnable
+                    && a.typeId == typeId
+                    select new TypeViewModel
+                    {
+                        typeId = a.typeId,
+                        typeName = a.typeName
+                    }).FirstOrDefault() ?? new TypeViewModel();
+        }
+        public ResponseResult CreateType(TypeViewModel data)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    if (data.typeId == 0)
+                    {
+                        type type = new type
+                        {
+                            typeName = data.typeName,
+                            createDate = DateTime.Now,
+                            createUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId)),
+                            isEnable = true
+                        };
+                        context.type.Add(type);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        var type = (from a in context.type
+                                    where a.isEnable
+                                    && a.typeId == data.typeId
+                                    select a).FirstOrDefault();
+                        type.typeName = data.typeName;
+                        type.updateDate = DateTime.Now;
+                        type.updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                        type.isEnable = true;
+                        context.SaveChanges();
+                    }
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public ResponseResult DeleteType(int typeId)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    var type = (from a in context.type
+                                where a.isEnable
+                                && a.typeId == typeId
+                                select a).FirstOrDefault();
+                    type.isEnable = false;
+                    type.updateDate = DateTime.Now;
+                    type.updateUser= Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                    context.SaveChanges();
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public bool CheckTypeName(int typeId,string typeName)
+        {
+            return !(from a in context.type
+                     where a.isEnable
+                     && a.typeId != typeId
+                     && a.typeName == typeName
+                     select a).Any();
+        }
+        #endregion
     }
 }
