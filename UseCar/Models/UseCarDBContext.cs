@@ -19,7 +19,9 @@ namespace UseCar.Models
         public virtual DbSet<brand> brand { get; set; }
         public virtual DbSet<capacityengine> capacityengine { get; set; }
         public virtual DbSet<category> category { get; set; }
+        public virtual DbSet<categoryshop> categoryshop { get; set; }
         public virtual DbSet<color> color { get; set; }
+        public virtual DbSet<contactrepairshop> contactrepairshop { get; set; }
         public virtual DbSet<department> department { get; set; }
         public virtual DbSet<drivesystem> drivesystem { get; set; }
         public virtual DbSet<enginetype> enginetype { get; set; }
@@ -31,6 +33,7 @@ namespace UseCar.Models
         public virtual DbSet<nature> nature { get; set; }
         public virtual DbSet<option> option { get; set; }
         public virtual DbSet<permission> permission { get; set; }
+        public virtual DbSet<repairshop> repairshop { get; set; }
         public virtual DbSet<seat> seat { get; set; }
         public virtual DbSet<subface> subface { get; set; }
         public virtual DbSet<type> type { get; set; }
@@ -131,6 +134,25 @@ namespace UseCar.Models
                 entity.Property(e => e.updateUser).HasColumnType("int(11)");
             });
 
+            modelBuilder.Entity<categoryshop>(entity =>
+            {
+                entity.Property(e => e.categoryShopId).HasColumnType("int(11)");
+
+                entity.Property(e => e.categoryShopName)
+                    .IsRequired()
+                    .HasColumnType("varchar(250)");
+
+                entity.Property(e => e.createDate).HasColumnType("datetime");
+
+                entity.Property(e => e.createUser).HasColumnType("int(11)");
+
+                entity.Property(e => e.isEnable).HasColumnType("bit(1)");
+
+                entity.Property(e => e.updateDate).HasColumnType("datetime");
+
+                entity.Property(e => e.updateUser).HasColumnType("int(11)");
+            });
+
             modelBuilder.Entity<color>(entity =>
             {
                 entity.Property(e => e.colorId).HasColumnType("int(11)");
@@ -148,6 +170,29 @@ namespace UseCar.Models
                 entity.Property(e => e.updateDate).HasColumnType("datetime");
 
                 entity.Property(e => e.updateUser).HasColumnType("int(11)");
+            });
+
+            modelBuilder.Entity<contactrepairshop>(entity =>
+            {
+                entity.Property(e => e.contactRepairShopId).HasColumnType("int(11)");
+
+                entity.Property(e => e.contactName)
+                    .IsRequired()
+                    .HasColumnType("varchar(500)");
+
+                entity.Property(e => e.createDate).HasColumnType("datetime");
+
+                entity.Property(e => e.createUser).HasColumnType("int(11)");
+
+                entity.Property(e => e.isEnable).HasColumnType("bit(1)");
+
+                entity.Property(e => e.remark).HasColumnType("varchar(500)");
+
+                entity.Property(e => e.repairShopId).HasColumnType("int(11)");
+
+                entity.Property(e => e.tel)
+                    .IsRequired()
+                    .HasColumnType("varchar(50)");
             });
 
             modelBuilder.Entity<department>(entity =>
@@ -365,6 +410,37 @@ namespace UseCar.Models
                 entity.Property(e => e.departmentId).HasColumnType("int(11)");
 
                 entity.Property(e => e.menuPermissionId).HasColumnType("int(11)");
+            });
+
+            modelBuilder.Entity<repairshop>(entity =>
+            {
+                entity.Property(e => e.repairShopId).HasColumnType("int(11)");
+
+                entity.Property(e => e.categoryShopId).HasColumnType("int(11)");
+
+                entity.Property(e => e.createDate).HasColumnType("datetime");
+
+                entity.Property(e => e.createUser).HasColumnType("int(11)");
+
+                entity.Property(e => e.fax).HasColumnType("varchar(50)");
+
+                entity.Property(e => e.isEnable).HasColumnType("bit(1)");
+
+                entity.Property(e => e.repairShopAddress)
+                    .IsRequired()
+                    .HasColumnType("text");
+
+                entity.Property(e => e.repairShopName)
+                    .IsRequired()
+                    .HasColumnType("varchar(255)");
+
+                entity.Property(e => e.tel)
+                    .IsRequired()
+                    .HasColumnType("varchar(50)");
+
+                entity.Property(e => e.updateDate).HasColumnType("datetime");
+
+                entity.Property(e => e.updateUser).HasColumnType("int(11)");
             });
 
             modelBuilder.Entity<seat>(entity =>
