@@ -75,5 +75,16 @@ namespace UseCar.Helper
                         Text = a.faceName
                     }).ToList();
         }
+        public List<SelectListItem> SubFaceByFace(int faceId)
+        {
+            return (from a in context.subface
+                    where a.isEnable
+                    && a.faceId == faceId
+                    select new SelectListItem
+                    {
+                        Value = a.subfaceId.ToString(),
+                        Text = a.subfaceName
+                    }).ToList();
+        }
     }
 }
