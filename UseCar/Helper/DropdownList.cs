@@ -33,5 +33,15 @@ namespace UseCar.Helper
                         Text = a.categoryShopName
                     }).ToList();
         }
+        public List<SelectListItem> BranchAll()
+        {
+            return (from a in context.branch
+                    where a.isEnable
+                    select new SelectListItem
+                    {
+                        Value = a.branchId.ToString(),
+                        Text = a.branchName
+                    }).ToList();
+        }
     }
 }
