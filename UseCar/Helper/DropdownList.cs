@@ -23,5 +23,15 @@ namespace UseCar.Helper
                         Text=a.departmentName
                     }).ToList();
         }
+        public List<SelectListItem> CategoryShopAll()
+        {
+            return (from a in context.categoryshop
+                    where a.isEnable
+                    select new SelectListItem
+                    {
+                        Value = a.categoryShopId.ToString(),
+                        Text = a.categoryShopName
+                    }).ToList();
+        }
     }
 }
