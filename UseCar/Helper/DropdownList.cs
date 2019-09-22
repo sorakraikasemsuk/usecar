@@ -53,5 +53,16 @@ namespace UseCar.Helper
                         Text = a.brandName
                     }).ToList();
         }
+        public List<SelectListItem> GenerationByBrand(int brandId)
+        {
+            return (from a in context.generation
+                    where a.isEnable
+                    && a.brandId == brandId
+                    select new SelectListItem
+                    {
+                        Value = a.generationId.ToString(),
+                        Text = a.generationName
+                    }).ToList();
+        }
     }
 }
