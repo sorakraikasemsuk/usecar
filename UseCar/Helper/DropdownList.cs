@@ -64,5 +64,16 @@ namespace UseCar.Helper
                         Text = a.generationName
                     }).ToList();
         }
+        public List<SelectListItem> FacByGeneration(int generationId)
+        {
+            return (from a in context.face
+                    where a.isEnable
+                    && a.generationId == generationId
+                    select new SelectListItem
+                    {
+                        Value = a.faceId.ToString(),
+                        Text = a.faceName
+                    }).ToList();
+        }
     }
 }
