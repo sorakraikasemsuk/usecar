@@ -24,14 +24,24 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group row">
-                    <label class="col-sm-4 col-form-label">ร้านซ่อม</label>
+                    <label class="col-sm-4 col-form-label">ประเภทร้านซ่อม</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" />
+                        <select class="form-control" id="categoryShopIdFilter" asp-items="@ViewBag.CategoryShopAll">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <button class="btn btn-primary"><i class="fa fa-search"></i> ค้นหา</button>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">ร้านซ่อม</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="textSearch" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary" onclick="ReloadDatatable();"><i class="fa fa-search"></i> ค้นหา</button>
             </div>
         </div>
     </div>
@@ -44,14 +54,15 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-12">
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal"><i class="fa fa-plus"></i> เพิ่มร้านซ่อม</button>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal" onclick="Add(0);"><i class="fa fa-plus"></i> เพิ่มร้านซ่อม</button>
             </div>
         </div>
         <div class="row mt-1">
             <div class="col-md-12">
-                <table id="shopTable" class="table table-bordered" style="width:100%">
+                <table id="repairTableTable" class="table table-bordered" style="width:100%">
                     <thead>
                         <tr>
+                            <th>ลำดับ</th>
                             <th>ชื่อร้าน</th>
                             <th>ประเภทร้านซ่อม</th>
                             <th>
@@ -59,7 +70,7 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    @*<tbody>
                         <tr>
                             <td>ออโต้ คาร์</td>
                             <td>อู่สี</td>
@@ -68,7 +79,7 @@
                                 <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
                             </td>
                         </tr>
-                    </tbody>
+                    </tbody>*@
                 </table>
             </div>
         </div>
@@ -77,7 +88,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">เพิ่ม/แก้ไขร้านซ่อม</h5>
@@ -86,85 +97,89 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label class="col-sm-12 col-form-label">ชื่อร้าน</label>
-                    <div class="col-sm-12">
-                        <input type="text" class="form-control" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-12 col-form-label">ที่อยู่</label>
-                    <div class="col-sm-12">
-                        <textarea class="form-control" rows="3"></textarea>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-12 col-form-label">เบอร์โทร</label>
-                    <div class="col-sm-12">
-                        <input type="text" class="form-control" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-12 col-form-label">แฟกซ์</label>
-                    <div class="col-sm-12">
-                        <input type="text" class="form-control" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-12 col-form-label">ประเภทร้านซ่อม</label>
-                    <div class="col-sm-12">
-                        <select class="form-control"></select>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <button type="button" class="btn btn-success"><i class="fa fa-plus"></i> เพิ่มผู้ติดต่อ</button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-5">
-                        <div class="form-group">
-                            <label>ชื่อ</label>
-                            <input type="text" class="form-control" />
+                <form id="repairShopForm" asp-controller="RepairShop" asp-action="CreateRepairShop" method="post" data-ajax="true" data-ajax-method="post" data-ajax-complete="completed">
+                    <input type="hidden" id="repairShopId" name="repairShopId" />
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>ข้อมูลร้านซ่อม</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label class="col-sm-12 col-form-label">ชื่อร้าน</label>
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" id="repairShopName" name="repairShopName" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-12 col-form-label">ที่อยู่</label>
+                                <div class="col-sm-12">
+                                    <textarea class="form-control" rows="3" id="repairShopAddress" name="repairShopAddress"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-12 col-form-label">เบอร์โทร</label>
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" id="tel" name="tel" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-12 col-form-label">แฟกซ์</label>
+                                <div class="col-sm-12">
+                                    <input type="text" class="form-control" id="fax" name="fax" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-12 col-form-label">ประเภทร้านซ่อม</label>
+                                <div class="col-sm-12">
+                                    <select class="form-control" id="categoryShopId" name="categoryShopId" asp-items="@ViewBag.CategoryShopAll">
+                                        <option value="">กรุณาเลือก</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-5">
-                        <div class="form-group">
-                            <label>เบอร์โทร</label>
-                            <input type="text" class="form-control" />
+                    <div class="card mt-2">
+                        <div class="card-header d-flex">
+                            <h5>ข้อมูลผู้ติดต่อ</h5>
+                            &nbsp;<button type="button" class="btn btn-success" onclick="AddContact('','','');"><i class="fa fa-plus"></i> เพิ่มผู้ติดต่อ</button>
+                        </div>
+                        <div class="card-body" id="contact">
+                            @*<div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label>ชื่อ</label>
+                                <input type="text" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>เบอร์โทร</label>
+                                <input type="text" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>หมายเหตุ</label>
+                                <input type="text" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label>&nbsp;</label>
+                                <button class="btn btn-light d-block"><i class="fa fa-times text-danger"></i></button>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>&nbsp;</label>
-                            <button class="btn btn-light d-block"><i class="fa fa-trash"></i></button>
+                    <hr />*@
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-5">
-                        <div class="form-group">
-                            <label>ชื่อ</label>
-                            <input type="text" class="form-control" />
+                    <div class="row mt-2">
+                        <div class="col-md-12 text-right">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> ปิด</button>
+                            <button type="button" class="btn btn-primary" onclick="Save();"><i class="fa fa-save"></i> บันทึก</button>
                         </div>
                     </div>
-                    <div class="col-md-5">
-                        <div class="form-group">
-                            <label>เบอร์โทร</label>
-                            <input type="text" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>&nbsp;</label>
-                            <button class="btn btn-light d-block"><i class="fa fa-trash"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> ปิด</button>
-                <button type="button" class="btn btn-primary"><i class="fa fa-save"></i> บันทึก</button>
+                </form>
             </div>
         </div>
     </div>
@@ -172,16 +187,252 @@
 
 @section scripts{
     <script>
+        var datatable;
         $(document).ready(function () {
-            $('#shopTable').DataTable({
+            Datatable();
+
+            $('#textSearch').keyup(function (e) {
+                if (e.keyCode === 13) {
+                    ReloadDatatable();
+                }
+            })
+        });
+        function Datatable() {
+            datatable = $('#repairTableTable').DataTable({
                 order: [],
                 searching: false,
                 ordering: true,
                 lengthChange: false,
                 pagingType: 'full_numbers',
-                bSort: false,
+                ajax: {
+                    url: '/RepairShop/GetDatatableRepairShop',
+                    type: 'GET',
+                    data: function (d) {
+                        d.categoryShopId = $('#categoryShopIdFilter').val(),
+                        d.repairShopName = $('#textSearch').val()
+                    },
+                    dataSrc: function (data) {
+                        return data;
+                    },
+                    statusCode: {
+                        401: function (xhr, error, thrown) {
+                            window.location.reload();
+                            return false;
+                        }
+                    }
+                },
+                columns: [
+                    {
+                        data: 'repairShopId',
+                        className: 'text-center',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: 'repairShopName',
+                    },
+                    {
+                        data:'categoryShopName'
+                    },
+                    {
+                        data: 'repairShopId',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            if (row.maInShop == 0) {
+                                return '<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addModal" onclick="Add(' + row.repairShopId + ')"><i class="fa fa-edit"></i> แก้ไข</button>' +
+                                    ' <button type="button" class="btn btn-danger btn-sm" onclick="Delete(' + row.repairShopId + ')"><i class="fa fa-trash"></i> ลบ</button>';
+                            } else {
+                                return '<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addModal" onclick="Add(' + row.repairShopId + ')"><i class="fa fa-edit"></i> แก้ไข</button>';
+                            }
+                        }
+                    }
+                ]
             });
-        });
+        }
+        function ReloadDatatable() {
+            datatable.ajax.reload();
+        }
+        function Add(repairShopId) {
+            $.ajax({
+                url: '/RepairShop/GetRepairShopById',
+                type: 'GET',
+                data: {
+                    repairShopId: repairShopId
+                },
+                success: function (data) {
+                    $('#repairShopId').val(data.repairShopId);
+                    $('#repairShopName').val(data.repairShopName);
+                    $('#repairShopAddress').val(data.repairShopAddress);
+                    $('#tel').val(data.tel);
+                    $('#fax').val(data.fax);
+                    $('#categoryShopId').val(data.categoryShopId);
+                    $('#contact > .row').remove();
+                    data.contactRepairShops.forEach(function (item) {
+                        AddContact(item.contactName, item.tel, item.remark);
+                    });
+                }
+            })
+        }
+        function Delete(repairShopId) {
+            $.showConfirm({
+                title: "แจ้งเตือน",
+                body: "คุณต้องการลบข้อมูล ใช่หรือไม่?",
+                textTrue: "ใช่",
+                textFalse: "ไม่ใช่",
+                onSubmit: function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '/RepairShop/DeleteRepairShop',
+                            type: 'POST',
+                            data: {
+                                repairShopId: repairShopId
+                            },
+                            success: function (data) {
+                                ResponseDialog(data.code, window.location.href);
+                            }
+                        })
+                    }
+                }
+            })
+        }
+        function Save() {
+            $("#repairShopForm").validate({
+                errorClass: 'text-danger',
+            }); //sets up the validator
+            $("#repairShopName").rules("add", {
+                required: true,
+                messages: {
+                    required: 'กรุณากรอกข้อมูล'
+                }
+            });
+            $("#repairShopAddress").rules("add", {
+                required: true,
+                messages: {
+                    required: 'กรุณากรอกข้อมูล'
+                }
+            });
+            $("#tel").rules("add", {
+                required: true,
+                messages: {
+                    required: 'กรุณากรอกข้อมูล'
+                }
+            });
+            $("#categoryShopId").rules("add", {
+                required: true,
+                messages: {
+                    required: 'กรุณากรอกข้อมูล'
+                }
+            });
+
+            //add validate contact
+            $('#contact > .row').each(function () {
+                var _rowId = $(this).attr('id').split('_')[1];
+                $("#contactName_" + _rowId).rules("add", {
+                    required: true,
+                    messages: {
+                        required: 'กรุณากรอกข้อมูล'
+                    }
+                });
+                $("#contactTel_" + _rowId).rules("add", {
+                    required: true,
+                    messages: {
+                        required: 'กรุณากรอกข้อมูล'
+                    }
+                });
+            })
+
+            var _checkRepairShopName = true;
+            $.ajax({
+                url: '/RepairShop/CheckRepairShopName',
+                type: 'GET',
+                async: false,
+                data: {
+                    repairShopId: $('#repairShopId').val(),
+                    repairShopName: $('#repairShopName').val()
+                },
+                success: function (data) {
+                    _checkRepairShopName = data;
+                }
+            })
+            if (_checkRepairShopName) {
+                var _contactRepairShops = [];
+                $('#contact > .row').each(function () {
+                    var _rowId = $(this).attr('id').split('_')[1];
+                    _contactRepairShops.push({
+                        contactRepairShopId:0,
+                        contactName: $('#contactName_' + _rowId).val(),
+                        tel: $('#contactTel_' + _rowId).val(),
+                        remark: $('#remark_' + _rowId).val()
+                    });
+                });
+                if (!$('#repairShopForm').valid()) {
+                    $('#repairShopForm').submit();
+                } else {
+                    $.ajax({
+                        url: '/RepairShop/CreateRepairShop',
+                        type: 'POST',
+                        data: {
+                            repairShopId: $('#repairShopId').val(),
+                            repairShopName: $('#repairShopName').val(),
+                            repairShopAddress: $('#repairShopAddress').val(),
+                            tel: $('#tel').val(),
+                            fax: $('#fax').val(),
+                            categoryShopId: $('#categoryShopId').val(),
+                            contactRepairShops: _contactRepairShops
+                        },
+                        success: function (data) {
+                            $('#addModal').modal('hide');
+                            ResponseDialog(data.code, window.location.href);
+                        }
+                    })
+                }
+               
+            } else {
+                ExistDialog($('#repairShopName').val());
+            }
+
+        }
+        function completed(res) {
+            $('#addModal').modal('hide');
+            ResponseDialog(res.responseJSON.code, window.location.href);
+        }
+        function AddContact(contactName,tel,remark) {
+            var lastRowId = $('#contact > .row:last').length == 0 ? 0 : $('#contact > .row:last').attr('id').split('_')[1];
+            var nextRowId = parseInt(lastRowId) + 1;
+            var _element = '';
+            _element += '<div class="row" id="row_' + nextRowId + '">';
+            _element += '<div class="col-md-5">';
+            _element += '<div class="form-group">';
+            _element += '<label>ชื่อ</label>';
+            _element += '<input type="text" class="form-control" id="contactName_' + nextRowId + '" name="contactName_' + nextRowId + '" value="' + contactName + '" />';
+            _element += '</div>';
+            _element += '</div>';
+            _element += '<div class="col-md-3">';
+            _element += '<div class="form-group">';
+            _element += '<label>เบอร์โทร</label>';
+            _element += '<input type="text" class="form-control" id="contactTel_' + nextRowId + '" name="contactTel_' + nextRowId + '" value="' + tel + '" />';
+            _element += '</div>';
+            _element += '</div>';
+            _element += '<div class="col-md-3">';
+            _element += '<div class="form-group">';
+            _element += '<label>หมายเหตุ</label>';
+            _element += '<input type="text" class="form-control" id="remark_' + nextRowId + '" value="' + remark + '" />';
+            _element += '</div>';
+            _element += '</div>';
+            _element += '<div class="col-md-1">';
+            _element += '<div class="form-group">';
+            _element += '<label>&nbsp;</label>';
+            _element += '<button class="btn btn-light d-block" onclick="DeleteContact(' + nextRowId + ')"><i class="fa fa-times text-danger"></i></button>';
+            _element += '</div>';
+            _element += '</div>';
+            _element += '</div>';
+
+            $('#contact').append(_element);
+        }
+        function DeleteContact(rowId) {
+            $('#row_' + rowId).remove();
+        }
     </script>
 }
 
