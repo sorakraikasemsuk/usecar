@@ -43,5 +43,15 @@ namespace UseCar.Helper
                         Text = a.branchName
                     }).ToList();
         }
+        public List<SelectListItem> BrandAll()
+        {
+            return (from a in context.brand
+                    where a.isEnable
+                    select new SelectListItem
+                    {
+                        Value = a.brandId.ToString(),
+                        Text = a.brandName
+                    }).ToList();
+        }
     }
 }
