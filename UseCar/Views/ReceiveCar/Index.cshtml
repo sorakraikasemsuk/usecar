@@ -1,0 +1,238 @@
+﻿@using UseCar.Helper;
+@inject DropdownList dropdownList;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1><i class="fa fa-warehouse"></i> รับรถ</h1>
+<hr />
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/Home">หน้าแรก</a></li>
+        <li class="breadcrumb-item active" aria-current="page">รับรถ</li>
+    </ol>
+</nav>
+
+<div class="card">
+    <div class="card-header">
+        <h5><i class="fa fa-search"></i> ค้นหาข้อมูล</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">สาขา</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="branchId" asp-items="@dropdownList.BranchAll()">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">ยี่ห้อรถ</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="brandId" asp-items="@dropdownList.BrandAll()" onchange="BrandSelect();">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">รุ่นรถ</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="generationId" onchange="GenerationSelect();">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">โฉมรถ</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="faceId" onchange="FaceSelect();">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">รุ่นย่อย</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="subFaceId">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">วันที่รับรถ</label>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <div class="input-group date" id="receiveDate">
+                                <input type="text" class="form-control" id="receiveDateShow" value="" readonly>
+                                <div class="input-group-append">
+                                    <button class="btn btn-dark" type="button">
+                                        <i class="fa fa-calendar-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <input type="hidden" id="receiveDateHidden" value="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">สถานะ</label>
+                    <div class="col-sm-8">
+                        <select class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">เลขทะเบียน</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" placeholder="" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 text-right">
+                <button class="btn btn-primary"><i class="fa fa-search"></i> ค้นหา</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-1">
+    <div class="card-header">
+        <h5><i class="fa fa-clipboard-list"></i> ข้อมูลรถ</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <a href="/Car/Create" class="btn btn-success"><i class="fa fa-plus"></i> เพิ่มข้อมูลรถ</a>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-md-12">
+                <table id="carTable" class="table table-bordered table-hover" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>รูปรถ</th>
+                            <th>ชื่อรถ</th>
+                            <th>ราคาซื้อ</th>
+                            <th>ราคาขาย</th>
+                            <th>สถานะ</th>
+                            <th>
+                                จัดการ
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><img src="https://www.checkraka.com/uploaded/logo/43/43f469bb05bcda9b93891a59816e9ac6.jpg" height="150" /></td>
+                            <td class="align-middle">[บษ 1234] toyota revo single cab</td>
+                            <td class="align-middle">350,000</td>
+                            <td class="align-middle">425,000</td>
+                            <td class="align-middle">ส่งซ่อม</td>
+                            <td class="text-center align-middle">
+                                <button type="button" class="btn btn-light btn-sm"><i class="fa fa-clipboard-list"></i> รายละเอียด</button>
+                                <button type="button" class="btn btn-light btn-sm"><i class="fa fa-edit"></i> แก้ไข</button>
+                                <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTE7LHnnbWJC0k7Q2hCkClCedjsu5xMYGODgvXHQOY9uvRvZ9pL" height="150" /></td>
+                            <td class="align-middle">[กท 999] isuzu dmax cab-4</td>
+                            <td class="align-middle">520,000</td>
+                            <td class="align-middle">590,000</td>
+                            <td class="align-middle">พร้อมขาย</td>
+                            <td class="text-center align-middle">
+                                <button type="button" class="btn btn-light btn-sm"><i class="fa fa-clipboard-list"></i> รายละเอียด</button>
+                                <button type="button" class="btn btn-light btn-sm"><i class="fa fa-edit"></i> แก้ไข</button>
+                                <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#receiveDateShow').val(moment().locale('th').format('ll'));
+            $('#receiveDateHidden').val(moment().format('YYYY-MM-DD'))
+            $('#receiveDate.date').datepicker().on('changeDate', function (e) {
+                $('#receiveDateHidden').val(moment(e.date).format('YYYY-MM-DD'));
+            });
+            $('#carTable').DataTable({
+                order: [],
+                searching: false,
+                ordering: true,
+                lengthChange: false,
+                pagingType: 'full_numbers',
+                bSort: false,
+            });
+        });
+        function BrandSelect() {
+            $('#generationId > option').not(':first').remove();
+            var _brandId = $('#brandId').val();
+            $.ajax({
+                url: '/ReceiveCar/GetGenerationByBrandId',
+                type: 'GET',
+                data: {
+                    brandId: _brandId
+                },
+                success: function (data) {
+                    data.forEach(function (item) {
+                        $("#generationId").append(new Option(item.text, item.value));
+                    })
+                }
+            })
+        }
+        function GenerationSelect() {
+            $('#faceId > option').not(':first').remove();
+            var _generationId = $('#generationId').val();
+            $.ajax({
+                url: '/ReceiveCar/GetFaceById',
+                type: 'GET',
+                data: {
+                    generationId: _generationId
+                },
+                success: function (data) {
+                    data.forEach(function (item) {
+                        $("#faceId").append(new Option(item.text, item.value));
+                    });
+                }
+            })
+        }
+        function FaceSelect() {
+            $('#subFaceId > option').not(':first').remove();
+            var _faceId = $('#faceId').val();
+            $.ajax({
+                url: '/ReceiveCar/GetSubFaceByFaceId',
+                type: 'GET',
+                data: {
+                    faceId: _faceId
+                },
+                success: function (data) {
+                    data.forEach(function (item) {
+                        $("#subFaceId").append(new Option(item.text, item.value));
+                    });
+                }
+            })
+        }
+    </script>
+}
