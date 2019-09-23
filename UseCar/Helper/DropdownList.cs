@@ -212,5 +212,15 @@ namespace UseCar.Helper
             }
             return year.OrderByDescending(o=>o.Value).ToList();
         }
+        public List<SelectListItem> Vendor()
+        {
+            return (from a in context.vendor
+                    where a.isEnable
+                    select new SelectListItem
+                    {
+                        Value = a.vendorId.ToString(),
+                        Text = a.vendorName
+                    }).ToList();
+        }
     }
 }
