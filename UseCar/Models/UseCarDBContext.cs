@@ -20,6 +20,8 @@ namespace UseCar.Models
         public virtual DbSet<capacityengine> capacityengine { get; set; }
         public virtual DbSet<car> car { get; set; }
         public virtual DbSet<car_option> car_option { get; set; }
+        public virtual DbSet<car_owner> car_owner { get; set; }
+        public virtual DbSet<car_register> car_register { get; set; }
         public virtual DbSet<category> category { get; set; }
         public virtual DbSet<categoryshop> categoryshop { get; set; }
         public virtual DbSet<color> color { get; set; }
@@ -223,6 +225,66 @@ namespace UseCar.Models
                 entity.Property(e => e.carId).HasColumnType("int(11)");
 
                 entity.Property(e => e.optionId).HasColumnType("int(11)");
+            });
+
+            modelBuilder.Entity<car_owner>(entity =>
+            {
+                entity.HasKey(e => e.ownerId)
+                    .HasName("PRIMARY");
+
+                entity.Property(e => e.ownerId).HasColumnType("int(11)");
+
+                entity.Property(e => e.carId).HasColumnType("int(11)");
+
+                entity.Property(e => e.createDate).HasColumnType("datetime");
+
+                entity.Property(e => e.createUser).HasColumnType("int(11)");
+
+                entity.Property(e => e.isEnable).HasColumnType("bit(1)");
+
+                entity.Property(e => e.order).HasColumnType("int(11)");
+
+                entity.Property(e => e.ownerAddress).HasColumnType("varchar(500)");
+
+                entity.Property(e => e.ownerDate).HasColumnType("date");
+
+                entity.Property(e => e.ownerName)
+                    .IsRequired()
+                    .HasColumnType("varchar(250)");
+
+                entity.Property(e => e.registerId).HasColumnType("int(11)");
+
+                entity.Property(e => e.updateDate).HasColumnType("datetime");
+
+                entity.Property(e => e.updateUser).HasColumnType("int(11)");
+            });
+
+            modelBuilder.Entity<car_register>(entity =>
+            {
+                entity.HasKey(e => e.registerId)
+                    .HasName("PRIMARY");
+
+                entity.Property(e => e.registerId).HasColumnType("int(11)");
+
+                entity.Property(e => e.carId).HasColumnType("int(11)");
+
+                entity.Property(e => e.createDate).HasColumnType("datetime");
+
+                entity.Property(e => e.createUser).HasColumnType("int(11)");
+
+                entity.Property(e => e.isEnable).HasColumnType("bit(1)");
+
+                entity.Property(e => e.provinceId).HasColumnType("int(11)");
+
+                entity.Property(e => e.registerDate).HasColumnType("date");
+
+                entity.Property(e => e.registerNumber)
+                    .IsRequired()
+                    .HasColumnType("varchar(20)");
+
+                entity.Property(e => e.updateDate).HasColumnType("datetime");
+
+                entity.Property(e => e.updateUser).HasColumnType("int(11)");
             });
 
             modelBuilder.Entity<category>(entity =>
