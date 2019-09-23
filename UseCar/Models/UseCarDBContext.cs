@@ -132,6 +132,8 @@ namespace UseCar.Models
 
                 entity.Property(e => e.brandId).HasColumnType("int(11)");
 
+                entity.Property(e => e.buyPrice).HasColumnType("decimal(18,2)");
+
                 entity.Property(e => e.capacityEngineId).HasColumnType("int(11)");
 
                 entity.Property(e => e.carProcessId).HasColumnType("int(11)");
@@ -179,6 +181,8 @@ namespace UseCar.Models
                 entity.Property(e => e.remark).HasColumnType("text");
 
                 entity.Property(e => e.seatId).HasColumnType("int(11)");
+
+                entity.Property(e => e.sellPrice).HasColumnType("decimal(18,2)");
 
                 entity.Property(e => e.serialNumber)
                     .IsRequired()

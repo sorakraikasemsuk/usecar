@@ -42,5 +42,7 @@ namespace UseCar.Models
         public DateTime? updateDate { get; set; }
         public int? updateUser { get; set; }
         public bool isEnable { get; set; }
+        public decimal buyPrice { get; set; }
+        public decimal? sellPrice { get; set; }
     }
 }
