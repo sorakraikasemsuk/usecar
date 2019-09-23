@@ -4,15 +4,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using UseCar.Helper;
+using UseCar.ViewModels;
 
 namespace UseCar.Controllers
 {
     public class ReceiveCarController : Controller
     {
         readonly DropdownList dropdownList;
-        public ReceiveCarController(DropdownList dropdownList)
+        readonly SharedData sharedData;
+        public ReceiveCarController(DropdownList dropdownList, SharedData sharedData)
         {
             this.dropdownList = dropdownList;
+            this.sharedData = sharedData;
         }
         public IActionResult Index()
         {
@@ -30,9 +33,22 @@ namespace UseCar.Controllers
         {
             return Json(dropdownList.SubFaceByFace(faceId));
         }
+        public JsonResult GetNatureByTypeId(int typeId)
+        {
+            return Json(dropdownList.NatureByType(typeId));
+        }
+        public JsonResult GetOption()
+        {
+            return Json(sharedData.OptionData());
+        }
         public IActionResult Create(int carId)
         {
-            return View();
+            ReceiveCarViewModel car = new ReceiveCarViewModel();
+            if (carId == 0)
+            {
+                car.code = "CAR" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2,'0') + "-XXXX";
+            }
+            return View(car);
         }
     }
 }

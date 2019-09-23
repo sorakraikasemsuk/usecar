@@ -1,4 +1,6 @@
-﻿
+﻿@using UseCar.Helper
+@model UseCar.ViewModels.ReceiveCarViewModel;
+@inject DropdownList dropdownList;
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -15,28 +17,27 @@
     </ol>
 </nav>
 
-<form>
+<form asp-controller="ReceiveCar" asp-action="Create" method="post" data-ajax="true" data-ajax-method="post" data-ajax-complete="completed">
     <div class="card">
         <div class="card-header">
             <h5><i class="fa fa-clipboard-list"></i> ข้อมูลรถ</h5>
         </div>
         <div class="card-body">
+            <input type="hidden" asp-for="carId" />
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>รหัสรถ</label>
-                        <input type="text" class="form-control" value="CAR201909-0001" readonly />
+                        <input type="text" class="form-control" asp-for="code" readonly />
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>สถานะ</label>
-                        <select class="form-control">
+                        <select class="form-control" asp-for="carProcessId" asp-items="@dropdownList.ReceiveCarStatus()">
                             <option value="">กรุณาเลือก</option>
-                            <option>รอรับรถ</option>
-                            <option>รับรถเรียบร้อย</option>
-                            <option>ยกเลิก</option>
                         </select>
+                        <span asp-validation-for="carProcessId" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -44,13 +45,19 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>สาขา</label>
-                        <select class="form-control"></select>
+                        <select class="form-control" asp-for="branchId" asp-items="@dropdownList.BranchAll()">
+                            <option value="">กรุณาเลือก</option>
+                        </select>
+                        <span asp-validation-for="branchId" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>ประเภทรถ</label>
-                        <select class="form-control"></select>
+                        <select class="form-control" asp-for="categoryId" asp-items="@dropdownList.Category()">
+                            <option value="">กรุณาเลือก</option>
+                        </select>
+                        <span asp-validation-for="categoryId" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -58,25 +65,37 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>ยี่ห้อ</label>
-                        <select class="form-control"></select>
+                        <select class="form-control" asp-for="brandId" asp-items="@dropdownList.BrandAll()" onchange="BrandSelect();">
+                            <option value="">กรุณาเลือก</option>
+                        </select>
+                        <span asp-validation-for="brandId" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>รุ่นรถ</label>
-                        <select class="form-control"></select>
+                        <select class="form-control" asp-for="generationId" onchange="GenerationSelect();">
+                            <option value="">กรุณาเลือก</option>
+                        </select>
+                        <span asp-validation-for="generationId" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>โฉมรถยนต์</label>
-                        <select class="form-control"></select>
+                        <select class="form-control" asp-for="faceId" onchange="FaceSelect();">
+                            <option value="">กรุณาเลือก</option>
+                        </select>
+                        <span asp-validation-for="faceId" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>รุ่นย่อย</label>
-                        <select class="form-control"></select>
+                        <select class="form-control" asp-for="subfaceId">
+                            <option value="">กรุณาเลือก</option>
+                        </select>
+                        <span asp-validation-for="subfaceId" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -84,19 +103,22 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>เลขตัวรถ</label>
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" asp-for="serialNumber" />
+                        <span asp-validation-for="serialNumber" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>เลขเครื่องยนต์</label>
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" asp-for="engineNumber" />
+                        <span asp-validation-for="engineNumber" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>เลขไมล์ปัจจุบัน</label>
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" asp-for="mileNumber" />
+                        <span asp-validation-for="mileNumber" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -104,73 +126,102 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>ยี่ห้อเครื่องยนต์</label>
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" asp-for="brandEngine" />
+                        <span asp-validation-for="brandEngine" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>เลขถังแก๊ส</label>
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" asp-for="gasNumber" />
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>น้ำหนักรถ</label>
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" asp-for="weight" />
+                        <span asp-validation-for="weight" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>สี</label>
-                        <select class="form-control"></select>
+                        <select class="form-control" asp-for="colorId" asp-items="@dropdownList.Color()">
+                            <option value="">กรุณาเลือก</option>
+                        </select>
+                        <span asp-validation-for="colorId" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>ระบบเกียร์</label>
-                        <select class="form-control"></select>
+                        <select class="form-control" asp-for="gearId" asp-items="@dropdownList.Gear()">
+                            <option value="">กรุณาเลือก</option>
+                        </select>
+                        <span asp-validation-for="gearId" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>เบาะ</label>
-                        <select class="form-control"></select>
+                        <select class="form-control" asp-for="seatId" asp-items="@dropdownList.Seat()">
+                            <option value="">กรุณาเลือก</option>
+                        </select>
+                        <span asp-validation-for="seatId" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>ระบบขับเคลื่อน</label>
-                        <select class="form-control"></select>
+                        <select class="form-control" asp-for="driveSystemId" asp-items="@dropdownList.DriveSystem()">
+                            <option value="">กรุณาเลือก</option>
+                        </select>
+                        <span asp-validation-for="driveSystemId" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>ประเภทเครื่องยนต์</label>
-                        <select class="form-control"></select>
+                        <select class="form-control" asp-for="engineTypeId" asp-items="@dropdownList.EngineType()">
+                            <option value="">กรุณาเลือก</option>
+                        </select>
+                        <span asp-validation-for="engineTypeId" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>ขนาดของเครื่องยนต์</label>
-                        <select class="form-control"></select>
+                        <select class="form-control" asp-for="capacityEngineId" asp-items="@dropdownList.CapacityEngine()">
+                            <option value="">กรุณาเลือก</option>
+                        </select>
+                        <span asp-validation-for="capacityEngineId" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>ประเภทรถตามจดทะเบียน(รย.1-รย.17)</label>
-                        <select class="form-control"></select>
+                        <select class="form-control" asp-for="typeId" asp-items="@dropdownList.Type()" onchange="TypeSelect();">
+                            <option value="">กรุณาเลือก</option>
+                        </select>
+                        <span asp-validation-for="typeId" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>ลักษณะ</label>
-                        <select class="form-control"></select>
+                        <select class="form-control" asp-for="natureId">
+                            <option value="">กรุณาเลือก</option>
+                        </select>
+                        <span asp-validation-for="natureId" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>รถปี ค.ศ.</label>
-                        <input type="text" class="form-control" />
+                        <select type="text" class="form-control" asp-for="year" asp-items="@dropdownList.Year()">
+                            <option value="">กรุณาเลือก</option>
+                        </select>
+                        <span asp-validation-for="year" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -184,7 +235,8 @@
                                 </button>
                             </div>
                         </div>
-                        <input type="hidden" id="receiveDateHidden" value="" />
+                        <input type="hidden" asp-for="receiveDateHidden" value="" />
+                        <span asp-validation-for="receiveDateHidden" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -262,15 +314,15 @@
             <h5><i class="fa fa-clipboard-list"></i> อุปกรณ์เสริมเพิ่มเติมอื่นๆ</h5>
         </div>
         <div class="card-body">
-            <div class="row">
-                <div class="col-md-4">
+            <div class="row" id="optionBody">
+                @*<div class="col-md-3">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="" id="add" checked>
                         <label class="form-check-label" for="add">
                             เพิ่มข้อมูล
                         </label>
                     </div>
-                </div>
+                </div>*@
             </div>
         </div>
     </div>
@@ -311,7 +363,7 @@
         </div>
         <div class="col-md-6 text-right">
             <button type="button" class="btn btn-danger"><i class="fa fa-times"></i> ยกเลิก</button>
-            <button type="button" class="btn btn-primary"><i class="fa fa-save"></i> บันทึก</button>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> บันทึก</button>
         </div>
     </div>
 </form>
@@ -324,6 +376,93 @@
             $('#receiveDate.date').datepicker().on('changeDate', function (e) {
                 $('#receiveDateHidden').val(moment(e.date).format('YYYY-MM-DD'));
             });
+
+            GenerateOption();
         });
+        function BrandSelect() {
+            $('#generationId > option').not(':first').remove();
+            var _brandId = $('#brandId').val();
+            $.ajax({
+                url: '/ReceiveCar/GetGenerationByBrandId',
+                type: 'GET',
+                data: {
+                    brandId: _brandId
+                },
+                success: function (data) {
+                    data.forEach(function (item) {
+                        $("#generationId").append(new Option(item.text, item.value));
+                    })
+                }
+            })
+        }
+        function GenerationSelect() {
+            $('#faceId > option').not(':first').remove();
+            var _generationId = $('#generationId').val();
+            $.ajax({
+                url: '/ReceiveCar/GetFaceById',
+                type: 'GET',
+                data: {
+                    generationId: _generationId
+                },
+                success: function (data) {
+                    data.forEach(function (item) {
+                        $("#faceId").append(new Option(item.text, item.value));
+                    });
+                }
+            })
+        }
+        function FaceSelect() {
+            $('#subfaceId > option').not(':first').remove();
+            var _faceId = $('#faceId').val();
+            $.ajax({
+                url: '/ReceiveCar/GetSubFaceByFaceId',
+                type: 'GET',
+                data: {
+                    faceId: _faceId
+                },
+                success: function (data) {
+                    data.forEach(function (item) {
+                        $("#subfaceId").append(new Option(item.text, item.value));
+                    });
+                }
+            })
+        }
+        function TypeSelect() {
+            $('#natureId > option').not(':first').remove();
+            var _typeId = $('#typeId').val();
+            $.ajax({
+                url: '/ReceiveCar/GetNatureByTypeId',
+                type: 'GET',
+                data: {
+                    typeId: _typeId
+                },
+                success: function (data) {
+                    data.forEach(function (item) {
+                        $("#natureId").append(new Option(item.text, item.value));
+                    });
+                }
+            })
+        }
+        function GenerateOption() {
+            $.ajax({
+                url: '/ReceiveCar/GetOption',
+                type: 'GET',
+                success: function (data) {
+                    var _element = '';
+                    data.forEach(function (item) {
+                        _element += '<div class="col-md-3">';
+                        _element += '<div class="form-check">';
+                        _element += '<input class="form-check-input" type="checkbox" value="" id="optionId_'+item.optionId+'" checked>';
+                        _element += '<label class="form-check-label" for="optionId_' + item.optionId +'">&nbsp;'+item.optionName+'</label>';
+                        _element += '</div>';
+                        _element += '</div>';
+                    });
+                    $('#optionBody').append(_element);
+                    $('input[type=checkbox]').iCheck({
+                        checkboxClass: 'icheckbox_square-green',
+                    })
+                }
+            })
+        }
     </script>
     }
