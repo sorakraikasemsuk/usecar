@@ -106,5 +106,15 @@ namespace UseCar.Helper
                         Text = a.gearName
                     }).ToList();
         }
+        public List<SelectListItem> Seat()
+        {
+            return (from a in context.seat
+                    where a.isEnable
+                    select new SelectListItem
+                    {
+                        Value = a.seatId.ToString(),
+                        Text = a.seatName
+                    }).ToList();
+        }
     }
 }
