@@ -1,0 +1,276 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1><i class="fa fa-building"></i> ข้อมูลผู้ขาย</h1>
+<hr />
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/Home">หน้าแรก</a></li>
+        <li class="breadcrumb-item"><a href="/Setting">ตั้งค่า</a></li>
+        <li class="breadcrumb-item active" aria-current="page">ข้อมูลผู้ขาย</li>
+    </ol>
+</nav>
+
+<div class="card">
+    <div class="card-header">
+        <h5><i class="fa fa-search"></i> ค้นหาข้อมูล</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">ชื่อผู้ขาย</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="textSearch" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-primary" onclick="ReloadDatatable();"><i class="fa fa-search"></i> ค้นหา</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-1">
+    <div class="card-header">
+        <h5><i class="fa fa-clipboard-list"></i> ข้อมูลผู้ขาย</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal" onclick="Add(0);"><i class="fa fa-plus"></i> เพิ่มข้อมูลผู้ขาย</button>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-md-12">
+                <table id="vendorTable" class="table table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>ลำดับ</th>
+                            <th>ชื่อ</th>
+                            <th>ที่อยู่</th>
+                            <th>เบอร์โทร</th>
+                            <th>เลขบัตร/เลขทะเบียนพานิชย์</th>
+                            <th>
+                                จัดการ
+                            </th>
+                        </tr>
+                    </thead>
+                    @*<tbody>
+                            <tr>
+                                <td>เกียร์ธรรมดา</td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-light btn-sm"><i class="fa fa-edit"></i> แก้ไข</button>
+                                    <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
+                                </td>
+                            </tr>
+                        </tbody>*@
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">เพิ่ม/แก้ไขข้อมูลผู้ขาย</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="vendorForm" asp-controller="Vendor" asp-action="Create" method="post" data-ajax="true" data-ajax-method="post" data-ajax-complete="completed">
+                    <input type="hidden" id="vendorId" name="vendorId" />
+                    <div class="form-group">
+                        <label class="col-sm-12 col-form-label">ชื่อ</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="vendorName" name="vendorName" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-12 col-form-label">ที่อยู่</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="vendorAddress" name="vendorAddress" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-12 col-form-label">หมายเลขโทรศัพท์</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="vendorTel" name="vendorTel" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-12 col-form-label">เลขบัตร/เลขทะเบียนพานิชย์</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="vendorNumber" name="vendorNumber" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> ปิด</button>
+                            <button type="button" class="btn btn-primary" onclick="Save();"><i class="fa fa-save"></i> บันทึก</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var datatable;
+        $(document).ready(function () {
+            Datatable();
+
+            $('#textSearch').keyup(function (e) {
+                if (e.keyCode === 13) {
+                    ReloadDatatable();
+                }
+            })
+        });
+        function Datatable() {
+            datatable = $('#vendorTable').DataTable({
+                order: [],
+                searching: false,
+                ordering: true,
+                lengthChange: false,
+                pagingType: 'full_numbers',
+                ajax: {
+                    url: '/Vendor/GetDatatable',
+                    type: 'GET',
+                    data: function (d) {
+                        d.vendorName = $('#textSearch').val()
+                    },
+                    dataSrc: function (data) {
+                        return data;
+                    },
+                    statusCode: {
+                        401: function (xhr, error, thrown) {
+                            window.location.reload();
+                            return false;
+                        }
+                    }
+                },
+                columns: [
+                    {
+                        data: 'vendorId',
+                        className: 'text-center',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: 'vendorName',
+                    },
+                    {
+                        data:'vendorAddress'
+                    },
+                    {
+                        data:'vendorTel'
+                    },
+                    {
+                        data:'vendorNumber'
+                    },
+                    {
+                        data: 'vendorId',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            if (row.carInVendor == 0) {
+                                return '<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addModal" onclick="Add(' + row.vendorId + ')"><i class="fa fa-edit"></i> แก้ไข</button>' +
+                                    ' <button type="button" class="btn btn-danger btn-sm" onclick="Delete(' + row.vendorId + ')"><i class="fa fa-trash"></i> ลบ</button>';
+                            } else {
+                                return '<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addModal" onclick="Add(' + row.vendorId + ')"><i class="fa fa-edit"></i> แก้ไข</button>';
+                            }
+                        }
+                    }
+                ]
+            });
+        }
+        function ReloadDatatable() {
+            datatable.ajax.reload();
+        }
+        function Add(vendorId) {
+            $.ajax({
+                url: '/Vendor/GetVendorById',
+                type: 'GET',
+                data: {
+                    vendorId: vendorId
+                },
+                success: function (data) {
+                    $('#vendorId').val(data.vendorId);
+                    $('#vendorName').val(data.vendorName);
+                    $('#vendorAddress').val(data.vendorAddress);
+                    $('#vendorTel').val(data.vendorTel);
+                    $('#vendorNumber').val(data.vendorNumber);
+                }
+            })
+        }
+        function Delete(vendorId) {
+            $.showConfirm({
+                title: "แจ้งเตือน",
+                body: "คุณต้องการลบข้อมูล ใช่หรือไม่?",
+                textTrue: "ใช่",
+                textFalse: "ไม่ใช่",
+                onSubmit: function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '/Vendor/Delete',
+                            type: 'POST',
+                            data: {
+                                vendorId: vendorId
+                            },
+                            success: function (data) {
+                                ResponseDialog(data.code, window.location.href);
+                            }
+                        })
+                    }
+                }
+            })
+        }
+        function Save() {
+            $("#vendorForm").validate({
+                errorClass: 'text-danger',
+            }); //sets up the validator
+            $("#vendorName").rules("add", {
+                required: true,
+                messages: {
+                    required: 'กรุณากรอกข้อมูล'
+                }
+            });
+
+            var _checkVendorName = true;
+            $.ajax({
+                url: '/Vendor/CheckVendorName',
+                type: 'GET',
+                async: false,
+                data: {
+                    vendorId: $('#vendorId').val(),
+                    vendorName: $('#vendorName').val()
+                },
+                success: function (data) {
+                    _checkVendorName = data;
+                }
+            })
+            if (_checkVendorName) {
+                $('#vendorForm').submit();
+            } else {
+                ExistDialog($('#vendorName').val());
+            }
+
+        }
+        function completed(res) {
+            $('#addModal').modal('hide');
+            ResponseDialog(res.responseJSON.code, window.location.href);
+        }
+    </script>
+}
+
