@@ -96,5 +96,15 @@ namespace UseCar.Helper
                         Text = a.colorName
                     }).ToList();
         }
+        public List<SelectListItem> Gear()
+        {
+            return (from a in context.gear
+                    where a.isEnable
+                    select new SelectListItem
+                    {
+                        Value = a.gearId.ToString(),
+                        Text = a.gearName
+                    }).ToList();
+        }
     }
 }
