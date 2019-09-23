@@ -30,5 +30,9 @@ namespace UseCar.Controllers
         {
             return Json(dropdownList.SubFaceByFace(faceId));
         }
+        public IActionResult Create(int carId)
+        {
+            return View();
+        }
     }
 }

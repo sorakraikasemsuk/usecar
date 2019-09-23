@@ -1,0 +1,329 @@
+﻿
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1><i class="fa fa-warehouse"></i> เพิ่มข้อมูลรับรถ</h1>
+<hr />
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/Home">หน้าแรก</a></li>
+        <li class="breadcrumb-item"><a href="/ReceiveCar">ข้อมูลรับรถ</a></li>
+        <li class="breadcrumb-item active" aria-current="page">เพิ่มข้อมูลรับรถ</li>
+    </ol>
+</nav>
+
+<form>
+    <div class="card">
+        <div class="card-header">
+            <h5><i class="fa fa-clipboard-list"></i> ข้อมูลรถ</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>รหัสรถ</label>
+                        <input type="text" class="form-control" value="CAR201909-0001" readonly />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>สถานะ</label>
+                        <select class="form-control">
+                            <option value="">กรุณาเลือก</option>
+                            <option>รอรับรถ</option>
+                            <option>รับรถเรียบร้อย</option>
+                            <option>ยกเลิก</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>สาขา</label>
+                        <select class="form-control"></select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>ประเภทรถ</label>
+                        <select class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>ยี่ห้อ</label>
+                        <select class="form-control"></select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>รุ่นรถ</label>
+                        <select class="form-control"></select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>โฉมรถยนต์</label>
+                        <select class="form-control"></select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>รุ่นย่อย</label>
+                        <select class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>เลขตัวรถ</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>เลขเครื่องยนต์</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>เลขไมล์ปัจจุบัน</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>ยี่ห้อเครื่องยนต์</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>เลขถังแก๊ส</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>น้ำหนักรถ</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>สี</label>
+                        <select class="form-control"></select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>ระบบเกียร์</label>
+                        <select class="form-control"></select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>เบาะ</label>
+                        <select class="form-control"></select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>ระบบขับเคลื่อน</label>
+                        <select class="form-control"></select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>ประเภทเครื่องยนต์</label>
+                        <select class="form-control"></select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>ขนาดของเครื่องยนต์</label>
+                        <select class="form-control"></select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>ประเภทรถตามจดทะเบียน(รย.1-รย.17)</label>
+                        <select class="form-control"></select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>ลักษณะ</label>
+                        <select class="form-control"></select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>รถปี ค.ศ.</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>วันที่รับรถ</label>
+                        <div class="input-group date" id="receiveDate">
+                            <input type="text" class="form-control" id="receiveDateShow" value="" readonly>
+                            <div class="input-group-append">
+                                <button class="btn btn-dark" type="button">
+                                    <i class="fa fa-calendar-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <input type="hidden" id="receiveDateHidden" value="" />
+                    </div>
+                </div>
+            </div>
+            @*<div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>วันจดทะเบียน</label>
+                        <div class="input-group date" id="registerDate">
+                            <input type="text" class="form-control" id="registerDateShow" value="" readonly>
+                            <div class="input-group-append">
+                                <button class="btn btn-dark" type="button">
+                                    <i class="fa fa-calendar-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <input type="hidden" id="registerDateHidden" value="" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>วันที่ต่อภาษีรถยนต์</label>
+                        <div class="input-group date" id="extendTaxDate">
+                            <input type="text" class="form-control" id="extendTaxDateShow" value="" readonly>
+                            <div class="input-group-append">
+                                <button class="btn btn-dark" type="button">
+                                    <i class="fa fa-calendar-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <input type="hidden" id="extendTaxDateHidden" value="" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>ราคาภาษีรถยนต์/ปี</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>วันที่ซื้อเข้า</label>
+                        <div class="input-group date" id="buyDate">
+                            <input type="text" class="form-control" id="buyDateShow" value="" readonly>
+                            <div class="input-group-append">
+                                <button class="btn btn-dark" type="button">
+                                    <i class="fa fa-calendar-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <input type="hidden" id="buyDateHidden" value="" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>ซื้อจาก</label>
+                        <select class="form-control"></select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>ราคาซื้อเข้า</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+            </div>*@
+            
+        </div>
+    </div>
+    <div class="card mt-2">
+        <div class="card-header">
+            <h5><i class="fa fa-clipboard-list"></i> อุปกรณ์เสริมเพิ่มเติมอื่นๆ</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="add" checked>
+                        <label class="form-check-label" for="add">
+                            เพิ่มข้อมูล
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card mt-2">
+        <div class="card-header">
+            <h5><i class="fa fa-clipboard-list"></i> ข้อมูลผู้ขาย</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>ซื้อจาก</label>
+                        <select class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card mt-2">
+        <div class="card-header">
+            <h5><i class="fa fa-clipboard-list"></i> ข้อมูลอื่นๆ</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>อื่นๆ</label>
+                        <textarea class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col-md-6">
+            <button type="button" class="btn btn-dark"><i class="fa fa-arrow-left"></i> กลับ</button>
+        </div>
+        <div class="col-md-6 text-right">
+            <button type="button" class="btn btn-danger"><i class="fa fa-times"></i> ยกเลิก</button>
+            <button type="button" class="btn btn-primary"><i class="fa fa-save"></i> บันทึก</button>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#receiveDateShow').val(moment().locale('th').format('ll'));
+            $('#receiveDateHidden').val(moment().format('YYYY-MM-DD'))
+            $('#receiveDate.date').datepicker().on('changeDate', function (e) {
+                $('#receiveDateHidden').val(moment(e.date).format('YYYY-MM-DD'));
+            });
+        });
+    </script>
+    }
