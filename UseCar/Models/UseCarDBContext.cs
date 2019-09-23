@@ -703,17 +703,13 @@ namespace UseCar.Models
 
                 entity.Property(e => e.updateUser).HasColumnType("int(11)");
 
-                entity.Property(e => e.vendorAddress)
-                    .IsRequired()
-                    .HasColumnType("varchar(500)");
+                entity.Property(e => e.vendorAddress).HasColumnType("varchar(500)");
 
                 entity.Property(e => e.vendorName)
                     .IsRequired()
                     .HasColumnType("varchar(250)");
 
-                entity.Property(e => e.vendorNumber)
-                    .IsRequired()
-                    .HasColumnType("varchar(50)");
+                entity.Property(e => e.vendorNumber).HasColumnType("varchar(50)");
 
                 entity.Property(e => e.vendorTel).HasColumnType("varchar(20)");
             });
