@@ -156,5 +156,16 @@ namespace UseCar.Helper
                         Text = a.typeName
                     }).ToList();
         }
+        public List<SelectListItem> NatureByType(int typeId)
+        {
+            return (from a in context.nature
+                    where a.isEnable
+                    && a.typeId == typeId
+                    select new SelectListItem
+                    {
+                        Value = a.typeId.ToString(),
+                        Text = a.natureName
+                    }).ToList();
+        }
     }
 }
