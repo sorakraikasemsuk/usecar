@@ -32,9 +32,9 @@ namespace UseCar.Helper
                     {
                         vendorId = a.vendorId,
                         vendorName = a.vendorName,
-                        vendorAddress = a.vendorAddress,
-                        vendorTel = a.vendorTel,
-                        vendorNumber = a.vendorNumber
+                        vendorAddress = a.vendorAddress ?? "",
+                        vendorTel = a.vendorTel ?? "",
+                        vendorNumber = a.vendorNumber ?? ""
                     }).FirstOrDefault() ?? new SheardDataVendorViewModel();
         }
     }
