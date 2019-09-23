@@ -226,6 +226,12 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
+                        <label>ราคาซื้อเข้า</label>
+                        <input type="text" class="form-control" asp-for="buyPrice" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
                         <label>วันที่รับรถ</label>
                         <div class="input-group date" id="receiveDate">
                             <input type="text" class="form-control" id="receiveDateShow" value="" readonly>
@@ -240,73 +246,6 @@
                     </div>
                 </div>
             </div>
-            @*<div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>วันจดทะเบียน</label>
-                        <div class="input-group date" id="registerDate">
-                            <input type="text" class="form-control" id="registerDateShow" value="" readonly>
-                            <div class="input-group-append">
-                                <button class="btn btn-dark" type="button">
-                                    <i class="fa fa-calendar-alt"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <input type="hidden" id="registerDateHidden" value="" />
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>วันที่ต่อภาษีรถยนต์</label>
-                        <div class="input-group date" id="extendTaxDate">
-                            <input type="text" class="form-control" id="extendTaxDateShow" value="" readonly>
-                            <div class="input-group-append">
-                                <button class="btn btn-dark" type="button">
-                                    <i class="fa fa-calendar-alt"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <input type="hidden" id="extendTaxDateHidden" value="" />
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>ราคาภาษีรถยนต์/ปี</label>
-                        <input type="text" class="form-control" />
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>วันที่ซื้อเข้า</label>
-                        <div class="input-group date" id="buyDate">
-                            <input type="text" class="form-control" id="buyDateShow" value="" readonly>
-                            <div class="input-group-append">
-                                <button class="btn btn-dark" type="button">
-                                    <i class="fa fa-calendar-alt"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <input type="hidden" id="buyDateHidden" value="" />
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>ซื้อจาก</label>
-                        <select class="form-control"></select>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>ราคาซื้อเข้า</label>
-                        <input type="text" class="form-control" />
-                    </div>
-                </div>
-            </div>*@
-            
         </div>
     </div>
     <div class="card mt-2">
@@ -450,7 +389,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>อื่นๆ</label>
-                        <textarea class="form-control" rows="3"></textarea>
+                        <textarea class="form-control" asp-for="remark" rows="3"></textarea>
                     </div>
                 </div>
             </div>

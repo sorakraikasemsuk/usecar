@@ -64,5 +64,7 @@ namespace UseCar.ViewModels
         public string vendorTel { get; set; }
         public string vendorNumber { get; set; }
         public string remark { get; set; }
+        [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
+        public decimal buyPrice { get; set; }
     }
 }
