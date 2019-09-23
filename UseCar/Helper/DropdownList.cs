@@ -126,5 +126,15 @@ namespace UseCar.Helper
                         Text = a.driveSystemName
                     }).ToList();
         }
+        public List<SelectListItem> EngineType()
+        {
+            return (from a in context.enginetype
+                    where a.isEnable
+                    select new SelectListItem
+                    {
+                        Value = a.engineTypeId.ToString(),
+                        Text = a.engineTypeName
+                    }).ToList();
+        }
     }
 }
