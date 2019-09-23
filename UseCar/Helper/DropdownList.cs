@@ -197,5 +197,20 @@ namespace UseCar.Helper
                         Text = a.categoryName
                     }).ToList();
         }
+        public List<SelectListItem> Year()
+        {
+            List<SelectListItem> year = new List<SelectListItem>();
+            int CurrentYear = DateTime.Now.Year;
+            int PastYear = DateTime.Now.AddYears(-9).Year;
+            for(int i= PastYear;i<= CurrentYear; i++)
+            {
+                year.Add(new SelectListItem
+                {
+                    Value = i.ToString(),
+                    Text = i.ToString()
+                });
+            }
+            return year.OrderByDescending(o=>o.Value).ToList();
+        }
     }
 }
