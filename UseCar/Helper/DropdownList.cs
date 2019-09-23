@@ -86,5 +86,15 @@ namespace UseCar.Helper
                         Text = a.subfaceName
                     }).ToList();
         }
+        public List<SelectListItem> Color()
+        {
+            return (from a in context.color
+                    where a.isEnable
+                    select new SelectListItem
+                    {
+                        Value = a.colorId.ToString(),
+                        Text = a.colorName
+                    }).ToList();
+        }
     }
 }
