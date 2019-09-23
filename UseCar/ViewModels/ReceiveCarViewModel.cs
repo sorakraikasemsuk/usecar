@@ -60,10 +60,8 @@ namespace UseCar.ViewModels
         public int vendorId { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
         public string vendorName { get; set; }
-        [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
         public string vendorAddress { get; set; }
         public string vendorTel { get; set; }
-        [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
         public string vendorNumber { get; set; }
         public string remark { get; set; }
     }

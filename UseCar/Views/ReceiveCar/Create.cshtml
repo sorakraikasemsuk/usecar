@@ -328,6 +328,80 @@
     </div>
     <div class="card mt-2">
         <div class="card-header">
+            <h5><i class="fa fa-clipboard-list"></i> ข้อมูลจดทะเบียน</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>วันจดทะเบียน</label>
+                        <div class="input-group date" id="registerDate">
+                            <input type="text" class="form-control" id="registerDateShow" value="" readonly>
+                            <div class="input-group-append">
+                                <button class="btn btn-dark" type="button">
+                                    <i class="fa fa-calendar-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <input type="hidden" id="registerDateHidden" value="" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>เลขทะเบียน</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label>จังหวัด</label>
+                    <select class="form-control"></select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card mt-2">
+        <div class="card-header">
+            <h5><i class="fa fa-clipboard-list"></i> เจ้าของรถปัจจุบัน</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>ลำดับที่</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>วันที่ครอบครองรถ</label>
+                        <div class="input-group date" id="ownerDate">
+                            <input type="text" class="form-control" id="ownerDateShow" value="" readonly>
+                            <div class="input-group-append">
+                                <button class="btn btn-dark" type="button">
+                                    <i class="fa fa-calendar-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <input type="hidden" id="ownerDateHidden" value="" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>ชื่อผู้ครอบครอง</label>
+                        <input type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>ที่อยู่</label>
+                        <textarea class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card mt-2">
+        <div class="card-header">
             <h5><i class="fa fa-clipboard-list"></i> ข้อมูลผู้ขาย</h5>
         </div>
         <div class="card-body">
@@ -335,7 +409,33 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>ซื้อจาก</label>
-                        <select class="form-control"></select>
+                        <select class="form-control" asp-for="vendorId" asp-items="@dropdownList.VendorWithOther()" onchange="VendorSelect();">
+                            <option value="">กรุณาเลือก</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <input type="text" class="form-control" asp-for="vendorName" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>ที่อยู่</label>
+                        <textarea class="form-control" asp-for="vendorAddress" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>เบอร์โทรศัพท์</label>
+                        <input type="text" class="form-control" asp-for="vendorTel" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>เลขบัตร/เลขทะเบียนพานิชย์</label>
+                        <input type="text" class="form-control" asp-for="vendorNumber" />
                     </div>
                 </div>
             </div>
@@ -375,6 +475,18 @@
             $('#receiveDateHidden').val(moment().format('YYYY-MM-DD'))
             $('#receiveDate.date').datepicker().on('changeDate', function (e) {
                 $('#receiveDateHidden').val(moment(e.date).format('YYYY-MM-DD'));
+            });
+
+            $('#registerDateShow').val(moment().locale('th').format('ll'));
+            $('#registerDateHidden').val(moment().format('YYYY-MM-DD'))
+            $('#registerDate.date').datepicker().on('changeDate', function (e) {
+                $('#registerDateHidden').val(moment(e.date).format('YYYY-MM-DD'));
+            });
+
+            $('#ownerDateShow').val(moment().locale('th').format('ll'));
+            $('#ownerDateHidden').val(moment().format('YYYY-MM-DD'))
+            $('#ownerDate.date').datepicker().on('changeDate', function (e) {
+                $('#ownerDateHidden').val(moment(e.date).format('YYYY-MM-DD'));
             });
 
             GenerateOption();
@@ -463,6 +575,29 @@
                     })
                 }
             })
+        }
+        function VendorSelect() {
+            var _vendorId = $('#vendorId').val();
+            if (_vendorId == 9999) {
+                $('#vendorName').show().val('');
+                $('#vendorAddress').val('').attr('readonly', false);
+                $('#vendorTel').val('').attr('readonly', false);
+                $('#vendorNumber').val('').attr('readonly', false);
+            } else {
+                $.ajax({
+                    url: '/ReceiveCar/GetVendor',
+                    type: 'GET',
+                    data: {
+                        vendorId: _vendorId
+                    },
+                    success: function (data) {
+                        $('#vendorName').val(data.vendorName).hide();
+                        $('#vendorAddress').val(data.vendorAddress).attr('readonly', true);
+                        $('#vendorTel').val(data.vendorTel).attr('readonly', true);
+                        $('#vendorNumber').val(data.vendorNumber).attr('readonly', true);
+                    }
+                })
+            }
         }
     </script>
     }
