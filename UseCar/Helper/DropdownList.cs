@@ -222,5 +222,23 @@ namespace UseCar.Helper
                         Text = a.vendorName
                     }).ToList();
         }
+        public List<SelectListItem> VendorWithOther()
+        {
+            var vendor = (from a in context.vendor
+                          where a.isEnable
+                          select new SelectListItem
+                          {
+                              Value = a.vendorId.ToString(),
+                              Text = a.vendorName
+                          }).ToList();
+            var other = new List<SelectListItem> {
+                new SelectListItem
+                {
+                    Value="0",
+                    Text="อิ่นๆ"
+                }
+            };
+            return vendor.Union(other).ToList();
+        }
     }
 }
