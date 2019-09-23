@@ -136,5 +136,15 @@ namespace UseCar.Helper
                         Text = a.engineTypeName
                     }).ToList();
         }
+        public List<SelectListItem> CapacityEngine()
+        {
+            return (from a in context.capacityengine
+                    where a.isEnable
+                    select new SelectListItem
+                    {
+                        Value = a.capacityEngineId.ToString(),
+                        Text = a.capacityEngineName
+                    }).ToList();
+        }
     }
 }
