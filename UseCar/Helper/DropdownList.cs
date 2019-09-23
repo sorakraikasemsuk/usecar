@@ -167,5 +167,15 @@ namespace UseCar.Helper
                         Text = a.natureName
                     }).ToList();
         }
+        public List<SelectListItem> ReceiveCarStatus()
+        {
+            return (from a in context.m_receivecare_status
+                    where a.isEnable
+                    select new SelectListItem
+                    {
+                        Value = a.receiveCarStatusId.ToString(),
+                        Text = a.statusName
+                    }).ToList();
+        }
     }
 }
