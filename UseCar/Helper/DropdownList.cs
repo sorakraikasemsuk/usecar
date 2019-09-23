@@ -234,7 +234,7 @@ namespace UseCar.Helper
             var other = new List<SelectListItem> {
                 new SelectListItem
                 {
-                    Value="0",
+                    Value="9999",
                     Text="อิ่นๆ"
                 }
             };
