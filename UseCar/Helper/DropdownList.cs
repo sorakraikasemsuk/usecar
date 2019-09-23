@@ -187,5 +187,15 @@ namespace UseCar.Helper
                         Text = a.statusName
                     }).ToList();
         }
+        public List<SelectListItem> Category()
+        {
+            return (from a in context.category
+                    where a.isEnable
+                    select new SelectListItem
+                    {
+                        Value = a.categoryId.ToString(),
+                        Text = a.categoryName
+                    }).ToList();
+        }
     }
 }
