@@ -58,6 +58,7 @@ namespace Car_Somchai
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddTransient<DropdownList>();
+            services.AddTransient<SharedData>();
             services.AddTransient<DepartmentManagementRepository>();
             services.AddTransient<UserManagementRepository>();
             services.AddTransient<PermissionManagementRepository>();
