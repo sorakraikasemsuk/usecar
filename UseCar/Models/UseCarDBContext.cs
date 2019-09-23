@@ -42,6 +42,7 @@ namespace UseCar.Models
         public virtual DbSet<subface> subface { get; set; }
         public virtual DbSet<type> type { get; set; }
         public virtual DbSet<user> user { get; set; }
+        public virtual DbSet<vendor> vendor { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -686,6 +687,35 @@ namespace UseCar.Models
                 entity.Property(e => e.userName)
                     .IsRequired()
                     .HasColumnType("varchar(250)");
+            });
+
+            modelBuilder.Entity<vendor>(entity =>
+            {
+                entity.Property(e => e.vendorId).HasColumnType("int(11)");
+
+                entity.Property(e => e.createDate).HasColumnType("datetime");
+
+                entity.Property(e => e.createUser).HasColumnType("int(11)");
+
+                entity.Property(e => e.isEnable).HasColumnType("bit(1)");
+
+                entity.Property(e => e.updateDate).HasColumnType("datetime");
+
+                entity.Property(e => e.updateUser).HasColumnType("int(11)");
+
+                entity.Property(e => e.vendorAddress)
+                    .IsRequired()
+                    .HasColumnType("varchar(500)");
+
+                entity.Property(e => e.vendorName)
+                    .IsRequired()
+                    .HasColumnType("varchar(250)");
+
+                entity.Property(e => e.vendorNumber)
+                    .IsRequired()
+                    .HasColumnType("varchar(50)");
+
+                entity.Property(e => e.vendorTel).HasColumnType("varchar(20)");
             });
         }
     }
