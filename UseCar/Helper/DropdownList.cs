@@ -116,5 +116,15 @@ namespace UseCar.Helper
                         Text = a.seatName
                     }).ToList();
         }
+        public List<SelectListItem> DriveSystem()
+        {
+            return (from a in context.drivesystem
+                    where a.isEnable
+                    select new SelectListItem
+                    {
+                        Value = a.driveSystemId.ToString(),
+                        Text = a.driveSystemName
+                    }).ToList();
+        }
     }
 }
