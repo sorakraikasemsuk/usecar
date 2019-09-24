@@ -240,5 +240,14 @@ namespace UseCar.Helper
             };
             return vendor.Union(other).ToList();
         }
+        public List<SelectListItem> Province()
+        {
+            return (from a in context.provinces
+                    select new SelectListItem
+                    {
+                        Value = a.id.ToString(),
+                        Text = a.name_th
+                    }).ToList();
+        }
     }
 }
