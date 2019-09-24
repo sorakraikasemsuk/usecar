@@ -15,4 +15,14 @@ namespace UseCar.Helper
         public const string edit = "edit";
         public const string delete = "delete";
     }
+    public static class CarStatus
+    {
+        public const int ReceiveCar = 1;
+    }
+    public static class ReceiveCarStatus
+    {
+        public const int Waiting = 1;
+        public const int Success = 2;
+        public const int Cancel = 3;
+    }
 }
