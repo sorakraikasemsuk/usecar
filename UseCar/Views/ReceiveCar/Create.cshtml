@@ -394,6 +394,26 @@
     </div>
     <div class="card mt-2">
         <div class="card-header">
+            <h5><i class="fa fa-image"></i> รูปภาพ</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group mb-3">
+                        <div class="custom-file">
+                            <input type="file" multiple class="custom-file-input" id="file" aria-describedby="file" onchange="BrowsFile();">
+                            <label class="custom-file-label" for="file">Choose file</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="SelectImg">
+                
+            </div>
+        </div>
+    </div>
+    <div class="card mt-2">
+        <div class="card-header">
             <h5><i class="fa fa-clipboard-list"></i> ข้อมูลอื่นๆ</h5>
         </div>
         <div class="card-body">
@@ -555,6 +575,26 @@
         function completed(res) {
             $('#addModal').modal('hide');
             ResponseDialog(res.responseJSON.code, window.location.href);
+        }
+        function BrowsFile() {
+            var files = $('#file')[0].files;
+            for (var i = 0; i < files.length; i++) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    // get loaded data and render thumbnail.
+                    var imageId = $('#SelectImg > div').length + 1;
+                    var _element = '';
+                    _element += '<div class="col-md-4">';
+                    _element += '<div class="card">';
+                    _element += '<img src = "" id="img_' + imageId + '" />';
+                    _element += '</div>';
+                    _element += '</div>';
+                    $('#SelectImg').append(_element);
+                    $("#img_" + imageId).attr('src', e.target.result);
+                };
+                // read the image file as a data URL.
+                reader.readAsDataURL(files[i]);
+            }
         }
     </script>
     }
