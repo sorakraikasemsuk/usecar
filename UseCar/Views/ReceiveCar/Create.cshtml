@@ -514,10 +514,10 @@
                 type: 'GET',
                 success: function (data) {
                     var _element = '';
-                    data.forEach(function (item) {
+                    data.forEach(function (item,index) {
                         _element += '<div class="col-md-3">';
                         _element += '<div class="form-check">';
-                        _element += '<input class="form-check-input" type="checkbox" value="" id="optionId_'+item.optionId+'" checked>';
+                        _element += '<input class="form-check-input" type="checkbox" name="options[' + index + '].optionId" value="' + item.optionId + '" id="optionId_' + item.optionId + '">';
                         _element += '<label class="form-check-label" for="optionId_' + item.optionId +'">&nbsp;'+item.optionName+'</label>';
                         _element += '</div>';
                         _element += '</div>';
