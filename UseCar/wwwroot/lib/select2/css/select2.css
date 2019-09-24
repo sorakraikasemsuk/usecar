@@ -10,6 +10,7 @@
     display: block;
     height: calc(2.25rem + 2px);
     user-select: none;
+    height:auto;
     -webkit-user-select: none; }
     .select2-container .select2-selection--single .select2-selection__rendered {
       display: block;
