@@ -66,5 +66,24 @@ namespace UseCar.ViewModels
         public string remark { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
         public decimal buyPrice { get; set; }
+        public List<ReceiveCarOption> options { get; set; }
+        [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
+        public DateTime registerDateHidden { get; set; }
+        [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
+        public string registerNumber { get; set; }
+        [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
+        public int provinceId { get; set; }
+        [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
+        public int order { get; set; }
+        [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
+        public DateTime ownerDateHidden { get; set; }
+        [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
+        public string ownerName { get; set; }
+        [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
+        public string ownerAddress { get; set; }
+    }
+    public class ReceiveCarOption
+    {
+        public int optionId { get; set; }
     }
 }

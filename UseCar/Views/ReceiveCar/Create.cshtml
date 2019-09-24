@@ -283,18 +283,23 @@
                                 </button>
                             </div>
                         </div>
-                        <input type="hidden" id="registerDateHidden" value="" />
+                        <input type="hidden" asp-for="registerDateHidden" value="" />
+                        <span asp-validation-for="registerDateHidden" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>เลขทะเบียน</label>
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" asp-for="registerNumber" />
+                        <span asp-validation-for="registerNumber" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <label>จังหวัด</label>
-                    <select class="form-control"></select>
+                    <select class="form-control" asp-for="provinceId">
+                        <option value="">กรุณาเลือก</option>
+                    </select>
+                    <span asp-validation-for="provinceId" class="text-danger"></span>
                 </div>
             </div>
         </div>
@@ -308,7 +313,8 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>ลำดับที่</label>
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" asp-for="order" />
+                        <span asp-validation-for="order" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -322,19 +328,22 @@
                                 </button>
                             </div>
                         </div>
-                        <input type="hidden" id="ownerDateHidden" value="" />
+                        <input type="hidden" asp-for="ownerDateHidden" value="" />
+                        <span asp-validation-for="ownerDateHidden" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>ชื่อผู้ครอบครอง</label>
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" asp-for="ownerName" />
+                        <span asp-validation-for="ownerName" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>ที่อยู่</label>
-                        <textarea class="form-control" rows="3"></textarea>
+                        <textarea class="form-control" rows="3" asp-for="ownerAddress"></textarea>
+                        <span asp-validation-for="ownerAddress" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -352,12 +361,14 @@
                         <select class="form-control" asp-for="vendorId" asp-items="@dropdownList.VendorWithOther()" onchange="VendorSelect();">
                             <option value="">กรุณาเลือก</option>
                         </select>
+                        <span asp-validation-for="vendorId" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>&nbsp;</label>
                         <input type="text" class="form-control" asp-for="vendorName" />
+                        <span asp-validation-for="vendorName" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-6">
