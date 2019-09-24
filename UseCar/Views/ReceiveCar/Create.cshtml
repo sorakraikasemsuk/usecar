@@ -296,7 +296,7 @@
                 </div>
                 <div class="col-md-4">
                     <label>จังหวัด</label>
-                    <select class="form-control" asp-for="provinceId">
+                    <select class="form-control" asp-for="provinceId" asp-items="@dropdownList.Province()">
                         <option value="">กรุณาเลือก</option>
                     </select>
                     <span asp-validation-for="provinceId" class="text-danger"></span>
