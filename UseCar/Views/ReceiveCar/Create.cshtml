@@ -552,5 +552,9 @@
                 })
             }
         }
+        function completed(res) {
+            $('#addModal').modal('hide');
+            ResponseDialog(res.responseJSON.code, window.location.href);
+        }
     </script>
     }

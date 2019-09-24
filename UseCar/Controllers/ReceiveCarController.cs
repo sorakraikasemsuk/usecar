@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using UseCar.Helper;
+using UseCar.Repositories;
 using UseCar.ViewModels;
 
 namespace UseCar.Controllers
@@ -12,10 +13,12 @@ namespace UseCar.Controllers
     {
         readonly DropdownList dropdownList;
         readonly SharedData sharedData;
-        public ReceiveCarController(DropdownList dropdownList, SharedData sharedData)
+        readonly ReceiveCarRepository receiveCarRepository;
+        public ReceiveCarController(DropdownList dropdownList, SharedData sharedData, ReceiveCarRepository receiveCarRepository)
         {
             this.dropdownList = dropdownList;
             this.sharedData = sharedData;
+            this.receiveCarRepository = receiveCarRepository;
         }
         public IActionResult Index()
         {
@@ -53,6 +56,11 @@ namespace UseCar.Controllers
                 car.code = "CAR" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2,'0') + "-XXXX";
             }
             return View(car);
+        }
+        [HttpPost]
+        public JsonResult Create(ReceiveCarViewModel data)
+        {
+            return Json(receiveCarRepository.Create(data));
         }
     }
 }
