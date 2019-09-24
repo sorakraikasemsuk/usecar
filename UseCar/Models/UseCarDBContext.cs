@@ -15,6 +15,7 @@ namespace UseCar.Models
         {
         }
 
+        public virtual DbSet<amphures> amphures { get; set; }
         public virtual DbSet<branch> branch { get; set; }
         public virtual DbSet<brand> brand { get; set; }
         public virtual DbSet<capacityengine> capacityengine { get; set; }
@@ -27,11 +28,13 @@ namespace UseCar.Models
         public virtual DbSet<color> color { get; set; }
         public virtual DbSet<contactrepairshop> contactrepairshop { get; set; }
         public virtual DbSet<department> department { get; set; }
+        public virtual DbSet<districts> districts { get; set; }
         public virtual DbSet<drivesystem> drivesystem { get; set; }
         public virtual DbSet<enginetype> enginetype { get; set; }
         public virtual DbSet<face> face { get; set; }
         public virtual DbSet<gear> gear { get; set; }
         public virtual DbSet<generation> generation { get; set; }
+        public virtual DbSet<geographies> geographies { get; set; }
         public virtual DbSet<m_carstatus> m_carstatus { get; set; }
         public virtual DbSet<m_menu> m_menu { get; set; }
         public virtual DbSet<m_menupermission> m_menupermission { get; set; }
@@ -39,6 +42,7 @@ namespace UseCar.Models
         public virtual DbSet<nature> nature { get; set; }
         public virtual DbSet<option> option { get; set; }
         public virtual DbSet<permission> permission { get; set; }
+        public virtual DbSet<provinces> provinces { get; set; }
         public virtual DbSet<repairshop> repairshop { get; set; }
         public virtual DbSet<seat> seat { get; set; }
         public virtual DbSet<subface> subface { get; set; }
@@ -57,6 +61,27 @@ namespace UseCar.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<amphures>(entity =>
+            {
+                entity.Property(e => e.id).HasColumnType("int(5)");
+
+                entity.Property(e => e.code)
+                    .IsRequired()
+                    .HasColumnType("varchar(4)");
+
+                entity.Property(e => e.name_en)
+                    .IsRequired()
+                    .HasColumnType("varchar(150)");
+
+                entity.Property(e => e.name_th)
+                    .IsRequired()
+                    .HasColumnType("varchar(150)");
+
+                entity.Property(e => e.province_id)
+                    .HasColumnType("int(5)")
+                    .HasDefaultValueSql("'0'");
+            });
+
             modelBuilder.Entity<branch>(entity =>
             {
                 entity.Property(e => e.branchId).HasColumnType("int(11)");
@@ -386,6 +411,25 @@ namespace UseCar.Models
                 entity.Property(e => e.updateUser).HasColumnType("int(11)");
             });
 
+            modelBuilder.Entity<districts>(entity =>
+            {
+                entity.Property(e => e.id).HasColumnType("varchar(6)");
+
+                entity.Property(e => e.amphure_id)
+                    .HasColumnType("int(11)")
+                    .HasDefaultValueSql("'0'");
+
+                entity.Property(e => e.name_en)
+                    .IsRequired()
+                    .HasColumnType("varchar(150)");
+
+                entity.Property(e => e.name_th)
+                    .IsRequired()
+                    .HasColumnType("varchar(150)");
+
+                entity.Property(e => e.zip_code).HasColumnType("int(11)");
+            });
+
             modelBuilder.Entity<drivesystem>(entity =>
             {
                 entity.Property(e => e.driveSystemId).HasColumnType("int(11)");
@@ -485,6 +529,15 @@ namespace UseCar.Models
                 entity.Property(e => e.updateDate).HasColumnType("datetime");
 
                 entity.Property(e => e.updateUser).HasColumnType("int(11)");
+            });
+
+            modelBuilder.Entity<geographies>(entity =>
+            {
+                entity.Property(e => e.id).HasColumnType("int(11)");
+
+                entity.Property(e => e.name)
+                    .IsRequired()
+                    .HasColumnType("varchar(255)");
             });
 
             modelBuilder.Entity<m_carstatus>(entity =>
@@ -610,6 +663,27 @@ namespace UseCar.Models
                 entity.Property(e => e.departmentId).HasColumnType("int(11)");
 
                 entity.Property(e => e.menuPermissionId).HasColumnType("int(11)");
+            });
+
+            modelBuilder.Entity<provinces>(entity =>
+            {
+                entity.Property(e => e.id).HasColumnType("int(5)");
+
+                entity.Property(e => e.code)
+                    .IsRequired()
+                    .HasColumnType("varchar(2)");
+
+                entity.Property(e => e.geography_id)
+                    .HasColumnType("int(5)")
+                    .HasDefaultValueSql("'0'");
+
+                entity.Property(e => e.name_en)
+                    .IsRequired()
+                    .HasColumnType("varchar(150)");
+
+                entity.Property(e => e.name_th)
+                    .IsRequired()
+                    .HasColumnType("varchar(150)");
             });
 
             modelBuilder.Entity<repairshop>(entity =>
