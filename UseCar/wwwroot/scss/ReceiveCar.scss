@@ -1,0 +1,15 @@
+﻿.list-img {
+    width: 100%;
+    overflow-x: auto;
+    display:flex;
+    .item-img {
+        display: inline-block;
+        margin:5px;
+        .card {
+            img {
+                width: 250px;
+                height: 250px;
+            }
+        }
+    }
+}
