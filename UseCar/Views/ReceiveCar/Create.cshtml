@@ -407,7 +407,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row" id="SelectImg">
+            <div class="list-img" id="SelectImg">
                 
             </div>
         </div>
@@ -441,6 +441,7 @@
 
 @section scripts{
     <script>
+        var file = [];
         $(document).ready(function () {
             $('#receiveDateShow').val(moment().locale('th').format('ll'));
             $('#receiveDateHidden').val(moment().format('YYYY-MM-DD'))
@@ -579,22 +580,31 @@
         function BrowsFile() {
             var files = $('#file')[0].files;
             for (var i = 0; i < files.length; i++) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    // get loaded data and render thumbnail.
-                    var imageId = $('#SelectImg > div').length + 1;
-                    var _element = '';
-                    _element += '<div class="col-md-4">';
-                    _element += '<div class="card">';
-                    _element += '<img src = "" id="img_' + imageId + '" />';
-                    _element += '</div>';
-                    _element += '</div>';
-                    $('#SelectImg').append(_element);
-                    $("#img_" + imageId).attr('src', e.target.result);
-                };
-                // read the image file as a data URL.
-                reader.readAsDataURL(files[i]);
+                var _id = file.length + 1;
+                file.push({
+                    id: _id,
+                    file: files[i]
+                });
+                var imageId = $('#SelectImg > div').length + 1;
+                var _element = '';
+                _element += '<div class="item-img">';
+                _element += '<div class="card">';
+                _element += '<img src = "" id="img_' + imageId + '" />';
+                _element += '<div class="card-body">';
+                _element += '<div class="row">';
+                _element += '<div class="col-md-12">';
+                _element += '<button type="button" class="btn btn-danger" onclick="DeleteFile(' + _id + ')">ลบ</button>';
+                _element += '</div>';
+                _element += '</div>';
+                _element += '</div>';
+                _element += '</div>';
+                _element += '</div>';
+                $('#SelectImg').append(_element);
+                $("#img_" + imageId).attr('src', window.URL.createObjectURL(files[i]));
             }
+        }
+        function DeleteFile(id) {
+            console.log(id)
         }
     </script>
     }
