@@ -20,6 +20,7 @@ namespace UseCar.Models
         public virtual DbSet<brand> brand { get; set; }
         public virtual DbSet<capacityengine> capacityengine { get; set; }
         public virtual DbSet<car> car { get; set; }
+        public virtual DbSet<car_image> car_image { get; set; }
         public virtual DbSet<car_option> car_option { get; set; }
         public virtual DbSet<car_owner> car_owner { get; set; }
         public virtual DbSet<car_register> car_register { get; set; }
@@ -238,6 +239,38 @@ namespace UseCar.Models
                     .HasColumnType("varchar(20)");
 
                 entity.Property(e => e.year).HasColumnType("int(11)");
+            });
+
+            modelBuilder.Entity<car_image>(entity =>
+            {
+                entity.HasKey(e => e.imageId)
+                    .HasName("PRIMARY");
+
+                entity.Property(e => e.imageId).HasColumnType("int(11)");
+
+                entity.Property(e => e.carId).HasColumnType("int(11)");
+
+                entity.Property(e => e.contenType)
+                    .IsRequired()
+                    .HasColumnType("varchar(250)");
+
+                entity.Property(e => e.createDate).HasColumnType("datetime");
+
+                entity.Property(e => e.createUser).HasColumnType("int(11)");
+
+                entity.Property(e => e.isEnable).HasColumnType("bit(1)");
+
+                entity.Property(e => e.name)
+                    .IsRequired()
+                    .HasColumnType("varchar(250)");
+
+                entity.Property(e => e.path)
+                    .IsRequired()
+                    .HasColumnType("varchar(500)");
+
+                entity.Property(e => e.updateDate).HasColumnType("datetime");
+
+                entity.Property(e => e.updateUser).HasColumnType("int(11)");
             });
 
             modelBuilder.Entity<car_option>(entity =>
