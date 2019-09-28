@@ -17,7 +17,7 @@
     </ol>
 </nav>
 
-<form asp-controller="ReceiveCar" asp-action="Create" method="post" data-ajax="true" data-ajax-method="post" data-ajax-complete="completed">
+<form id="ReceiveCarForm" data-ajax="true" data-ajax-method="post" data-ajax-complete="completed" enctype="multipart/form-data" data-ajax-begin="beforeSend">
     <div class="card">
         <div class="card-header">
             <h5><i class="fa fa-clipboard-list"></i> ข้อมูลรถ</h5>
@@ -408,7 +408,7 @@
                 </div>
             </div>
             <div class="list-img" id="SelectImg">
-                
+
             </div>
         </div>
     </div>
@@ -575,7 +575,17 @@
         }
         function completed(res) {
             $('#addModal').modal('hide');
-            ResponseDialog(res.responseJSON.code, window.location.href);
+            ResponseDialog(res.responseJSON.code, '/ReceiveCar');
+        }
+        function beforeSend() {
+            var form = document.getElementById('ReceiveCarForm');
+            var formData = new FormData(form);
+            file.forEach(function (file, index) {
+                formData.append('files', file.file);
+            })
+            var request = new XMLHttpRequest();
+            request.open("POST", "/ReceiveCar/Create");
+            request.send(formData);
         }
         function BrowsFile() {
             var files = $('#file')[0].files;

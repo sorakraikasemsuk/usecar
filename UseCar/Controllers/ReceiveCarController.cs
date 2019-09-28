@@ -58,9 +58,11 @@ namespace UseCar.Controllers
             return View(car);
         }
         [HttpPost]
-        public JsonResult Create(ReceiveCarViewModel data)
+        [IgnoreAntiforgeryToken]
+        public async Task<JsonResult> Create(ReceiveCarViewModel data)
         {
-            return Json(receiveCarRepository.Create(data));
+            var result = await receiveCarRepository.Create(data);
+            return Json(result);
         }
     }
 }

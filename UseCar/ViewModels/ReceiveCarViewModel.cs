@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -81,6 +82,7 @@ namespace UseCar.ViewModels
         public string ownerName { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
         public string ownerAddress { get; set; }
+        public List<IFormFile> files { get; set; }
     }
     public class ReceiveCarOption
     {

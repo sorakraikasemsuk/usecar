@@ -13,12 +13,14 @@ namespace UseCar.Repositories
     {
         readonly UseCarDBContext context;
         readonly HttpContext httpContext;
-        public ReceiveCarRepository(UseCarDBContext context, IHttpContextAccessor httpContext)
+        readonly File file;
+        public ReceiveCarRepository(UseCarDBContext context, IHttpContextAccessor httpContext, File file)
         {
             this.context = context;
             this.httpContext = httpContext.HttpContext;
+            this.file = file;
         }
-        public ResponseResult Create(ReceiveCarViewModel data)
+        public async Task<ResponseResult> Create(ReceiveCarViewModel data)
         {
             using(var Transaction = context.Database.BeginTransaction())
             {
@@ -112,6 +114,29 @@ namespace UseCar.Repositories
                         };
                         context.car_owner.Add(owner);
                         context.SaveChanges();
+
+                        //file
+                        if (data.files != null)
+                        {
+                            foreach(var image in data.files)
+                            {
+                                car_image car_Image = new car_image
+                                {
+                                    carId = car.carId,
+                                    name = image.FileName,
+                                    contenType = image.ContentType,
+                                    path = "",
+                                    menuId = MenuId.ReceiveCar,
+                                    createDate = DateTime.Now,
+                                    createUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId)),
+                                    isEnable = true
+                                };
+                                context.car_image.Add(car_Image);
+                                context.SaveChanges();
+                                //upload
+                                await file.Upload(image, car.code, MenuName.ReceiveCar);
+                            }
+                        }
                     }
                     Transaction.Commit();
 
