@@ -225,14 +225,16 @@
                     },
                     {
                         data: 'buyPrice',
+                        className: 'text-right',
                         render: function (data, type, row) {
-                            return row.buyPrice;
+                            return row.buyPrice.toLocaleString({ minimumIntegerDigits:2});
                         }
                     },
                     {
                         data: 'receiveDate',
+                        className: 'text-center',
                         render: function (data, type, row) {
-                            return row.receiveDate;
+                            return moment(row.receiveDate).add('year',543).locale('th').format('ll');
                         }
                     },
                     {
