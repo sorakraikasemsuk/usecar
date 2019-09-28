@@ -248,10 +248,11 @@
                         className: 'text-center',
                         render: function (data, type, row) {
                             if (row.receiveCarStatusId != 2) {
-                                return '<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addModal" onclick="Add(' + row.gearId + ')"><i class="fa fa-edit"></i> แก้ไข</button>' +
+                                return '<button type="button" class="btn btn-light btn-sm" onclick="View(' + row.carId + ')"><i class="fa fa-clipboard-list"></i> รายละเอียด</button>' +
+                                    ' <button type = "button" class="btn btn-warning btn-sm" data - toggle="modal" data - target="#addModal" onclick = "Add(' + row.gearId + ')" > <i class="fa fa-edit"></i> แก้ไข</button > ' +
                                     ' <button type="button" class="btn btn-danger btn-sm" onclick="Delete(' + row.gearId + ')"><i class="fa fa-trash"></i> ลบ</button>';
                             } else {
-                                return '<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addModal" onclick="Add(' + row.gearId + ')"><i class="fa fa-edit"></i> แก้ไข</button>';
+                                return '<button type="button" class="btn btn-light btn-sm" onclick="View(' + row.carId + ')"><i class="fa fa-clipboard-list"></i> รายละเอียด</button>';
                             }
                         }
                     }
@@ -308,6 +309,9 @@
                     });
                 }
             })
+        }
+        function View(carId) {
+            window.location.href = '/ReceiveCar/View?carId=' + carId;
         }
     </script>
 }

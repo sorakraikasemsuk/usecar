@@ -68,5 +68,9 @@ namespace UseCar.Controllers
             var result = await receiveCarRepository.Create(data);
             return Json(result);
         }
+        public IActionResult View(int carId)
+        {
+            return View(receiveCarRepository.View(carId));
+        }
     }
 }

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using UseCar.Helper;
@@ -18,9 +19,9 @@ namespace UseCar.Repositories
     {
         readonly UseCarDBContext context;
         readonly HttpContext httpContext;
-        readonly File file;
+        readonly FileManagement file;
         readonly IConfiguration configuration;
-        public ReceiveCarRepository(UseCarDBContext context, IHttpContextAccessor httpContext, File file, IConfiguration configuration)
+        public ReceiveCarRepository(UseCarDBContext context, IHttpContextAccessor httpContext, FileManagement file, IConfiguration configuration)
         {
             this.context = context;
             this.httpContext = httpContext.HttpContext;
@@ -109,7 +110,7 @@ namespace UseCar.Repositories
                             registerNumber = data.registerNumber,
                             provinceId = data.provinceId,
                             createDate = DateTime.Now,
-                            updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId)),
+                            createUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId)),
                             isEnable = true
                         };
                         context.car_register.Add(register);
@@ -172,6 +173,110 @@ namespace UseCar.Repositories
                          && a.createDate.Month == DateTime.Now.Month
                          select a).Count();
             return $"CAR{DateTime.Now.Year.ToString()}{DateTime.Now.Month.ToString().PadLeft(2, '0')}-{(count+1).ToString().PadLeft(4, '0')}";
+        }
+        public ReceiveCarViewModel View(int carId)
+        {
+            var registerData = (from a in context.car_register
+                                join b in context.car_owner on a.registerId equals b.registerId
+                                where a.isEnable
+                                && a.carId == carId
+                                && b.isEnable
+                                select new {
+                                    a.registerDate,
+                                    a.registerNumber,
+                                    a.provinceId,
+                                    b.order,
+                                    b.ownerDate,
+                                    b.ownerName,
+                                    b.ownerAddress
+                                }).FirstOrDefault();   
+            return (from a in context.car
+                    join b in context.brand on a.branchId equals b.brandId
+                    join c in context.generation on a.generationId equals c.generationId
+                    join d in context.face on a.faceId equals d.faceId
+                    join e in context.subface on a.subfaceId equals e.subfaceId
+                    join f in context.nature on a.natureId equals f.natureId
+                    where a.isEnable
+                    && a.carId == carId
+                    && b.isEnable
+                    && c.isEnable
+                    && d.isEnable
+                    && e.isEnable
+                    && f.isEnable
+                    select new ReceiveCarViewModel
+                    {
+                        carId = a.carId,
+                        code = a.code,
+                        branchId = a.branchId,
+                        categoryId = a.categoryId,
+                        brandId = a.brandId,
+                        brandName = b.brandName,
+                        generationId = a.generationId,
+                        generationName = c.generationName,
+                        faceId = a.faceId,
+                        faceName = d.faceName,
+                        subfaceId = a.subfaceId,
+                        subfaceName = e.subfaceName,
+                        serialNumber = a.serialNumber,
+                        engineNumber = a.engineNumber,
+                        mileNumber = a.mileNumber,
+                        brandEngine = a.brandEngine,
+                        gasNumber = a.gasNumber,
+                        weight = a.weight,
+                        colorId = a.colorId,
+                        gearId = a.gearId,
+                        seatId = a.seatId,
+                        driveSystemId = a.driveSystemId,
+                        engineTypeId = a.engineTypeId,
+                        capacityEngineId = a.capacityEngineId,
+                        typeId = a.typeId,
+                        natureId = a.natureId,
+                        natureName = f.natureName,
+                        year = a.year,
+                        receiveDateHidden = a.receiveDate.ToString("yyyy-MM-dd"),
+                        receiveCarStatusId = a.receiveCarStatusId,
+                        vendorId = a.vendorId,
+                        vendorName = a.vendorName,
+                        vendorAddress = a.vendorAddress,
+                        vendorTel = a.vendorTel,
+                        vendorNumber = a.vendorNumber,
+                        remark = a.remark,
+                        buyPrice = a.buyPrice,
+                        options = (from option in context.car_option
+                                   where option.carId == a.carId
+                                   select new ReceiveCarOption
+                                   {
+                                       optionId = option.optionId
+                                   }).ToList(),
+                        registerDateHidden = registerData.registerDate.ToString("yyyy-MM-dd"),
+                        registerNumber = registerData.registerNumber,
+                        provinceId = registerData.provinceId,
+                        order = registerData.order,
+                        ownerDateHidden = registerData.ownerDate.ToString("yyyy-MM-dd"),
+                        ownerName = registerData.ownerName,
+                        ownerAddress = registerData.ownerAddress,
+                        imageDisplay = (from image in context.car_image
+                                        where image.isEnable
+                                        && image.carId == a.carId
+                                        && image.menuId == MenuId.ReceiveCar
+                                        select new ImageDisplay
+                                        {
+                                            name = image.name,
+                                            image = GetImage($"{configuration["Upload:Path"]}{a.code}\\{MenuName.ReceiveCar}\\{image.name}")
+                                        }
+                                     ).ToList()
+                    }).FirstOrDefault();
+        }
+        public string GetImage(string pathImage)
+        {
+            using (var stream = new FileStream(pathImage, FileMode.Open))
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    stream.CopyTo(memoryStream);
+                    return "data:image/png;base64," + Convert.ToBase64String(memoryStream.ToArray());
+                }
+            }
         }
     }
 }

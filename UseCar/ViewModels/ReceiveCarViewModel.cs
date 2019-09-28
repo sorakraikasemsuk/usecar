@@ -17,12 +17,16 @@ namespace UseCar.ViewModels
         public int categoryId { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
         public int brandId { get; set; }
+        public string brandName { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
         public int generationId { get; set; }
+        public string generationName { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
         public int faceId { get; set; }
+        public string faceName { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
         public int subfaceId { get; set; }
+        public string subfaceName { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
         public string serialNumber { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
@@ -50,6 +54,7 @@ namespace UseCar.ViewModels
         public int typeId { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
         public int natureId { get; set; }
+        public string natureName { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
         public int year { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
@@ -83,10 +88,16 @@ namespace UseCar.ViewModels
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
         public string ownerAddress { get; set; }
         public List<IFormFile> files { get; set; }
+        public List<ImageDisplay> imageDisplay { get; set; }
     }
     public class ReceiveCarOption
     {
         public int optionId { get; set; }
+    }
+    public class ImageDisplay
+    {
+        public string name { get; set; }
+        public string image { get; set; }
     }
     public class ReceiveCarDatatableViewModel
     {
