@@ -17,7 +17,7 @@
     </ol>
 </nav>
 
-<form id="ReceiveCarForm" data-ajax="true" data-ajax-method="post" data-ajax-complete="completed" enctype="multipart/form-data" data-ajax-begin="beforeSend">
+<form id="ReceiveCarForm" data-ajax="true" enctype="multipart/form-data" data-ajax-begin="beforeSend">
     <div class="card">
         <div class="card-header">
             <h5><i class="fa fa-clipboard-list"></i> ข้อมูลรถ</h5>
@@ -34,10 +34,10 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>สถานะ</label>
-                        <select class="form-control" asp-for="carProcessId" asp-items="@dropdownList.ReceiveCarStatus()">
+                        <select class="form-control" asp-for="receiveCarStatusId" asp-items="@dropdownList.ReceiveCarStatus()">
                             <option value="">กรุณาเลือก</option>
                         </select>
-                        <span asp-validation-for="carProcessId" class="text-danger"></span>
+                        <span asp-validation-for="receiveCarStatusId" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -573,10 +573,6 @@
                 })
             }
         }
-        function completed(res) {
-            $('#addModal').modal('hide');
-            ResponseDialog(res.responseJSON.code, '/ReceiveCar');
-        }
         function beforeSend() {
             var form = document.getElementById('ReceiveCarForm');
             var formData = new FormData(form);
@@ -586,6 +582,11 @@
             var request = new XMLHttpRequest();
             request.open("POST", "/ReceiveCar/Create");
             request.send(formData);
+            request.onload = function () {
+                var jsonResponse = JSON.parse(request.response);
+                // do something with jsonResponse
+                ResponseDialog(jsonResponse.code, '/ReceiveCar');
+            };
         }
         function BrowsFile() {
             var files = $('#file')[0].files;

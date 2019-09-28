@@ -56,7 +56,7 @@ namespace UseCar.ViewModels
         public DateTime receiveDateHidden { get; set; }
         public int carStatusId { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
-        public int carProcessId { get; set; }
+        public int receiveCarStatusId { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
         public int vendorId { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
