@@ -88,6 +88,7 @@ namespace UseCar.ViewModels
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
         public string ownerAddress { get; set; }
         public List<IFormFile> files { get; set; }
+        public List<int> deleteFile { get; set; }
         public List<ImageDisplay> imageDisplay { get; set; }
     }
     public class ReceiveCarOption
@@ -96,6 +97,7 @@ namespace UseCar.ViewModels
     }
     public class ImageDisplay
     {
+        public int imageId { get; set; }
         public string name { get; set; }
         public string image { get; set; }
     }

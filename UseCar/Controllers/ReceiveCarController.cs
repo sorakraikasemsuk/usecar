@@ -59,6 +59,10 @@ namespace UseCar.Controllers
             {
                 car.code = "CAR" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString().PadLeft(2,'0') + "-XXXX";
             }
+            else
+            {
+                car = receiveCarRepository.View(carId);
+            }
             return View(car);
         }
         [HttpPost]

@@ -200,7 +200,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>ประเภทรถตามจดทะเบียน(รย.1-รย.17)</label>
-                        <select class="form-control" asp-for="typeId" asp-items="@dropdownList.Type()" onchange="TypeSelect();">
+                        <select class="form-control" asp-for="typeId" asp-items="@dropdownList.Type()">
                             <option value="">กรุณาเลือก</option>
                         </select>
                         <span asp-validation-for="typeId" class="text-danger"></span>
@@ -442,6 +442,7 @@
 @section scripts{
     <script>
         var file = [];
+        var deleteFile = [];
         $(document).ready(function () {
             $('#receiveDateShow').val(moment().locale('th').format('ll'));
             $('#receiveDateHidden').val(moment().format('YYYY-MM-DD'))
@@ -464,6 +465,37 @@
             $('#provinceId').select2();
 
             GenerateOption();
+
+            if ($('#carId').val() != 0) {
+                BrandSelect();
+                TypeSelect();
+                var image = '@Model.imageDisplay'==''?[]: JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.imageDisplay))');
+                image.forEach(function (image) {
+                    var _id = file.length == 0 ? 1 : file[file.length - 1].id + 1;
+                    file.push({
+                        id: _id,
+                        file: image.image,
+                        imageId: image.imageId,
+                        newFile: false
+                    });
+                    var imageId = $('#SelectImg > div').length + 1;
+                    var _element = '';
+                    _element += '<div class="item-img">';
+                    _element += '<div class="card">';
+                    _element += '<img src = "" id="img_' + imageId + '" />';
+                    _element += '<div class="card-body">';
+                    _element += '<div class="row">';
+                    _element += '<div class="col-md-12">';
+                    _element += '<button type="button" class="btn btn-danger" onclick="DeleteFile(' + _id + ',true)">ลบ</button>';
+                    _element += '</div>';
+                    _element += '</div>';
+                    _element += '</div>';
+                    _element += '</div>';
+                    _element += '</div>';
+                    $('#SelectImg').append(_element);
+                    $("#img_" + imageId).attr('src', image.image);
+                });
+            }
         });
         function BrandSelect() {
             $('#generationId > option').not(':first').remove();
@@ -478,6 +510,10 @@
                     data.forEach(function (item) {
                         $("#generationId").append(new Option(item.text, item.value));
                     })
+                    if ($('#carId').val() != 0) {
+                        $("#generationId").val('@Model.generationId');
+                        GenerationSelect();
+                    } 
                 }
             })
         }
@@ -494,6 +530,10 @@
                     data.forEach(function (item) {
                         $("#faceId").append(new Option(item.text, item.value));
                     });
+                    if ($('#carId').val() != 0) {
+                        $('#faceId').val('@Model.faceId');
+                        FaceSelect();
+                    } 
                 }
             })
         }
@@ -510,6 +550,9 @@
                     data.forEach(function (item) {
                         $("#subfaceId").append(new Option(item.text, item.value));
                     });
+                    if ($('#carId').val() != 0) {
+                        $("#subfaceId").val('@Model.subfaceId');
+                    } 
                 }
             })
         }
@@ -526,19 +569,26 @@
                     data.forEach(function (item) {
                         $("#natureId").append(new Option(item.text, item.value));
                     });
+                    if ($('#carId').val() != 0) {
+                        $("#natureId").val('@Model.natureId');
+                    } 
                 }
             })
         }
         function GenerateOption() {
+            var car_option = '@Model.options' == '' ? [] : JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.options))');
             $.ajax({
                 url: '/ReceiveCar/GetOption',
                 type: 'GET',
                 success: function (data) {
                     var _element = '';
-                    data.forEach(function (item,index) {
+                    data.forEach(function (item, index) {
+                        var _check = car_option.filter(function (option) {
+                            return option.optionId == item.optionId
+                        }).length > 0 ? 'checked' : '';
                         _element += '<div class="col-md-3">';
                         _element += '<div class="form-check">';
-                        _element += '<input class="form-check-input" type="checkbox" name="options[' + index + '].optionId" value="' + item.optionId + '" id="optionId_' + item.optionId + '">';
+                        _element += '<input class="form-check-input" type="checkbox" name="options[' + index + '].optionId" value="' + item.optionId + '" id="optionId_' + item.optionId + '" ' + _check +'>';
                         _element += '<label class="form-check-label" for="optionId_' + item.optionId +'">&nbsp;'+item.optionName+'</label>';
                         _element += '</div>';
                         _element += '</div>';
@@ -579,6 +629,9 @@
             file.forEach(function (file, index) {
                 formData.append('files', file.file);
             })
+            deleteFile.forEach(function (file) {
+                formData.append('deleteFile', file);
+            });
             var request = new XMLHttpRequest();
             request.open("POST", "/ReceiveCar/Create");
             request.send(formData);
@@ -594,12 +647,14 @@
                 var _id = file.length == 0 ? 1 : file[file.length - 1].id + 1;
                 file.push({
                     id: _id,
-                    file: files[i]
+                    file: files[i],
+                    imageId: 0,
+                    newFile: true
                 });
-                GenerateFile(files[i], _id);
+                GenerateFile(files[i], _id, true);
             }
         }
-        function GenerateFile(file, id) {
+        function GenerateFile(file, id, newFile) {
             var imageId = $('#SelectImg > div').length + 1;
             var _element = '';
             _element += '<div class="item-img">';
@@ -608,24 +663,33 @@
             _element += '<div class="card-body">';
             _element += '<div class="row">';
             _element += '<div class="col-md-12">';
-            _element += '<button type="button" class="btn btn-danger" onclick="DeleteFile(' + id + ')">ลบ</button>';
+            _element += '<button type="button" class="btn btn-danger" onclick="DeleteFile(' + id + ',' + newFile +')">ลบ</button>';
             _element += '</div>';
             _element += '</div>';
             _element += '</div>';
             _element += '</div>';
             _element += '</div>';
             $('#SelectImg').append(_element);
-            $("#img_" + imageId).attr('src', window.URL.createObjectURL(file));
+            $("#img_" + imageId).attr('src', newFile ? window.URL.createObjectURL(file) : file);
         }
-        function DeleteFile(id) {
+        function DeleteFile(id, oldFile) {
             var _removeFile = file.findIndex(function (data) {
                 return data.id == id
             });
-            file.splice(_removeFile, 1);
-            $('#SelectImg > div').remove();
-            file.forEach(function (file) {
-                GenerateFile(file.file, file.id);
-            })
+            if (oldFile) {
+                deleteFile.push(file[_removeFile].imageId);
+                file.splice(_removeFile, 1);
+                $('#SelectImg > div').remove();
+                file.forEach(function (file) {
+                    GenerateFile(file.file, file.id, file.newFile);
+                })
+            } else {
+                file.splice(_removeFile, 1);
+                $('#SelectImg > div').remove();
+                file.forEach(function (file) {
+                    GenerateFile(file.file, file.id, file.newFile);
+                })
+            }
         }
     </script>
     }

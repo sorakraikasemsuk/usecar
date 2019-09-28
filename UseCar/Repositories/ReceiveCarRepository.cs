@@ -154,6 +154,139 @@ namespace UseCar.Repositories
                             }
                         }
                     }
+                    else
+                    {
+                        var car = (from a in context.car
+                                   where a.isEnable
+                                   && a.carId == data.carId
+                                   select a).FirstOrDefault();
+                        car.branchId = data.branchId;
+                        car.categoryId = data.categoryId;
+                        car.brandId = data.brandId;
+                        car.generationId = data.generationId;
+                        car.faceId = data.faceId;
+                        car.subfaceId = data.subfaceId;
+                        car.serialNumber = data.serialNumber;
+                        car.engineNumber = data.engineNumber;
+                        car.mileNumber = data.mileNumber;
+                        car.brandEngine = data.brandEngine;
+                        car.gasNumber = data.gasNumber;
+                        car.weight = data.weight;
+                        car.colorId = data.colorId;
+                        car.gearId = data.gearId;
+                        car.seatId = data.seatId;
+                        car.driveSystemId = data.driveSystemId;
+                        car.engineTypeId = data.engineTypeId;
+                        car.capacityEngineId = data.capacityEngineId;
+                        car.typeId = data.typeId;
+                        car.natureId = data.natureId;
+                        car.year = data.year;
+                        car.receiveDate = DateTime.ParseExact(data.receiveDateHidden, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                        car.carStatusId = CarStatus.ReceiveCar;
+                        car.carProcessId = data.receiveCarStatusId;
+                        car.receiveCarStatusId = data.receiveCarStatusId;
+                        car.vendorId = data.vendorId;
+                        car.vendorName = data.vendorName;
+                        car.vendorAddress = data.vendorAddress;
+                        car.vendorTel = data.vendorTel;
+                        car.vendorNumber = data.vendorNumber;
+                        car.remark = data.remark;
+                        car.buyPrice = data.buyPrice;
+                        car.updateDate = DateTime.Now;
+                        car.updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                        car.isEnable = true;
+                        context.SaveChanges();
+
+                        //Remove old option
+                        var delOption = (from a in context.car_option
+                                         where a.carId == data.carId
+                                         select a).ToList();
+                        foreach(var item in delOption)
+                        {
+                            context.car_option.Remove(item);
+                            context.SaveChanges();
+                        }
+                        //option
+                        if (data.options != null)
+                        {
+                            foreach (var item in data.options)
+                            {
+                                car_option option = new car_option
+                                {
+                                    carId = car.carId,
+                                    optionId = item.optionId
+                                };
+                                context.car_option.Add(option);
+                                context.SaveChanges();
+                            }
+                        }
+                        //Register
+                        var register = (from a in context.car_register
+                                        where a.isEnable
+                                        && a.carId == data.carId
+                                        select a).FirstOrDefault();
+                        register.carId = data.carId;
+                        register.registerDate = DateTime.ParseExact(data.registerDateHidden, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                        register.registerNumber = data.registerNumber;
+                        register.provinceId = data.provinceId;
+                        register.updateDate = DateTime.Now;
+                        register.updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                        register.isEnable = true;
+                        context.SaveChanges();
+                        //Owner
+                        var owner = (from a in context.car_owner
+                                     where a.isEnable
+                                     && a.carId == data.carId
+                                     && a.registerId == register.registerId
+                                     select a).FirstOrDefault();
+                        owner.carId = data.carId;
+                        owner.registerId = register.registerId;
+                        owner.order = data.order;
+                        owner.ownerDate = DateTime.ParseExact(data.ownerDateHidden, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                        owner.ownerName = data.ownerName;
+                        owner.ownerAddress = data.ownerAddress;
+                        owner.updateDate = DateTime.Now;
+                        owner.updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                        owner.isEnable = true;
+                        context.SaveChanges();
+                        //Remode old file
+                        if (data.deleteFile != null)
+                        {
+                            var delFile = (from a in context.car_image
+                                           where a.isEnable
+                                           && a.carId == data.carId
+                                           && a.menuId == MenuId.ReceiveCar
+                                           && data.deleteFile.Contains(a.imageId)
+                                           select a).ToList();
+                            foreach(var item in delFile)
+                            {
+                                context.car_image.Remove(item);
+                                context.SaveChanges();
+                                file.Delete(car.code, MenuName.ReceiveCar, item.name);
+                            }
+                        }
+                        //file
+                        if (data.files != null)
+                        {
+                            foreach (var image in data.files)
+                            {
+                                car_image car_Image = new car_image
+                                {
+                                    carId = car.carId,
+                                    name = image.FileName,
+                                    contenType = image.ContentType,
+                                    menuId = MenuId.ReceiveCar,
+                                    createDate = DateTime.Now,
+                                    createUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId)),
+                                    isEnable = true
+                                };
+                                context.car_image.Add(car_Image);
+                                context.SaveChanges();
+                                //upload
+                                await file.Upload(image, car.code, MenuName.ReceiveCar);
+                            }
+                        }
+                    }
                     Transaction.Commit();
 
                     result.code = ResponseCode.ok;
@@ -189,7 +322,7 @@ namespace UseCar.Repositories
                                     b.ownerDate,
                                     b.ownerName,
                                     b.ownerAddress
-                                }).FirstOrDefault();   
+                                }).FirstOrDefault();
             return (from a in context.car
                     join b in context.brand on a.branchId equals b.brandId
                     join c in context.generation on a.generationId equals c.generationId
@@ -261,6 +394,7 @@ namespace UseCar.Repositories
                                         && image.menuId == MenuId.ReceiveCar
                                         select new ImageDisplay
                                         {
+                                            imageId = image.imageId,
                                             name = image.name,
                                             image = GetImage($"{configuration["Upload:Path"]}{a.code}\\{MenuName.ReceiveCar}\\{image.name}")
                                         }
