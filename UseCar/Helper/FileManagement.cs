@@ -33,5 +33,16 @@ namespace UseCar.Helper
                 }
             }
         }
+        public void Delete(string folderName,string moduleName,string fileName)
+        {
+            var uniqueFileName = fileName;
+            var uploads = Path.Combine(configuration["Upload:Path"], folderName, moduleName);
+            var filePath = Path.Combine(uploads, uniqueFileName);
+            if (File.Exists(filePath))
+            {
+                // If file found, delete it    
+                File.Delete(filePath);
+            }
+        }
     }
 }
