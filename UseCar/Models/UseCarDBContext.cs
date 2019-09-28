@@ -268,10 +268,6 @@ namespace UseCar.Models
                     .IsRequired()
                     .HasColumnType("varchar(250)");
 
-                entity.Property(e => e.path)
-                    .IsRequired()
-                    .HasColumnType("varchar(500)");
-
                 entity.Property(e => e.updateDate).HasColumnType("datetime");
 
                 entity.Property(e => e.updateUser).HasColumnType("int(11)");

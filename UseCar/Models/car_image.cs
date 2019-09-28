@@ -9,7 +9,6 @@ namespace UseCar.Models
         public int carId { get; set; }
         public string name { get; set; }
         public string contenType { get; set; }
-        public string path { get; set; }
         public int menuId { get; set; }
         public DateTime createDate { get; set; }
         public int createUser { get; set; }
