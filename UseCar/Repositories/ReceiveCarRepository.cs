@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Dapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using UseCar.Helper;
@@ -14,11 +18,21 @@ namespace UseCar.Repositories
         readonly UseCarDBContext context;
         readonly HttpContext httpContext;
         readonly File file;
-        public ReceiveCarRepository(UseCarDBContext context, IHttpContextAccessor httpContext, File file)
+        readonly IConfiguration configuration;
+        public ReceiveCarRepository(UseCarDBContext context, IHttpContextAccessor httpContext, File file, IConfiguration configuration)
         {
             this.context = context;
             this.httpContext = httpContext.HttpContext;
             this.file = file;
+            this.configuration = configuration;
+        }
+        public IEnumerable<ReceiveCarDatatableViewModel> GetDatatable()
+        {
+            using (var connection = new MySqlConnection(configuration.GetConnectionString("UseCarDBContext")))
+            {
+                var data = connection.Query<ReceiveCarDatatableViewModel>("st_getReceiveCarList", commandType: CommandType.StoredProcedure);
+                return data;
+            }
         }
         public async Task<ResponseResult> Create(ReceiveCarViewModel data)
         {

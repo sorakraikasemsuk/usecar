@@ -127,17 +127,18 @@
                 <table id="carTable" class="table table-bordered table-hover" style="width:100%">
                     <thead>
                         <tr>
+                            <th>ลำดับ</th>
                             <th>รูปรถ</th>
-                            <th>ชื่อรถ</th>
-                            <th>ราคาซื้อ</th>
-                            <th>ราคาขาย</th>
+                            <th>ข้อมูลรถ</th>
+                            <th>ราคาซื้อเข้า</th>
+                            <th>วันที่รับ</th>
                             <th>สถานะ</th>
                             <th>
                                 จัดการ
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    @*<tbody>
                         <tr>
                             <td><img src="https://www.checkraka.com/uploaded/logo/43/43f469bb05bcda9b93891a59816e9ac6.jpg" height="150" /></td>
                             <td class="align-middle">[บษ 1234] toyota revo single cab</td>
@@ -162,7 +163,7 @@
                                 <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
                             </td>
                         </tr>
-                    </tbody>
+                    </tbody>*@
                 </table>
             </div>
         </div>
@@ -177,15 +178,87 @@
             $('#receiveDate.date').datepicker().on('changeDate', function (e) {
                 $('#receiveDateHidden').val(moment(e.date).format('YYYY-MM-DD'));
             });
-            $('#carTable').DataTable({
+            Datatable();
+        });
+        function Datatable() {
+            datatable = $('#carTable').DataTable({
                 order: [],
                 searching: false,
                 ordering: true,
                 lengthChange: false,
                 pagingType: 'full_numbers',
-                bSort: false,
+                ajax: {
+                    url: '/ReceiveCar/GetDatatable',
+                    type: 'GET',
+                    data: function (d) {
+                        //d.gearName = $('#textSearch').val()
+                    },
+                    dataSrc: function (data) {
+                        return data;
+                    },
+                    statusCode: {
+                        401: function (xhr, error, thrown) {
+                            window.location.reload();
+                            return false;
+                        }
+                    }
+                },
+                columns: [
+                    {
+                        data: 'carId',
+                        className: 'text-center',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: 'fileName',
+                        render: function (data, type, row) {
+                            return row.fileName;
+                        }
+                    },
+                    {
+                        data: 'brandName',
+                        render: function (data, type, row) {
+                            return row.brandName + ' ' + row.generationName + ' ' + row.faceName + ' ' + row.subfaceName;
+                        }
+                    },
+                    {
+                        data: 'buyPrice',
+                        render: function (data, type, row) {
+                            return row.buyPrice;
+                        }
+                    },
+                    {
+                        data: 'receiveDate',
+                        render: function (data, type, row) {
+                            return row.receiveDate;
+                        }
+                    },
+                    {
+                        data: 'statusName',
+                        render: function (data, type, row) {
+                            return row.statusName;
+                        }
+                    },
+                    {
+                        data: 'carId',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            if (row.receiveCarStatusId != 2) {
+                                return '<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addModal" onclick="Add(' + row.gearId + ')"><i class="fa fa-edit"></i> แก้ไข</button>' +
+                                    ' <button type="button" class="btn btn-danger btn-sm" onclick="Delete(' + row.gearId + ')"><i class="fa fa-trash"></i> ลบ</button>';
+                            } else {
+                                return '<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addModal" onclick="Add(' + row.gearId + ')"><i class="fa fa-edit"></i> แก้ไข</button>';
+                            }
+                        }
+                    }
+                ]
             });
-        });
+        }
+        function ReloadDatatable() {
+            datatable.ajax.reload();
+        }
         function BrandSelect() {
             $('#generationId > option').not(':first').remove();
             var _brandId = $('#brandId').val();

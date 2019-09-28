@@ -88,4 +88,25 @@ namespace UseCar.ViewModels
     {
         public int optionId { get; set; }
     }
+    public class ReceiveCarDatatableViewModel
+    {
+        public int carId { get; set; }
+        public int brandId { get; set; }
+        public string brandName { get; set; }
+        public int generationId { get; set; }
+        public string generationName { get; set; }
+        public int faceId { get; set; }
+        public string faceName { get; set; }
+        public int subfaceId { get; set; }
+        public string subfaceName { get; set; }
+        public decimal buyPrice { get; set; }
+        public DateTime receiveDate { get; set; }
+        public int receiveCarStatusId { get; set; }
+        public string statusName { get; set; }
+        public string fileName { get; set; }
+    }
+    public class ReceiveCarDatatableFilter
+    {
+        
+    }
 }
