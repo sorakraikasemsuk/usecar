@@ -204,6 +204,8 @@ namespace UseCar.Models
 
                 entity.Property(e => e.natureId).HasColumnType("int(11)");
 
+                entity.Property(e => e.receiveCarStatusId).HasColumnType("int(11)");
+
                 entity.Property(e => e.receiveDate).HasColumnType("datetime");
 
                 entity.Property(e => e.remark).HasColumnType("text");

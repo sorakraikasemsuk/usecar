@@ -44,5 +44,6 @@ namespace UseCar.Models
         public bool isEnable { get; set; }
         public decimal buyPrice { get; set; }
         public decimal? sellPrice { get; set; }
+        public int receiveCarStatusId { get; set; }
     }
 }
