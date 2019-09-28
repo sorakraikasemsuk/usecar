@@ -39,7 +39,7 @@ namespace UseCar.Models
         public virtual DbSet<m_carstatus> m_carstatus { get; set; }
         public virtual DbSet<m_menu> m_menu { get; set; }
         public virtual DbSet<m_menupermission> m_menupermission { get; set; }
-        public virtual DbSet<m_receivecare_status> m_receivecare_status { get; set; }
+        public virtual DbSet<m_receivecar_status> m_receivecar_status { get; set; }
         public virtual DbSet<nature> nature { get; set; }
         public virtual DbSet<option> option { get; set; }
         public virtual DbSet<permission> permission { get; set; }
@@ -635,7 +635,7 @@ namespace UseCar.Models
                     .HasColumnType("varchar(50)");
             });
 
-            modelBuilder.Entity<m_receivecare_status>(entity =>
+            modelBuilder.Entity<m_receivecar_status>(entity =>
             {
                 entity.HasKey(e => e.receiveCarStatusId)
                     .HasName("PRIMARY");
