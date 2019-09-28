@@ -7,6 +7,7 @@ namespace UseCar.Helper
 {
     public static class Resource
     {
+
     }
     public static class Permission
     {
@@ -24,5 +25,13 @@ namespace UseCar.Helper
         public const int Waiting = 1;
         public const int Success = 2;
         public const int Cancel = 3;
+    }
+    public static class MenuId
+    {
+        public const int ReceiveCar = 11;
+    }
+    public static class MenuName
+    {
+        public const string ReceiveCar = "ReceiveCar";
     }
 }
