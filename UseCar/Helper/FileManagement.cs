@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace UseCar.Helper
 {
-    public class File
+    public class FileManagement
     {
         readonly IConfiguration configuration;
-        public File(IConfiguration configuration)
+        public FileManagement(IConfiguration configuration)
         {
             this.configuration = configuration;
         }
