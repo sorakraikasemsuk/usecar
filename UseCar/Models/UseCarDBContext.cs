@@ -260,6 +260,8 @@ namespace UseCar.Models
 
                 entity.Property(e => e.isEnable).HasColumnType("bit(1)");
 
+                entity.Property(e => e.menuId).HasColumnType("int(11)");
+
                 entity.Property(e => e.name)
                     .IsRequired()
                     .HasColumnType("varchar(250)");
