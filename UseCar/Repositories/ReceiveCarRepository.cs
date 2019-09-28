@@ -5,6 +5,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using UseCar.Helper;
@@ -67,7 +68,7 @@ namespace UseCar.Repositories
                             typeId = data.typeId,
                             natureId = data.natureId,
                             year = data.year,
-                            receiveDate = data.receiveDateHidden,
+                            receiveDate = DateTime.ParseExact(data.receiveDateHidden,"yyyy-MM-dd",CultureInfo.InvariantCulture),
                             carStatusId = CarStatus.ReceiveCar,
                             carProcessId = data.receiveCarStatusId,
                             receiveCarStatusId = data.receiveCarStatusId,
@@ -104,7 +105,7 @@ namespace UseCar.Repositories
                         car_register register = new car_register
                         {
                             carId = car.carId,
-                            registerDate = data.registerDateHidden,
+                            registerDate = DateTime.ParseExact(data.registerDateHidden,"yyyy-MM-dd",CultureInfo.InvariantCulture),
                             registerNumber = data.registerNumber,
                             provinceId = data.provinceId,
                             createDate = DateTime.Now,
@@ -120,7 +121,7 @@ namespace UseCar.Repositories
                             carId = car.carId,
                             registerId = register.registerId,
                             order = data.order,
-                            ownerDate = data.ownerDateHidden,
+                            ownerDate = DateTime.ParseExact(data.ownerDateHidden, "yyyy-MM-dd", CultureInfo.InvariantCulture),
                             ownerName = data.ownerName,
                             ownerAddress = data.ownerAddress,
                             createDate = DateTime.Now,

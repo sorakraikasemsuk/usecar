@@ -53,7 +53,7 @@ namespace UseCar.ViewModels
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
         public int year { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
-        public DateTime receiveDateHidden { get; set; }
+        public string receiveDateHidden { get; set; }
         public int carStatusId { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
         public int receiveCarStatusId { get; set; }
@@ -69,7 +69,7 @@ namespace UseCar.ViewModels
         public decimal buyPrice { get; set; }
         public List<ReceiveCarOption> options { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
-        public DateTime registerDateHidden { get; set; }
+        public string registerDateHidden { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
         public string registerNumber { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
@@ -77,7 +77,7 @@ namespace UseCar.ViewModels
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
         public int order { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
-        public DateTime ownerDateHidden { get; set; }
+        public string ownerDateHidden { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
         public string ownerName { get; set; }
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
