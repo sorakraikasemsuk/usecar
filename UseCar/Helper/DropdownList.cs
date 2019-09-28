@@ -169,7 +169,7 @@ namespace UseCar.Helper
         }
         public List<SelectListItem> ReceiveCarStatus()
         {
-            return (from a in context.m_receivecare_status
+            return (from a in context.m_receivecar_status
                     where a.isEnable
                     select new SelectListItem
                     {
