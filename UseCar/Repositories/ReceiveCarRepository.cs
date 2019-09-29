@@ -28,11 +28,21 @@ namespace UseCar.Repositories
             this.file = file;
             this.configuration = configuration;
         }
-        public List<ReceiveCarDatatableViewModel> GetDatatable()
+        public List<ReceiveCarDatatableViewModel> GetDatatable(ReceiveCarDatatableFilter filter)
         {
             using (var connection = new MySqlConnection(configuration.GetConnectionString("UseCarDBContext")))
             {
-                var data = connection.Query<ReceiveCarDatatableViewModel>("st_getReceiveCarList", commandType: CommandType.StoredProcedure);
+                DateTime receiveDate = DateTime.ParseExact(filter.receiveDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                var queryParameters = new DynamicParameters();
+                queryParameters.Add("@branchId", filter.branchId);
+                queryParameters.Add("@brandId", filter.brandId);
+                queryParameters.Add("@generationId", filter.generationId);
+                queryParameters.Add("@faceId", filter.faceId);
+                queryParameters.Add("@subfaceId", filter.subfaceId);
+                queryParameters.Add("@receiveDate", receiveDate);
+                queryParameters.Add("@receiveCarStatusId", filter.receiveCarStatusId);
+                queryParameters.Add("@registerNumber", string.IsNullOrEmpty(filter.registerNumber)?"":filter.registerNumber);
+                var data = connection.Query<ReceiveCarDatatableViewModel>("st_getReceiveCarList", queryParameters, commandType: CommandType.StoredProcedure);
                 return (from a in data
                         select new ReceiveCarDatatableViewModel
                         {
@@ -49,7 +59,8 @@ namespace UseCar.Repositories
                             receiveDate = a.receiveDate,
                             receiveCarStatusId = a.receiveCarStatusId,
                             statusName = a.statusName,
-                            fileName = file.GetImage($"{configuration["Upload:Path"]}{a.code}\\{MenuName.ReceiveCar}\\{a.fileName}")
+                            fileName = file.GetImage($"{configuration["Upload:Path"]}{a.code}\\{MenuName.ReceiveCar}\\{a.fileName}"),
+                            registerNumber = a.registerNumber
                         }).ToList();
             }
         }

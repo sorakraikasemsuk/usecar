@@ -48,9 +48,9 @@ namespace UseCar.Controllers
         {
             return Json(sharedData.VendorData(vendorId));
         }
-        public JsonResult GetDatatable()
+        public JsonResult GetDatatable(ReceiveCarDatatableFilter filter)
         {
-            return Json(receiveCarRepository.GetDatatable());
+            return Json(receiveCarRepository.GetDatatable(filter));
         }
         public IActionResult Create(int carId)
         {

@@ -118,9 +118,17 @@ namespace UseCar.ViewModels
         public int receiveCarStatusId { get; set; }
         public string statusName { get; set; }
         public string fileName { get; set; }
+        public string registerNumber { get; set; }
     }
     public class ReceiveCarDatatableFilter
     {
-        
+        public int branchId { get; set; }
+        public int brandId { get; set; }
+        public int generationId { get; set; }
+        public int faceId { get; set; }
+        public int subfaceId { get; set; }
+        public string receiveDate { get; set; }
+        public int receiveCarStatusId { get; set; }
+        public string registerNumber { get; set; }
     }
 }
