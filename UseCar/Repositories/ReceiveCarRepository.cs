@@ -396,21 +396,10 @@ namespace UseCar.Repositories
                                         {
                                             imageId = image.imageId,
                                             name = image.name,
-                                            image = GetImage($"{configuration["Upload:Path"]}{a.code}\\{MenuName.ReceiveCar}\\{image.name}")
+                                            image = file.GetImage($"{configuration["Upload:Path"]}{a.code}\\{MenuName.ReceiveCar}\\{image.name}")
                                         }
                                      ).ToList()
                     }).FirstOrDefault();
-        }
-        public string GetImage(string pathImage)
-        {
-            using (var stream = new FileStream(pathImage, FileMode.Open))
-            {
-                using (var memoryStream = new MemoryStream())
-                {
-                    stream.CopyTo(memoryStream);
-                    return "data:image/png;base64," + Convert.ToBase64String(memoryStream.ToArray());
-                }
-            }
         }
     }
 }

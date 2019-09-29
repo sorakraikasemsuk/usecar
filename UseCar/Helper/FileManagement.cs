@@ -44,5 +44,16 @@ namespace UseCar.Helper
                 File.Delete(filePath);
             }
         }
+        public string GetImage(string pathImage)
+        {
+            using (var stream = new FileStream(pathImage, FileMode.Open))
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    stream.CopyTo(memoryStream);
+                    return "data:image/png;base64," + Convert.ToBase64String(memoryStream.ToArray());
+                }
+            }
+        }
     }
 }
