@@ -46,14 +46,19 @@ namespace UseCar.Helper
         }
         public string GetImage(string pathImage)
         {
-            using (var stream = new FileStream(pathImage, FileMode.Open))
+            if (File.Exists(pathImage))
             {
-                using (var memoryStream = new MemoryStream())
+                using (var stream = new FileStream(pathImage, FileMode.Open))
                 {
-                    stream.CopyTo(memoryStream);
-                    return "data:image/png;base64," + Convert.ToBase64String(memoryStream.ToArray());
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        stream.CopyTo(memoryStream);
+                        return "data:image/png;base64," + Convert.ToBase64String(memoryStream.ToArray());
+                    }
                 }
             }
+            return "";
+            
         }
     }
 }
