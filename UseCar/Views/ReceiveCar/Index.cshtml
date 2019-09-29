@@ -214,7 +214,7 @@
                     {
                         data: 'fileName',
                         render: function (data, type, row) {
-                            return row.fileName;
+                            return row.fileName == '' ? '' : '<img src="' + row.fileName + '" width="150" height="150" />';
                         }
                     },
                     {

@@ -28,12 +28,29 @@ namespace UseCar.Repositories
             this.file = file;
             this.configuration = configuration;
         }
-        public IEnumerable<ReceiveCarDatatableViewModel> GetDatatable()
+        public List<ReceiveCarDatatableViewModel> GetDatatable()
         {
             using (var connection = new MySqlConnection(configuration.GetConnectionString("UseCarDBContext")))
             {
                 var data = connection.Query<ReceiveCarDatatableViewModel>("st_getReceiveCarList", commandType: CommandType.StoredProcedure);
-                return data;
+                return (from a in data
+                        select new ReceiveCarDatatableViewModel
+                        {
+                            carId = a.carId,
+                            brandId = a.brandId,
+                            brandName = a.brandName,
+                            generationId = a.generationId,
+                            generationName = a.generationName,
+                            faceId = a.faceId,
+                            faceName = a.faceName,
+                            subfaceId = a.subfaceId,
+                            subfaceName = a.subfaceName,
+                            buyPrice = a.buyPrice,
+                            receiveDate = a.receiveDate,
+                            receiveCarStatusId = a.receiveCarStatusId,
+                            statusName = a.statusName,
+                            fileName = file.GetImage($"{configuration["Upload:Path"]}{a.code}\\{MenuName.ReceiveCar}\\{a.fileName}")
+                        }).ToList();
             }
         }
         public async Task<ResponseResult> Create(ReceiveCarViewModel data)
