@@ -429,5 +429,32 @@ namespace UseCar.Repositories
                                      ).ToList()
                     }).FirstOrDefault();
         }
+        public ResponseResult Delete(int carId)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    var car = (from a in context.car
+                               where a.isEnable
+                               && a.carId == carId
+                               select a).FirstOrDefault();
+                    car.isEnable = false;
+                    car.updateDate = DateTime.Now;
+                    car.updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                    context.SaveChanges();
+                    Transaction.Commit();
+
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
     }
 }

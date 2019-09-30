@@ -22,7 +22,7 @@
             <div class="col-md-12">
                 <div class="alert alert-success" role="alert">
                     <button type="button" class="btn btn-warning" onclick="Edit(@Model.carId)"><i class="fa fa-edit"></i> แก้ไข</button>
-                    <button type="button" class="btn btn-danger"><i class="fa fa-trash"></i> ลบ</button>
+                    <button type="button" class="btn btn-danger" onclick="Delete(@Model.carId)"><i class="fa fa-trash"></i> ลบ</button>
                 </div>
             </div>
         </div>
@@ -474,6 +474,28 @@
         }
         function Edit(carId) {
             window.location.href = '/ReceiveCar/Create?carId=' + carId;
+        }
+        function Delete(carId) {
+            $.showConfirm({
+                title: "แจ้งเตือน",
+                body: "คุณต้องการลบข้อมูล ใช่หรือไม่?",
+                textTrue: "ใช่",
+                textFalse: "ไม่ใช่",
+                onSubmit: function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '/ReceiveCar/Delete',
+                            type: 'POST',
+                            data: {
+                                carId: carId
+                            },
+                            success: function (data) {
+                                ResponseDialog(data.code, '/ReceiveCar');
+                            }
+                        })
+                    }
+                }
+            })
         }
     </script>
 }

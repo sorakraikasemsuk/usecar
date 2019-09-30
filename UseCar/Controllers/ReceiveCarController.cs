@@ -76,5 +76,11 @@ namespace UseCar.Controllers
         {
             return View(receiveCarRepository.View(carId));
         }
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public JsonResult Delete(int carId)
+        {
+            return Json(receiveCarRepository.Delete(carId));
+        }
     }
 }
