@@ -200,7 +200,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>ประเภทรถตามจดทะเบียน(รย.1-รย.17)</label>
-                        <select class="form-control" asp-for="typeId" asp-items="@dropdownList.Type()">
+                        <select class="form-control" asp-for="typeId" asp-items="@dropdownList.Type()" onchange="TypeSelect();">
                             <option value="">กรุณาเลือก</option>
                         </select>
                         <span asp-validation-for="typeId" class="text-danger"></span>

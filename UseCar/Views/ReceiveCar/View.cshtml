@@ -15,14 +15,20 @@
         <li class="breadcrumb-item active" aria-current="page">รายละเอียดข้อมูลรับรถ</li>
     </ol>
 </nav>
-<div class="row">
-    <div class="col-md-12">
-        <div class="alert alert-success" role="alert">
-            <button type="button" class="btn btn-warning" onclick="Edit(@Model.carId)"><i class="fa fa-edit"></i> แก้ไข</button>
-            <button type="button" class="btn btn-danger"><i class="fa fa-trash"></i> ลบ</button>
+@{
+    if (Model.receiveCarStatusId != 2)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-success" role="alert">
+                    <button type="button" class="btn btn-warning" onclick="Edit(@Model.carId)"><i class="fa fa-edit"></i> แก้ไข</button>
+                    <button type="button" class="btn btn-danger"><i class="fa fa-trash"></i> ลบ</button>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
+    }
+}
+
 <form>
     <div class="card">
         <div class="card-header">
@@ -380,8 +386,8 @@
         </div>
         <div class="card-body">
             <div class="list-img" id="SelectImg">
-                @{ 
-                    foreach(var image in Model.imageDisplay)
+                @{
+                    foreach (var image in Model.imageDisplay)
                     {
                         <div class="item-img">
                             <div class="card">
