@@ -21,11 +21,14 @@ namespace UseCar.Models
         public virtual DbSet<capacityengine> capacityengine { get; set; }
         public virtual DbSet<car> car { get; set; }
         public virtual DbSet<car_image> car_image { get; set; }
+        public virtual DbSet<car_maintenance> car_maintenance { get; set; }
+        public virtual DbSet<car_maintenance_detail> car_maintenance_detail { get; set; }
         public virtual DbSet<car_option> car_option { get; set; }
         public virtual DbSet<car_owner> car_owner { get; set; }
         public virtual DbSet<car_register> car_register { get; set; }
         public virtual DbSet<category> category { get; set; }
         public virtual DbSet<categoryshop> categoryshop { get; set; }
+        public virtual DbSet<checkup> checkup { get; set; }
         public virtual DbSet<color> color { get; set; }
         public virtual DbSet<contactrepairshop> contactrepairshop { get; set; }
         public virtual DbSet<department> department { get; set; }
@@ -37,6 +40,7 @@ namespace UseCar.Models
         public virtual DbSet<generation> generation { get; set; }
         public virtual DbSet<geographies> geographies { get; set; }
         public virtual DbSet<m_carstatus> m_carstatus { get; set; }
+        public virtual DbSet<m_maintenance_status> m_maintenance_status { get; set; }
         public virtual DbSet<m_menu> m_menu { get; set; }
         public virtual DbSet<m_menupermission> m_menupermission { get; set; }
         public virtual DbSet<m_receivecar_status> m_receivecar_status { get; set; }
@@ -273,6 +277,68 @@ namespace UseCar.Models
                 entity.Property(e => e.updateUser).HasColumnType("int(11)");
             });
 
+            modelBuilder.Entity<car_maintenance>(entity =>
+            {
+                entity.HasKey(e => e.maintenanceId)
+                    .HasName("PRIMARY");
+
+                entity.Property(e => e.maintenanceId).HasColumnType("int(11)");
+
+                entity.Property(e => e.carId).HasColumnType("int(11)");
+
+                entity.Property(e => e.code)
+                    .IsRequired()
+                    .HasColumnType("varchar(50)");
+
+                entity.Property(e => e.createDate).HasColumnType("datetime");
+
+                entity.Property(e => e.createUser).HasColumnType("int(11)");
+
+                entity.Property(e => e.isEnable).HasColumnType("bit(1)");
+
+                entity.Property(e => e.maintenanceStatusId).HasColumnType("int(11)");
+
+                entity.Property(e => e.receiveDate).HasColumnType("datetime");
+
+                entity.Property(e => e.remark).HasColumnType("varchar(500)");
+
+                entity.Property(e => e.repairShopId).HasColumnType("int(11)");
+
+                entity.Property(e => e.sendDate).HasColumnType("datetime");
+
+                entity.Property(e => e.updateDate).HasColumnType("datetime");
+
+                entity.Property(e => e.updateUser).HasColumnType("int(11)");
+            });
+
+            modelBuilder.Entity<car_maintenance_detail>(entity =>
+            {
+                entity.HasKey(e => e.maintenanceDetailId)
+                    .HasName("PRIMARY");
+
+                entity.Property(e => e.maintenanceDetailId).HasColumnType("int(11)");
+
+                entity.Property(e => e.createDate).HasColumnType("datetime");
+
+                entity.Property(e => e.createUser).HasColumnType("int(11)");
+
+                entity.Property(e => e.description)
+                    .IsRequired()
+                    .HasColumnType("varchar(500)");
+
+                entity.Property(e => e.isEnable).HasColumnType("bit(1)");
+
+                entity.Property(e => e.itemNo).HasColumnType("int(11)");
+
+                entity.Property(e => e.maintenanceId).HasColumnType("int(11)");
+
+                entity.Property(e => e.price).HasColumnType("decimal(18,2)");
+
+                entity.Property(e => e.updateDate).HasColumnType("datetime");
+
+                entity.Property(e => e.updateUser).HasColumnType("int(11)");
+            });
+
             modelBuilder.Entity<car_option>(entity =>
             {
                 entity.HasKey(e => e.carOptionId)
@@ -369,6 +435,25 @@ namespace UseCar.Models
                 entity.Property(e => e.categoryShopId).HasColumnType("int(11)");
 
                 entity.Property(e => e.categoryShopName)
+                    .IsRequired()
+                    .HasColumnType("varchar(250)");
+
+                entity.Property(e => e.createDate).HasColumnType("datetime");
+
+                entity.Property(e => e.createUser).HasColumnType("int(11)");
+
+                entity.Property(e => e.isEnable).HasColumnType("bit(1)");
+
+                entity.Property(e => e.updateDate).HasColumnType("datetime");
+
+                entity.Property(e => e.updateUser).HasColumnType("int(11)");
+            });
+
+            modelBuilder.Entity<checkup>(entity =>
+            {
+                entity.Property(e => e.checkupId).HasColumnType("int(11)");
+
+                entity.Property(e => e.checkupName)
                     .IsRequired()
                     .HasColumnType("varchar(250)");
 
@@ -579,6 +664,20 @@ namespace UseCar.Models
                     .HasName("PRIMARY");
 
                 entity.Property(e => e.carStatusId).HasColumnType("int(11)");
+
+                entity.Property(e => e.isEnable).HasColumnType("bit(1)");
+
+                entity.Property(e => e.statusName)
+                    .IsRequired()
+                    .HasColumnType("varchar(50)");
+            });
+
+            modelBuilder.Entity<m_maintenance_status>(entity =>
+            {
+                entity.HasKey(e => e.maintenanceStatusId)
+                    .HasName("PRIMARY");
+
+                entity.Property(e => e.maintenanceStatusId).HasColumnType("int(11)");
 
                 entity.Property(e => e.isEnable).HasColumnType("bit(1)");
 
