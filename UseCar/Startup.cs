@@ -69,6 +69,7 @@ namespace Car_Somchai
             services.AddTransient<VendorRepository>();
             services.AddTransient<ReceiveCarRepository>();
             services.AddTransient<MaintenanceCarRepository>();
+            services.AddTransient<CheckupSettingRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
