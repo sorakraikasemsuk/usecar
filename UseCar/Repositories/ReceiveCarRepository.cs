@@ -98,7 +98,7 @@ namespace UseCar.Repositories
                             natureId = data.natureId,
                             year = data.year,
                             receiveDate = DateTime.ParseExact(data.receiveDateHidden,"yyyy-MM-dd",CultureInfo.InvariantCulture),
-                            carStatusId = CarStatus.ReceiveCar,
+                            carStatusId = data.receiveCarStatusId == ReceiveCarStatus.Success ? CarStatus.ReadySell : CarStatus.ReceiveCar,
                             carProcessId = data.receiveCarStatusId,
                             receiveCarStatusId = data.receiveCarStatusId,
                             vendorId = data.vendorId,
@@ -210,7 +210,7 @@ namespace UseCar.Repositories
                         car.natureId = data.natureId;
                         car.year = data.year;
                         car.receiveDate = DateTime.ParseExact(data.receiveDateHidden, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-                        car.carStatusId = CarStatus.ReceiveCar;
+                        car.carStatusId = data.receiveCarStatusId == ReceiveCarStatus.Success ? CarStatus.ReadySell : CarStatus.ReceiveCar;
                         car.carProcessId = data.receiveCarStatusId;
                         car.receiveCarStatusId = data.receiveCarStatusId;
                         car.vendorId = data.vendorId;
