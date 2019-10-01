@@ -4,14 +4,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1><i class="fa fa-tasks"></i> ข้อมูลเชครถ</h1>
+<h1><i class="fa fa-tasks"></i> ข้อมูลตรวจสภาพ</h1>
 <hr />
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/Home">หน้าแรก</a></li>
         <li class="breadcrumb-item"><a href="/Setting">ตั้งค่า</a></li>
-        <li class="breadcrumb-item active" aria-current="page">ข้อมูลเชครถ</li>
+        <li class="breadcrumb-item active" aria-current="page">ข้อมูลตรวจสภาพ</li>
     </ol>
 </nav>
 
@@ -23,14 +23,14 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group row">
-                    <label class="col-sm-4 col-form-label">รายการเชครถ</label>
+                    <label class="col-sm-4 col-form-label">รายการตรวจสภาพ</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" id="textSearch" />
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <button class="btn btn-primary"><i class="fa fa-search"></i> ค้นหา</button>
+                <button class="btn btn-primary" onclick="ReloadDatatable();"><i class="fa fa-search"></i> ค้นหา</button>
             </div>
         </div>
     </div>
@@ -38,12 +38,12 @@
 
 <div class="card mt-1">
     <div class="card-header">
-        <h5><i class="fa fa-clipboard-list"></i> ข้อมูลเชครถ</h5>
+        <h5><i class="fa fa-clipboard-list"></i> ข้อมูลตรวจสภาพ</h5>
     </div>
     <div class="card-body">
         <div class="row">
             <div class="col-md-12">
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal"><i class="fa fa-plus"></i> เพิ่มข้อมูลเชครถ</button>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addModal" onclick="Add(0);"><i class="fa fa-plus"></i> เพิ่มข้อมูลตรวจสภาพ</button>
             </div>
         </div>
         <div class="row mt-1">
@@ -51,13 +51,14 @@
                 <table id="checkUpTable" class="table table-bordered" style="width:100%">
                     <thead>
                         <tr>
-                            <th>รายการเชครถ</th>
+                            <th>ลำดับ</th>
+                            <th>รายการตรวจสภาพ</th>
                             <th>
                                 จัดการ
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    @*<tbody>
                         <tr>
                             <td>แบตเตอรี่</td>
                             <td class="text-center">
@@ -65,7 +66,7 @@
                                 <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
                             </td>
                         </tr>
-                    </tbody>
+                    </tbody>*@
                 </table>
             </div>
         </div>
@@ -77,22 +78,27 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">เพิ่ม/แก้ไขข้อมูลเชครถ</h5>
+                <h5 class="modal-title" id="exampleModalLabel">เพิ่ม/แก้ไขข้อมูลตรวจสภาพ</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label class="col-sm-12 col-form-label">รายการเชครถ</label>
-                    <div class="col-sm-12">
-                        <input type="text" class="form-control" />
+                <form id="checkupForm" asp-controller="CheckupSetting" asp-action="Create" method="post" data-ajax="true" data-ajax-method="post" data-ajax-complete="completed">
+                    <input type="hidden" id="checkupId" name="checkupId" />
+                    <div class="form-group">
+                        <label class="col-sm-12 col-form-label">รายการตรวจสภาพ</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="checkupName" name="checkupName" />
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> ปิด</button>
-                <button type="button" class="btn btn-primary"><i class="fa fa-save"></i> บันทึก</button>
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> ปิด</button>
+                            <button type="button" class="btn btn-primary" onclick="Save();"><i class="fa fa-save"></i> บันทึก</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -100,16 +106,138 @@
 
 @section scripts{
     <script>
+        var datatable;
         $(document).ready(function () {
-            $('#checkUpTable').DataTable({
+            Datatable();
+
+            $('#textSearch').keyup(function (e) {
+                if (e.keyCode === 13) {
+                    ReloadDatatable();
+                }
+            })
+        });
+        function Datatable() {
+            datatable = $('#checkUpTable').DataTable({
                 order: [],
                 searching: false,
                 ordering: true,
                 lengthChange: false,
                 pagingType: 'full_numbers',
-                bSort: false,
+                ajax: {
+                    url: '/CheckupSetting/GetDatatable',
+                    type: 'GET',
+                    data: function (d) {
+                        d.checkupName = $('#textSearch').val()
+                    },
+                    dataSrc: function (data) {
+                        return data;
+                    },
+                    statusCode: {
+                        401: function (xhr, error, thrown) {
+                            window.location.reload();
+                            return false;
+                        }
+                    }
+                },
+                columns: [
+                    {
+                        data: 'checkupId',
+                        className: 'text-center',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: 'checkupName',
+                    },
+                    {
+                        data: 'checkupId',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            if (row.carInCheck == 0) {
+                                return '<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addModal" onclick="Add(' + row.checkupId + ')"><i class="fa fa-edit"></i> แก้ไข</button>' +
+                                    ' <button type="button" class="btn btn-danger btn-sm" onclick="Delete(' + row.checkupId + ')"><i class="fa fa-trash"></i> ลบ</button>';
+                            } else {
+                                return '<button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#addModal" onclick="Add(' + row.checkupId + ')"><i class="fa fa-edit"></i> แก้ไข</button>';
+                            }
+                        }
+                    }
+                ]
             });
-        });
+        }
+        function ReloadDatatable() {
+            datatable.ajax.reload();
+        }
+        function Add(checkupId) {
+            $.ajax({
+                url: '/CheckupSetting/GetCheckupById',
+                type: 'GET',
+                data: {
+                    checkupId: checkupId
+                },
+                success: function (data) {
+                    $('#checkupId').val(data.checkupId);
+                    $('#checkupName').val(data.checkupName);
+                }
+            })
+        }
+        function Delete(checkupId) {
+            $.showConfirm({
+                title: "แจ้งเตือน",
+                body: "คุณต้องการลบข้อมูล ใช่หรือไม่?",
+                textTrue: "ใช่",
+                textFalse: "ไม่ใช่",
+                onSubmit: function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '/CheckupSetting/Delete',
+                            type: 'POST',
+                            data: {
+                                checkupId: checkupId
+                            },
+                            success: function (data) {
+                                ResponseDialog(data.code, window.location.href);
+                            }
+                        })
+                    }
+                }
+            })
+        }
+        function Save() {
+            $("#checkupForm").validate({
+                errorClass: 'text-danger',
+            }); //sets up the validator
+            $("#checkupName").rules("add", {
+                required: true,
+                messages: {
+                    required: 'กรุณากรอกข้อมูล'
+                }
+            });
+
+            var _checkName = true;
+            $.ajax({
+                url: '/CheckupSetting/CheckName',
+                type: 'GET',
+                async: false,
+                data: {
+                    checkupId: $('#checkupId').val(),
+                    checkupName: $('#checkupName').val()
+                },
+                success: function (data) {
+                    _checkName = data;
+                }
+            })
+            if (_checkName) {
+                $('#checkupForm').submit();
+            } else {
+                ExistDialog($('#checkupName').val());
+            }
+
+        }
+        function completed(res) {
+            $('#addModal').modal('hide');
+            ResponseDialog(res.responseJSON.code, window.location.href);
+        }
     </script>
 }
 
