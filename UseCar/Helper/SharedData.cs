@@ -74,6 +74,16 @@ namespace UseCar.Helper
                         }).ToList();
             }
         }
+        public List<SharedDataCheckupViewModel> CheckupData()
+        {
+            return (from a in context.checkup
+                    where a.isEnable
+                    select new SharedDataCheckupViewModel
+                    {
+                        checkupId = a.checkupId,
+                        checkupName = a.checkupName
+                    }).ToList();
+        }
     }
     public class SharedDataOptionViewModel
     {
@@ -111,5 +121,10 @@ namespace UseCar.Helper
         public int faceId { get; set; }
         public int subfaceId { get; set; }
         public string registerNumber { get; set; }
+    }
+    public class SharedDataCheckupViewModel
+    {
+        public int checkupId { get; set; }
+        public string checkupName { get; set; }
     }
 }
