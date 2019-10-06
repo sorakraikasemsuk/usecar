@@ -20,6 +20,8 @@ namespace UseCar.Models
         public virtual DbSet<brand> brand { get; set; }
         public virtual DbSet<capacityengine> capacityengine { get; set; }
         public virtual DbSet<car> car { get; set; }
+        public virtual DbSet<car_checkup> car_checkup { get; set; }
+        public virtual DbSet<car_checkup_detail> car_checkup_detail { get; set; }
         public virtual DbSet<car_image> car_image { get; set; }
         public virtual DbSet<car_maintenance> car_maintenance { get; set; }
         public virtual DbSet<car_maintenance_detail> car_maintenance_detail { get; set; }
@@ -245,6 +247,44 @@ namespace UseCar.Models
                     .HasColumnType("varchar(20)");
 
                 entity.Property(e => e.year).HasColumnType("int(11)");
+            });
+
+            modelBuilder.Entity<car_checkup>(entity =>
+            {
+                entity.HasKey(e => e.carCheckupId)
+                    .HasName("PRIMARY");
+
+                entity.Property(e => e.carCheckupId).HasColumnType("int(11)");
+
+                entity.Property(e => e.carId).HasColumnType("int(11)");
+
+                entity.Property(e => e.checkupBy).HasColumnType("int(11)");
+
+                entity.Property(e => e.checkupDate).HasColumnType("datetime");
+
+                entity.Property(e => e.createDate).HasColumnType("datetime");
+
+                entity.Property(e => e.createUser).HasColumnType("int(11)");
+
+                entity.Property(e => e.isEnable).HasColumnType("bit(1)");
+
+                entity.Property(e => e.remark).HasColumnType("text");
+
+                entity.Property(e => e.updateDate).HasColumnType("datetime");
+
+                entity.Property(e => e.updateUser).HasColumnType("int(11)");
+            });
+
+            modelBuilder.Entity<car_checkup_detail>(entity =>
+            {
+                entity.HasKey(e => e.carCheckupDetId)
+                    .HasName("PRIMARY");
+
+                entity.Property(e => e.carCheckupDetId).HasColumnType("int(11)");
+
+                entity.Property(e => e.carCheckupId).HasColumnType("int(11)");
+
+                entity.Property(e => e.checkupId).HasColumnType("int(11)");
             });
 
             modelBuilder.Entity<car_image>(entity =>
