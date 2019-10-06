@@ -249,5 +249,18 @@ namespace UseCar.Helper
                         Text = a.name_th
                     }).ToList();
         }
+        public List<SelectListItem> User(int userId)
+        {
+            return (from a in context.user
+                    where a.isEnable
+                    && a.isActive
+                    && !a.isAdmin
+                    select new SelectListItem
+                    {
+                        Value = a.userId.ToString(),
+                        Text = a.firstName + " " + a.lastName,
+                        Selected = userId == a.userId
+                    }).ToList();
+        }
     }
 }
