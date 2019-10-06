@@ -1,0 +1,180 @@
+﻿@using UseCar.Helper;
+@inject DropdownList dropdownList
+@model int
+<div class="modal fade" id="carSearchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document" style="max-width:1200px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">ค้นหารถ</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fa fa-search"></i> ค้นหาข้อมูล</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>สาขา</label>
+                                    <select class="form-control" id="branchId" asp-items="@dropdownList.BranchAll()">
+                                        <option value="0">ทั้งหมด</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>ยี่ห้อรถ</label>
+                                    <select class="form-control" id="brandId" asp-items="@dropdownList.BrandAll()">
+                                        <option value="0">ทั้งหมด</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>รุ่นรถ</label>
+                                    <select class="form-control" id="generationId">
+                                        <option value="0">ทั้งหมด</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>โฉมรถ</label>
+                                    <select class="form-control" id="faceId">
+                                        <option value="0">ทั้งหมด</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>รุ่นย่อย</label>
+                                    <select class="form-control" id="subfaceId">
+                                        <option value="0">ทั้งหมด</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>เลขทะเบียนรถ</label>
+                                    <input type="text" class="form-control" id="registerNumber" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>&nbsp;</label>
+                                    <button type="button" class="btn btn-primary form-control" onclick="ReloadDatatable();"><i class="fa fa-search"></i> ค้นหา</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mt-2">
+                    <div class="card-header">
+                        <h5><i class="fa fa-clipboard-list"></i> ข้อมูลรถ</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table id="carSearchTable" class="table table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>ลำดับ</th>
+                                            <th>รูปรถ</th>
+                                            <th>ข้อมูลรถ</th>
+                                            <th>จัดการ</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> ปิด</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    var datatable;
+    $(document).ready(function () {
+        $('#carSearchModal').on('show.bs.modal', function (e) {
+            // do something...
+            Datatable();
+        });
+        $('#registerNumber').keyup(function (e) {
+            if (e.keyCode === 13) {
+                ReloadDatatable();
+            }
+        });
+    });
+    function Datatable() {
+        datatable = $('#carSearchTable').DataTable({
+            order: [],
+            searching: false,
+            ordering: true,
+            lengthChange: false,
+            pagingType: 'full_numbers',
+            destroy: true,
+            ajax: {
+                url: '/SharedData/CarSearch',
+                type: 'GET',
+                data: function (d) {
+                    d.branchId = $('#branchId').val(),
+                        d.brandId = $('#brandId').val(),
+                        d.generationId = $('#generationId').val(),
+                        d.faceId = $('#faceId').val(),
+                        d.subfaceId = $('#subfaceId').val(),
+                        d.registerNumber = $('#registerNumber').val()
+                },
+                dataSrc: function (data) {
+                    return data;
+                },
+                statusCode: {
+                    401: function (xhr, error, thrown) {
+                        window.location.reload();
+                        return false;
+                    }
+                }
+            },
+            columns: [
+                {
+                    data: 'carId',
+                    className: 'text-center',
+                    render: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                {
+                    data: 'image',
+                    className: 'text-center',
+                    render: function (data, type, row) {
+                        return row.image == '' ? '' : '<img src="' + row.image + '" width="150" height="150" />';
+                    }
+                },
+                {
+                    data: 'carId',
+                    render: function (data, type, row) {
+                        return '<span class="badge badge-primary"> ' + row.registerNumber + '</span>' + row.brandName + ' ' + row.generationName + ' ' + row.faceName + ' ' + row.subfaceName;
+                    }
+                },
+                {
+                    data: 'carId',
+                    className: 'text-center',
+                    render: function (data, type, row) {
+                        return '<button type="button" class="btn btn-primary">เลือก</button>';
+                    }
+                }
+            ]
+        });
+    }
+    function ReloadDatatable() {
+        datatable.ajax.reload();
+    }
+</script>
