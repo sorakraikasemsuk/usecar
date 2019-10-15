@@ -168,7 +168,7 @@
                     data: 'carId',
                     className: 'text-center',
                     render: function (data, type, row) {
-                        return '<button type="button" class="btn btn-primary">เลือก</button>';
+                        return '<button type="button" class="btn btn-primary" onclick="Select(' + row.carId + ',\'' + row.brandName + '\',\'' + row.generationName + '\',\'' + row.faceName + '\',\'' + row.subfaceName + '\',\'' + row.registerNumber+'\')">เลือก</button>';
                     }
                 }
             ]
@@ -176,5 +176,10 @@
     }
     function ReloadDatatable() {
         datatable.ajax.reload();
+    }
+    function Select(carId, brandName, generationName, faceName, subfaceName, registerNumber) {
+        $('#carId').val(carId);
+        $('#carDetail').val('[' + registerNumber + '] ' + brandName + ' ' + generationName + ' ' + faceName + ' ' + subfaceName);
+        $('#carSearchModal').modal('hide');
     }
 </script>
