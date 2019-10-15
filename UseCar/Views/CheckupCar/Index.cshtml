@@ -1,4 +1,5 @@
-﻿
+﻿@using UseCar.Helper
+@inject DropdownList dropdownList
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -22,30 +23,82 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group row">
-                    <label class="col-sm-4 col-form-label">ข้อมูลรถ</label>
+                    <label class="col-sm-4 col-form-label">สาขา</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" />
+                        <select class="form-control" id="branchId" asp-items="@dropdownList.BranchAll()">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group row">
-                    <label class="col-sm-4 col-form-label">วันที่เชค</label>
+                    <label class="col-sm-4 col-form-label">ยี่ห้อรถ</label>
                     <div class="col-sm-8">
-                        <div class="input-group date" id="checkupDate">
-                            <input type="text" class="form-control" id="checkupDateShow" value="" readonly>
-                            <div class="input-group-append">
-                                <button class="btn btn-dark" type="button">
-                                    <i class="fa fa-calendar-alt"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <input type="hidden" id="checkupDateHidden" value="" />
+                        <select class="form-control" id="brandId" asp-items="@dropdownList.BrandAll()" onchange="BrandSelect();">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <button class="btn btn-primary"><i class="fa fa-search"></i> ค้นหา</button>
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">รุ่นรถ</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="generationId" onchange="GenerationSelect();">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">โฉมรถ</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="faceId" onchange="FaceSelect();">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">รุ่นย่อย</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="subFaceId">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">วันที่ตรวจสภาพ</label>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <div class="input-group date" id="checkupDate">
+                                <input type="text" class="form-control" id="checkupDateShow" value="" readonly>
+                                <div class="input-group-append">
+                                    <button class="btn btn-dark" type="button">
+                                        <i class="fa fa-calendar-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <input type="hidden" id="checkupDateHidden" value="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">เลขทะเบียน</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="registerNumber" placeholder="" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 text-right">
+                <button class="btn btn-primary" onclick="ReloadDatatable();"><i class="fa fa-search"></i> ค้นหา</button>
             </div>
         </div>
     </div>
@@ -66,15 +119,17 @@
                 <table id="checkupCarTable" class="table table-bordered" style="width:100%">
                     <thead>
                         <tr>
+                            <th>ลำดับ</th>
+                            <th>รูปรถ</th>
                             <th>ข้อมูลรถ</th>
-                            <th>วันที่เชค</th>
-                            <th>เชคล่าสุดโดย</th>
+                            <th>วันที่ตรวจสภาพ</th>
+                            <th>โดย</th>
                             <th>
                                 จัดการ
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    @*<tbody>
                         <tr>
                             <td>[บษ 1234] toyota revo single cab</td>
                             <td>2 ก.ย. 2562</td>
@@ -111,7 +166,7 @@
                                 <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
                             </td>
                         </tr>
-                    </tbody>
+                    </tbody>*@
                 </table>
             </div>
         </div>
@@ -120,22 +175,174 @@
 
 @section scripts{
     <script>
+        var datatable;
         $(document).ready(function () {
-            $('#checkupCarTable').DataTable({
-                order: [],
-                searching: false,
-                ordering: true,
-                lengthChange: false,
-                pagingType: 'full_numbers',
-                bSort: false,
-            });
-
             $('#checkupDateShow').val(moment().locale('th').format('ll'));
             $('#checkupDateHidden').val(moment().format('YYYY-MM-DD'))
             $('#checkupDate.date').datepicker().on('changeDate', function (e) {
                 $('#checkupDateHidden').val(moment(e.date).format('YYYY-MM-DD'));
             });
+            Datatable();
+            $('#registerNumber').keyup(function (e) {
+                if (e.keyCode === 13) {
+                    ReloadDatatable();
+                }
+            })
         });
+        function Datatable() {
+            datatable = $('#checkupCarTable').DataTable({
+                order: [],
+                searching: false,
+                ordering: true,
+                lengthChange: false,
+                pagingType: 'full_numbers',
+                ajax: {
+                    url: '/CheckupCar/GetDatatable',
+                    type: 'GET',
+                    data: function (d) {
+                        d.branchId = $('#branchId').val(),
+                            d.brandId = $('#brandId').val(),
+                            d.generationId = $('#generationId').val(),
+                            d.faceId = $('#faceId').val(),
+                            d.subFaceId = $('#subFaceId').val(),
+                            d.checkupDate = $('#checkupDateHidden').val(),
+                            d.registerNumber = $('#registerNumber').val()
+                    },
+                    dataSrc: function (data) {
+                        return data;
+                    },
+                    statusCode: {
+                        401: function (xhr, error, thrown) {
+                            window.location.reload();
+                            return false;
+                        }
+                    }
+                },
+                columns: [
+                    {
+                        data: 'carCheckupId',
+                        className: 'text-center',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: 'fileName',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            return row.fileName == '' ? '' : '<img src="' + row.fileName + '" width="150" height="150" />';
+                        }
+                    },
+                    {
+                        data: 'brandName',
+                        render: function (data, type, row) {
+                            return '<span class="badge badge-primary"> ' + row.registerNumber + '</span>' + row.brandName + ' ' + row.generationName + ' ' + row.faceName + ' ' + row.subfaceName;
+                        }
+                    },
+                    {
+                        data: 'checkupDate',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            return moment(row.checkupDate).add('year', 543).locale('th').format('ll');
+                        }
+                    },
+                    {
+                        data: 'checkupBy',
+                        render: function (data, type, row) {
+                            return row.checkupByName;
+                        }
+                    },
+                    {
+                        data: 'carCheckupId',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            return '<button type="button" class="btn btn-light btn-sm" onclick="View(' + row.carCheckupId + ')"><i class="fa fa-clipboard-list"></i> รายละเอียด</button>';
+                                //' <br /><button type = "button" class="btn btn-warning btn-sm mt-2" data - toggle="modal" data - target="#addModal" onclick = "Edit(' + row.carCheckupId + ')" > <i class="fa fa-edit"></i> แก้ไข</button > ' +
+                                //' <br /><button type="button" class="btn btn-danger btn-sm mt-2" onclick="Delete(' + row.carCheckupId + ')"><i class="fa fa-trash"></i> ลบ</button>';
+                        }
+                    }
+                ]
+            });
+        }
+        function ReloadDatatable() {
+            datatable.ajax.reload();
+        }
+        function BrandSelect() {
+            $('#generationId > option').not(':first').remove();
+            var _brandId = $('#brandId').val();
+            $.ajax({
+                url: '/SharedData/GetGenerationByBrandId',
+                type: 'GET',
+                data: {
+                    brandId: _brandId
+                },
+                success: function (data) {
+                    data.forEach(function (item) {
+                        $("#generationId").append(new Option(item.text, item.value));
+                    })
+                }
+            })
+        }
+        function GenerationSelect() {
+            $('#faceId > option').not(':first').remove();
+            var _generationId = $('#generationId').val();
+            $.ajax({
+                url: '/SharedData/GetFaceById',
+                type: 'GET',
+                data: {
+                    generationId: _generationId
+                },
+                success: function (data) {
+                    data.forEach(function (item) {
+                        $("#faceId").append(new Option(item.text, item.value));
+                    });
+                }
+            })
+        }
+        function FaceSelect() {
+            $('#subFaceId > option').not(':first').remove();
+            var _faceId = $('#faceId').val();
+            $.ajax({
+                url: '/SharedData/GetSubFaceByFaceId',
+                type: 'GET',
+                data: {
+                    faceId: _faceId
+                },
+                success: function (data) {
+                    data.forEach(function (item) {
+                        $("#subFaceId").append(new Option(item.text, item.value));
+                    });
+                }
+            })
+        }
+        function View(carId) {
+            window.location.href = '/ReceiveCar/View?carId=' + carId;
+        }
+        function Edit(carId) {
+            window.location.href = '/ReceiveCar/Create?carId=' + carId;
+        }
+        function Delete(carId) {
+            $.showConfirm({
+                title: "แจ้งเตือน",
+                body: "คุณต้องการลบข้อมูล ใช่หรือไม่?",
+                textTrue: "ใช่",
+                textFalse: "ไม่ใช่",
+                onSubmit: function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '/ReceiveCar/Delete',
+                            type: 'POST',
+                            data: {
+                                carId: carId
+                            },
+                            success: function (data) {
+                                ResponseDialog(data.code, window.location.href);
+                            }
+                        })
+                    }
+                }
+            })
+        }
     </script>
 }
 

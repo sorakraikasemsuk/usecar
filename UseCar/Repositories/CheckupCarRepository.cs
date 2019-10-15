@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Dapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,11 +19,48 @@ namespace UseCar.Repositories
         readonly UseCarDBContext context;
         readonly HttpContext httpContext;
         readonly FileManagement file;
-        public CheckupCarRepository(UseCarDBContext context, IHttpContextAccessor httpContext, FileManagement file)
+        readonly IConfiguration configuration;
+        public CheckupCarRepository(UseCarDBContext context, IHttpContextAccessor httpContext, FileManagement file, IConfiguration configuration)
         {
             this.context = context;
             this.httpContext = httpContext.HttpContext;
             this.file = file;
+            this.configuration = configuration;
+        }
+        public List<CheckupCarDatatableViewModel> GetDatatable(CheckupCarDatatableFilter filter)
+        {
+            using (var connection = new MySqlConnection(configuration.GetConnectionString("UseCarDBContext")))
+            {
+                DateTime checkupDate = DateTime.ParseExact(filter.checkupDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                var queryParameters = new DynamicParameters();
+                queryParameters.Add("@branchId", filter.branchId);
+                queryParameters.Add("@brandId", filter.brandId);
+                queryParameters.Add("@generationId", filter.generationId);
+                queryParameters.Add("@faceId", filter.faceId);
+                queryParameters.Add("@subfaceId", filter.subfaceId);
+                queryParameters.Add("@checkupDate", checkupDate);
+                queryParameters.Add("@registerNumber", string.IsNullOrEmpty(filter.registerNumber) ? "" : filter.registerNumber);
+                var data = connection.Query<CheckupCarDatatableViewModel>("st_getCheckupCarList", queryParameters, commandType: CommandType.StoredProcedure);
+                return (from a in data
+                        select new CheckupCarDatatableViewModel
+                        {
+                            carCheckupId=a.carCheckupId,
+                            carId = a.carId,
+                            checkupDate=a.checkupDate,
+                            checkupBy=a.checkupBy,
+                            checkupByName=a.checkupByName,
+                            brandId = a.brandId,
+                            brandName = a.brandName,
+                            generationId = a.generationId,
+                            generationName = a.generationName,
+                            faceId = a.faceId,
+                            faceName = a.faceName,
+                            subfaceId = a.subfaceId,
+                            subfaceName = a.subfaceName,
+                            fileName = file.GetImage($"{configuration["Upload:Path"]}{a.code}\\{MenuName.CheckupCar}\\{a.fileName}"),
+                            registerNumber = a.registerNumber
+                        }).ToList();
+            }
         }
         public async Task<ResponseResult> Create(CheckupCarViewModel data)
         {

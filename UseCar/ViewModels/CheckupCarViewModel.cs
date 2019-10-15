@@ -28,4 +28,33 @@ namespace UseCar.ViewModels
     {
         public int checkupId { get; set; }
     }
+    public class CheckupCarDatatableViewModel
+    {
+        public int carCheckupId { get; set; }
+        public int carId { get; set; }
+        public string code { get; set; }
+        public DateTime checkupDate { get; set; }
+        public int checkupBy { get; set; }
+        public string checkupByName { get; set; }
+        public string fileName { get; set; }
+        public string registerNumber { get; set; }
+        public int brandId { get; set; }
+        public string brandName { get; set; }
+        public int generationId { get; set; }
+        public string generationName { get; set; }
+        public int faceId { get; set; }
+        public string faceName { get; set; }
+        public int subfaceId { get; set; }
+        public string subfaceName { get; set; }
+    }
+    public class CheckupCarDatatableFilter
+    {
+        public int branchId { get; set; }
+        public int brandId { get; set; }
+        public int generationId { get; set; }
+        public int faceId { get; set; }
+        public int subfaceId { get; set; }
+        public string checkupDate { get; set; }
+        public string registerNumber { get; set; }
+    }
 }

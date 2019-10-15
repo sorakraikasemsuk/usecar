@@ -22,6 +22,10 @@ namespace UseCar.Controllers
         {
             return View();
         }
+        public JsonResult GetDatatable(CheckupCarDatatableFilter filter)
+        {
+            return Json(checkupCarRepository.GetDatatable(filter));
+        }
         public JsonResult CheckupItem()
         {
             return Json(shared.CheckupData());
