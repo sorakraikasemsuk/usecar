@@ -31,9 +31,11 @@ namespace UseCar.Helper
     public static class MenuId
     {
         public const int ReceiveCar = 11;
+        public const int CheckupCar = 4;
     }
     public static class MenuName
     {
         public const string ReceiveCar = "ReceiveCar";
+        public const string CheckupCar = "CheckupCar";
     }
 }
