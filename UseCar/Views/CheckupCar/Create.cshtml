@@ -1,38 +1,53 @@
-﻿
+﻿@using UseCar.Helper
+@using Microsoft.AspNetCore.Http
+@model UseCar.ViewModels.CheckupCarViewModel
+@inject DropdownList dropdownList
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1><i class="fa fa-tasks"></i> เพิ่มข้อมูลเชครถ</h1>
+<h1><i class="fa fa-tasks"></i> เพิ่มข้อมูลตรวจสภาพ</h1>
 <hr />
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/Home">หน้าแรก</a></li>
-        <li class="breadcrumb-item"><a href="/CheckupCar">เชครถ</a></li>
-        <li class="breadcrumb-item active" aria-current="page">เพิ่มข้อมูลเชครถ</li>
+        <li class="breadcrumb-item"><a href="/CheckupCar">ตรวจสภาพ</a></li>
+        <li class="breadcrumb-item active" aria-current="page">เพิ่มข้อมูลตรวจสภาพ</li>
     </ol>
 </nav>
 
-<form>
+<form id="CheckupCarForm" data-ajax="true" enctype="multipart/form-data" data-ajax-begin="beforeSend">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h5><i class="fa fa-clipboard-list"></i> ข้อมูลเชครถ</h5>
+                    <h5><i class="fa fa-clipboard-list"></i> ข้อมูลตรวจสภาพ</h5>
                 </div>
+                <input type="hidden" asp-for="carCheckupId" />
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>รถที่ต้องการเชค</label>
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                <div class="input-group">
+                                    <input type="hidden" asp-for="carId" />
+                                    <input type="text" class="form-control" asp-for="carDetail" aria-describedby="button-addon2" readonly data-toggle="modal" data-target="#carSearchModal">
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary" type="button" id="button-addon2" data-toggle="modal" data-target="#carSearchModal"><i class="fa fa-search"></i></button>
                                     </div>
                                 </div>
+                                <span asp-validation-for="carDetail" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>ตรวจสภาพโดย</label>
+                                <select class="form-control" asp-for="checkupBy" asp-items="@dropdownList.User(Convert.ToInt32(Context.Session.GetString(Session.userId)))">
+                                    <option value="">กรุณาเลือกข้อมูล</option>
+                                </select>
+                                <span asp-validation-for="checkupBy" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -46,23 +61,23 @@
                                         </button>
                                     </div>
                                 </div>
-                                <input type="hidden" id="checkupDateHidden" value="" />
+                                <input type="hidden" asp-for="checkupDateHidden" value="" />
                             </div>
                         </div>
                     </div>
-                </div>
             </div>
         </div>
+    </div>
     </div>
     <div class="row mt-2">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h5><i class="fa fa-clipboard-list"></i> รายการเชครถ</h5>
+                    <h5><i class="fa fa-clipboard-list"></i> รายการตรวจสภาพ</h5>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-4">
+                    <div class="row" id="checkupItem">
+                        @*<div class="col-md-4">
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">
@@ -71,91 +86,13 @@
                                 </div>
                                 <input type="text" class="form-control" value="แบตเตอรี่" readonly>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <input type="checkbox" aria-label="Checkbox for following text input">
-                                    </div>
-                                </div>
-                                <input type="text" class="form-control" value="แบตเตอรี่" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <input type="checkbox" aria-label="Checkbox for following text input">
-                                    </div>
-                                </div>
-                                <input type="text" class="form-control" value="แบตเตอรี่" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <input type="checkbox" aria-label="Checkbox for following text input">
-                                    </div>
-                                </div>
-                                <input type="text" class="form-control" value="แบตเตอรี่" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <input type="checkbox" aria-label="Checkbox for following text input">
-                                    </div>
-                                </div>
-                                <input type="text" class="form-control" value="แบตเตอรี่" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <input type="checkbox" aria-label="Checkbox for following text input">
-                                    </div>
-                                </div>
-                                <input type="text" class="form-control" value="แบตเตอรี่" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <input type="checkbox" aria-label="Checkbox for following text input">
-                                    </div>
-                                </div>
-                                <input type="text" class="form-control" value="แบตเตอรี่" readonly>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <input type="checkbox" aria-label="Checkbox for following text input">
-                                    </div>
-                                </div>
-                                <input type="text" class="form-control" value="แบตเตอรี่" readonly>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>อื่นๆ</label>
-                                <textarea class="form-control" rows="3"></textarea>
-                            </div>
-                        </div>
+                        </div>*@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>หมายเหตุ</label>
-                                <textarea class="form-control" rows="3"></textarea>
+                                <textarea class="form-control" asp-for="remark" rows="3"></textarea>
                             </div>
                         </div>
                     </div>
@@ -163,14 +100,14 @@
             </div>
         </div>
     </div>
-
+    <partial name="/Views/Shared/_FileUpload.cshtml" />
     <div class="row mt-2">
         <div class="col-md-6">
-            <button type="button" class="btn btn-dark"><i class="fa fa-arrow-left"></i> กลับ</button>
+            <button type="button" class="btn btn-dark" onclick="window.history.back();"><i class="fa fa-arrow-left"></i> กลับ</button>
         </div>
         <div class="col-md-6 text-right">
-            <button type="button" class="btn btn-danger"><i class="fa fa-times"></i> ยกเลิก</button>
-            <button type="button" class="btn btn-primary"><i class="fa fa-save"></i> บันทึก</button>
+            <button type="button" class="btn btn-danger" onclick="window.history.back();"><i class="fa fa-times"></i> ยกเลิก</button>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> บันทึก</button>
         </div>
     </div>
 
@@ -186,7 +123,53 @@
             $('#checkupDate.date').datepicker().on('changeDate', function (e) {
                 $('#checkupDateHidden').val(moment(e.date).format('YYYY-MM-DD'));
             });
+
+            CheckupItem();
         });
+        function CheckupItem() {
+            $('#checkupItem > div').remove();
+            $.ajax({
+                url: '/CheckupCar/CheckupItem',
+                type: 'GET',
+                success: function (data) {
+                    var _element = '';
+                    data.forEach(function (checkup, index) {
+                        _element += '<div class="col-md-4">';
+                        _element += '<div class="input-group mb-3">';
+                        _element += '<div class="input-group-prepend">';
+                        _element += ' <div class="input-group-text">';
+                        _element += '<input type="checkbox" name="checkupDetail[' + index + '].checkupId" value="' + checkup.checkupId + '">';
+                        _element += '</div>';
+                        _element += '</div>';
+                        _element += '<input type="text" class="form-control" value="' + checkup.checkupName + '" readonly>'
+                        _element += '</div>';
+                        _element += '</div>';
+                    });
+                    $('#checkupItem').append(_element);
+                    $('input[type=checkbox]').iCheck({
+                        checkboxClass: 'icheckbox_square-green',
+                    })
+                }
+            })
+        }
+        function beforeSend() {
+            var form = document.getElementById('CheckupCarForm');
+            var formData = new FormData(form);
+            file.forEach(function (file, index) {
+                formData.append('files', file.file);
+            })
+            deleteFile.forEach(function (file) {
+                formData.append('deleteFile', file);
+            });
+            var request = new XMLHttpRequest();
+            request.open("POST", "/CheckupCar/Create");
+            request.send(formData);
+            request.onload = function () {
+                var jsonResponse = JSON.parse(request.response);
+                // do something with jsonResponse
+                ResponseDialog(jsonResponse.code, '/CheckupCar');
+            };
+        }
     </script>
 }
 
