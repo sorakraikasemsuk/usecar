@@ -262,5 +262,15 @@ namespace UseCar.Helper
                         Selected = userId == a.userId
                     }).ToList();
         }
+        public List<SelectListItem> RepairShop()
+        {
+            return (from a in context.repairshop
+                    where a.isEnable
+                    select new SelectListItem
+                    {
+                        Value = a.repairShopId.ToString(),
+                        Text = a.repairShopName
+                    }).ToList();
+        }
     }
 }
