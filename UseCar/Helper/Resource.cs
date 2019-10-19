@@ -32,10 +32,12 @@ namespace UseCar.Helper
     {
         public const int ReceiveCar = 11;
         public const int CheckupCar = 4;
+        public const int MaintenanceCar = 3;
     }
     public static class MenuName
     {
         public const string ReceiveCar = "ReceiveCar";
         public const string CheckupCar = "CheckupCar";
+        public const string MaintenanceCar = "MaintenanceCar";
     }
 }
