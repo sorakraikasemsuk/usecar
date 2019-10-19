@@ -28,6 +28,12 @@ namespace UseCar.Helper
         public const int Success = 2;
         public const int Cancel = 3;
     }
+    public static class MaintenanceCarStatus
+    {
+        public const int Send = 1;
+        public const int Success = 2;
+        public const int Cancel = 3;
+    }
     public static class MenuId
     {
         public const int ReceiveCar = 11;
