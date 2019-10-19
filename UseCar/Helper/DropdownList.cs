@@ -272,5 +272,15 @@ namespace UseCar.Helper
                         Text = a.repairShopName
                     }).ToList();
         }
+        public List<SelectListItem> MaintenanceStatus()
+        {
+            return (from a in context.m_maintenance_status
+                    where a.isEnable
+                    select new SelectListItem
+                    {
+                        Value = a.maintenanceStatusId.ToString(),
+                        Text = a.statusName
+                    }).ToList();
+        }
     }
 }
