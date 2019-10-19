@@ -18,9 +18,11 @@ namespace UseCar.Helper
     }
     public static class CarStatus
     {
-        public const int ReceiveCar = 1;
-        public const int MaintenanceCar = 2;
-        public const int ReadySell = 3;
+        public const int Receive = 1;
+        public const int WaitingCheckup = 2;
+        public const int Checkup = 3;
+        public const int WaitingMaintenance = 4;
+        public const int Maintenance = 5;
     }
     public static class ReceiveCarStatus
     {
