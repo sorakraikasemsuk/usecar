@@ -3,18 +3,31 @@
         <h5><i class="fa fa-image"></i> รูปภาพ</h5>
     </div>
     <div class="card-body">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="input-group mb-3">
-                    <div class="custom-file">
-                        <input type="file" multiple="" class="custom-file-input" id="file" aria-describedby="file" onchange="BrowsFile();">
-                        <label class="custom-file-label" for="file">Choose file</label>
+        @if ((int)ViewData["id"] == 0)
+        {
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group mb-3">
+                        <div class="custom-file">
+                            <input type="file" multiple="" class="custom-file-input" id="file" aria-describedby="file" onchange="BrowsFile();">
+                            <label class="custom-file-label" for="file">Choose file</label>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        }
         <div class="list-img" id="SelectImg">
-
+            @if((int)ViewData["id"] != 0)
+            {
+                foreach (var image in (List<UseCar.ViewModels.ImageDisplay>)ViewData["imageDisplay"])
+                {
+                    <div class="item-img">
+                        <div class="card">
+                            <img src="@image.image" />
+                        </div>
+                    </div>
+                }
+            }
         </div>
     </div>
 </div>
