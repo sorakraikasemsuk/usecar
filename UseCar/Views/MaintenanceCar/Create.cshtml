@@ -1,7 +1,10 @@
-﻿
+﻿@using UseCar.Helper;
+@model UseCar.ViewModels.MaintenanceCarViewModel
+@inject DropdownList dropdownList;
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["id"] = Model.maintenanceId;
 }
 
 <h1><i class="fa fa-wrench"></i> เพิ่มข้อมูลส่งซ่อม</h1>
@@ -15,19 +18,28 @@
     </ol>
 </nav>
 
-<form>
+<form id="MaintenanceForm" data-ajax="true" enctype="multipart/form-data" data-ajax-begin="beforeSend">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
                     <h5><i class="fa fa-clipboard-list"></i> ข้อมูลส่งซ่อม</h5>
                 </div>
+                <input type="hidden" asp-for="maintenanceId" />
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>รหัสใบซ่อม</label>
-                                <input type="text" class="form-control" disabled value="MA201909-XXXX" />
+                                <input type="text" class="form-control" asp-for="code" disabled />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>สถานะการส่งซ่อม</label>
+                                <select class="form-control" asp-for="maintenanceStatusId" asp-items="@dropdownList.MaintenanceStatus()">
+                                    <option value="">กรุณากรอกข้อมูล</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -35,18 +47,23 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>รถที่ส่งซ่อม</label>
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                <div class="input-group">
+                                    <input type="hidden" asp-for="carId" />
+                                    <input type="text" class="form-control" asp-for="carDetail" aria-describedby="button-addon2" readonly data-toggle="modal" data-target="#carSearchModal">
                                     <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" type="button" id="button-addon2"><i class="fa fa-search"></i></button>
+                                        <button class="btn btn-outline-secondary" type="button" id="button-addon2" data-toggle="modal" data-target="#carSearchModal"><i class="fa fa-search"></i></button>
                                     </div>
                                 </div>
+                                <span asp-validation-for="carDetail" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>ร้านที่ส่งซ่อม</label>
-                                <select class="form-control"></select>
+                                <select class="form-control" asp-for="repairShopId" asp-items="@dropdownList.RepairShop()">
+                                    <option value="">กรุณาเลือก</option>
+                                </select>
+                                <span asp-validation-for="repairShopId" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
@@ -54,13 +71,29 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>วันที่ส่งซ่อม</label>
-                                <input type="text" class="form-control" />
+                                <div class="input-group date" id="sendDate">
+                                    <input type="text" class="form-control" id="sendDateShow" value="" readonly>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-dark" type="button">
+                                            <i class="fa fa-calendar-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <input type="hidden" asp-for="sendDateHidden" value="" />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>วันที่เสร็จ</label>
-                                <input type="text" class="form-control" />
+                                <div class="input-group date" id="receiveDate">
+                                    <input type="text" class="form-control" id="receiveDateShow" value="" readonly>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-dark" type="button">
+                                            <i class="fa fa-calendar-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <input type="hidden" asp-for="receiveDateHidden" value="" />
                             </div>
                         </div>
                     </div>
@@ -68,7 +101,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>หมายเหตุ</label>
-                                <textarea class="form-control" rows="3"></textarea>
+                                <textarea class="form-control" rows="3" asp-for="remark"></textarea>
                             </div>
                         </div>
                     </div>
@@ -90,7 +123,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <table class="table table-bordered mt-2">
+                            <table class="table table-bordered mt-2" id="detailTable">
                                 <thead>
                                     <tr>
                                         <th width="10%">รายการที่</th>
@@ -100,29 +133,29 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td class="text-center">1</td>
-                                        <td>ล้าง ขัดสีรอบคัน</td>
-                                        <td class="text-right">1,500</td>
-                                        <td class="text-center">
-                                            <button type="button" class="btn btn-light btn-sm"><i class="fa fa-edit"></i> แก้ไข</button>
-                                            <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center">1</td>
-                                        <td>พ่นสี</td>
-                                        <td class="text-right">3,500</td>
-                                        <td class="text-center">
-                                            <button type="button" class="btn btn-light btn-sm"><i class="fa fa-edit"></i> แก้ไข</button>
-                                            <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
-                                        </td>
-                                    </tr>
+                                    @*<tr>
+                                            <td class="text-center">1</td>
+                                            <td>ล้าง ขัดสีรอบคัน</td>
+                                            <td class="text-right">1,500</td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-light btn-sm"><i class="fa fa-edit"></i> แก้ไข</button>
+                                                <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center">1</td>
+                                            <td>พ่นสี</td>
+                                            <td class="text-right">3,500</td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-light btn-sm"><i class="fa fa-edit"></i> แก้ไข</button>
+                                                <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
+                                            </td>
+                                        </tr>*@
                                 </tbody>
                                 <tfoot>
                                     <tr>
                                         <td colspan="2" class="text-right">รวม</td>
-                                        <td class="text-right">5,000</td>
+                                        <td class="text-right" id="totalPrice">0</td>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -132,56 +165,183 @@
             </div>
         </div>
     </div>
-    <div class="row mt-2">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5><i class="fa fa-image"></i> รูปภาพ</h5>
-                </div>
-            </div>
-        </div>
-    </div>
+    <partial name="/Views/Shared/_FileUpload.cshtml" view-data="ViewData" />
 
     <div class="row mt-2">
         <div class="col-md-6">
-            <button type="button" class="btn btn-dark"><i class="fa fa-arrow-left"></i> กลับ</button>
+            <button type="button" class="btn btn-dark" onclick="window.history.back();"><i class="fa fa-arrow-left"></i> กลับ</button>
         </div>
         <div class="col-md-6 text-right">
-            <button type="button" class="btn btn-danger"><i class="fa fa-times"></i> ยกเลิก</button>
-            <button type="button" class="btn btn-primary"><i class="fa fa-save"></i> บันทึก</button>
+            <button type="button" class="btn btn-danger" onclick="window.history.back();"><i class="fa fa-times"></i> ยกเลิก</button>
+            <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> บันทึก</button>
         </div>
     </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">เพิ่ม/แก้ไขรายละเอียดการซ่อม</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
+</form>
+<!-- Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">เพิ่ม/แก้ไขรายละเอียดการซ่อม</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="AddDetailForm">
+                    <input type="hidden" id="maintenanceDetailId" value="0" />
+                    <input type="hidden" id="itemNo" value="0" />
                     <div class="form-group">
                         <label class="col-sm-12 col-form-label">รายละเอียด</label>
                         <div class="col-sm-12">
-                            <textarea class="form-control" rows="3"></textarea>
+                            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
-                    <label class="col-sm-12 col-form-label">ราคา</label>
-                    <div class="col-sm-12">
-                        <input type="text" class="form-control" />
+                        <label class="col-sm-12 col-form-label">ราคา</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="price" name="price" />
+                        </div>
                     </div>
-                </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> ปิด</button>
-                    <button type="button" class="btn btn-primary"><i class="fa fa-save"></i> ตกลง</button>
+                </form>
+                <div class="row">
+                    <div class="col-md-12 text-right">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> ปิด</button>
+                        <button type="button" class="btn btn-primary" onclick="AddMaDetail();"><i class="fa fa-save"></i> ตกลง</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</form>
+</div>
+
+<partial name="/Views/Shared/_CarSearch.cshtml" model="@UseCar.Helper.CarStatus.WaitingMaintenance" />
+@section scripts{
+    <script>
+        var MaDetail = [];
+        $(document).ready(function () {
+            $('#sendDateShow').val(moment().locale('th').format('ll'));
+            $('#sendDateHidden').val(moment().format('YYYY-MM-DD'))
+            $('#sendDate.date').datepicker().on('changeDate', function (e) {
+                $('#sendDateHidden').val(moment(e.date).format('YYYY-MM-DD'));
+            });
+
+            $('#receiveDateShow').val(moment().locale('th').format('ll'));
+            $('#receiveDateHidden').val(moment().format('YYYY-MM-DD'))
+            $('#receiveDate.date').datepicker().on('changeDate', function (e) {
+                $('#receiveDateHidden').val(moment(e.date).format('YYYY-MM-DD'));
+            });
+        })
+        function beforeSend() {
+            var form = document.getElementById('MaintenanceForm');
+            var formData = new FormData(form);
+            file.forEach(function (file, index) {
+                formData.append('files', file.file);
+            })
+            deleteFile.forEach(function (file) {
+                formData.append('deleteFile', file);
+            });
+            MaDetail.forEach(function (detail, index) {
+                formData.append('details[' + index + '].maintenanceDetailId', detail.maintenanceDetailId);
+                formData.append('details[' + index + '].itemNo', detail.itemNo);
+                formData.append('details[' + index + '].description', detail.description);
+                formData.append('details[' + index + '].price', detail.price);
+            })
+            var request = new XMLHttpRequest();
+            request.open("POST", "/MaintenanceCar/Create");
+            request.send(formData);
+            request.onload = function () {
+                var jsonResponse = JSON.parse(request.response);
+                // do something with jsonResponse
+                ResponseDialog(jsonResponse.code, '/MaintenanceCar');
+            };
+        }
+        function AddMaDetail() {
+            $("#AddDetailForm").validate({
+                errorClass: 'text-danger',
+            }); //sets up the validator
+            $("#price").rules("add", {
+                required: true,
+                messages: {
+                    required: 'กรุณากรอกข้อมูล'
+                }
+            });
+            $("#description").rules("add", {
+                required: true,
+                messages: {
+                    required: 'กรุณากรอกข้อมูล'
+                }
+            });
+           
+            if ($('#AddDetailForm').valid()) {
+                $('#addModal').modal('hide');
+                MaDetail.push({
+                    maintenanceDetailId: $('#maintenanceDetailId').val() == 0 ? MaDetail.length + 1 : $('#maintenanceDetailId').val(),
+                    itemNo: $('#itemNo').val() == 0 ? MaDetail.length + 1 : $('#itemNo').val(),
+                    description: $('#description').val(),
+                    price: $('#price').val()
+                });
+                GenerateDetail();
+            } 
+        }
+        function GenerateDetail() {
+            $('table#detailTable > tbody > tr').remove();
+            var _element = '';
+            var _totalPrice = 0;
+            MaDetail.sort(function (a, b) {
+                return a.itemNo - b.itemNo;
+            }).forEach(function (detail) {
+                _element += '<tr>';
+                _element += '<td class="text-center">' + detail.itemNo + '</td>';
+                _element += '<td>' + detail.description + '</td>';
+                _element += '<td class="text-right">' + detail.price + '</td>';
+                _element += '<td class="text-center">';
+                _element += '<button typ="button" class="btn btn-light btn-sm" onclick="EditDetail(' + detail.maintenanceDetailId + ')"><i class="fa fa-edit"></i> แก้ไข</button>';
+                _element += '<button type="button" class="btn btn-danger btn-sm" onclick="DeleteDetail(' + detail.maintenanceDetailId + ')"><i class="fa fa-trash"></i> ลบ</button>';
+                _element += '</td>';
+                _element += '</tr>';
+                _totalPrice += parseFloat(detail.price);
+            });
+            $('table#detailTable > tbody').append(_element);
+            $('#totalPrice').text(_totalPrice);
+            $('#description').val('');
+            $('#price').val('');
+        }
+        function EditDetail(maintenanceDetailId) {
+            var data = MaDetail.filter(function (detail) {
+                return detail.maintenanceDetailId == maintenanceDetailId;
+            })[0];
+            $('#maintenanceDetailId').val(maintenanceDetailId);
+            $('#itemNo').val(data.itemNo);
+            $('#description').val(data.description);
+            $('#price').val(data.price);
+
+            var _removeDetail = MaDetail.findIndex(function (detail) {
+                return detail.maintenanceDetailId == maintenanceDetailId;
+            });
+            MaDetail.splice(_removeDetail, 1);
+            $('#addModal').modal('show');
+        }
+        function DeleteDetail(maintenanceDetailId) {
+            var data = MaDetail.filter(function (detail) {
+                return detail.maintenanceDetailId == maintenanceDetailId;
+            })[0];
+            var _removeDetail = MaDetail.findIndex(function (detail) {
+                return detail.maintenanceDetailId == maintenanceDetailId;
+            });
+            MaDetail.splice(_removeDetail, 1);
+            var TempDetail = MaDetail;
+            MaDetail = [];
+            TempDetail.forEach(function (detail,index) {
+                MaDetail.push({
+                    maintenanceDetailId: index + 1,
+                    itemNo: index + 1,
+                    description: detail.description,
+                    price: detail.price
+                });
+            })
+            GenerateDetail();
+        }
+    </script>
+}
 
