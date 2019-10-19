@@ -40,5 +40,9 @@ namespace UseCar.Controllers
         {
             return Json(await checkupCarRepository.Create(data));
         }
+        public IActionResult View(int carCheckupId)
+        {
+            return View(checkupCarRepository.View(carCheckupId));
+        }
     }
 }

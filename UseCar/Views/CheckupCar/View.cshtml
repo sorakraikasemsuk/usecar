@@ -1,0 +1,140 @@
+﻿@using UseCar.Helper
+@using Microsoft.AspNetCore.Http
+@model UseCar.ViewModels.CheckupCarViewModel
+@inject DropdownList dropdownList
+@{
+    ViewData["Title"] = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["id"]= Model.carCheckupId;
+    ViewData["imageDisplay"] = Model.imageDisplay;
+}
+
+<h1><i class="fa fa-tasks"></i> รายละเอียดข้อมูลตรวจสภาพ</h1>
+<hr />
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/Home">หน้าแรก</a></li>
+        <li class="breadcrumb-item"><a href="/CheckupCar">ตรวจสภาพ</a></li>
+        <li class="breadcrumb-item active" aria-current="page">รายละเอียดข้อมูลตรวจสภาพ</li>
+    </ol>
+</nav>
+
+<form>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fa fa-clipboard-list"></i> ข้อมูลตรวจสภาพ</h5>
+                </div>
+                <input type="hidden" asp-for="carCheckupId" />
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>รถที่ต้องการเชค</label>
+                                <div class="input-group">
+                                    <input type="hidden" asp-for="carId" />
+                                    <input type="text" class="form-control" asp-for="carDetail" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>ตรวจสภาพโดย</label>
+                                <select class="form-control" asp-for="checkupBy" asp-items="@dropdownList.User(Convert.ToInt32(Context.Session.GetString(Session.userId)))" disabled>
+                                    <option value="">กรุณาเลือกข้อมูล</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>วันที่เชครถ</label>
+                                <input type="text" class="form-control" asp-for="checkupDateHidden" value="" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fa fa-clipboard-list"></i> รายการตรวจสภาพ</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row" id="checkupItem">
+                        @*<div class="col-md-4">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <input type="checkbox" aria-label="Checkbox for following text input">
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control" value="แบตเตอรี่" readonly>
+                                </div>
+                            </div>*@
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>หมายเหตุ</label>
+                                <textarea class="form-control" asp-for="remark" rows="3" readonly></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <partial name="/Views/Shared/_FileUpload.cshtml"  view-data="ViewData" />
+    <div class="row mt-2">
+        <div class="col-md-6">
+            <button type="button" class="btn btn-dark" onclick="window.history.back();"><i class="fa fa-arrow-left"></i> กลับ</button>
+        </div>
+    </div>
+
+</form>
+
+@section scripts{
+    <script>
+        $(document).ready(function(){
+            $('#checkupDateHidden').val(moment('@Model.checkupDateHidden').locale('th').format('ll'));
+
+            CheckupItem();
+        });
+        function CheckupItem() {
+            var checkupSelect = JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.checkupDetail))');
+            $('#checkupItem > div').remove();
+            $.ajax({
+                url: '/CheckupCar/CheckupItem',
+                type: 'GET',
+                success: function (data) {
+                    var _element = '';
+                    data.forEach(function (checkup, index) {
+                        var select = checkupSelect.filter(function (check) {
+                            return check.checkupId == checkup.checkupId;
+                        }).length > 0 ? 'checked' : '';
+                        _element += '<div class="col-md-4">';
+                        _element += '<div class="input-group mb-3">';
+                        _element += '<div class="input-group-prepend">';
+                        _element += ' <div class="input-group-text">';
+                        _element += '<input type="checkbox" name="checkupDetail[' + index + '].checkupId" value="' + checkup.checkupId + '" ' + select +' disabled>';
+                        _element += '</div>';
+                        _element += '</div>';
+                        _element += '<input type="text" class="form-control" value="' + checkup.checkupName + '" readonly>'
+                        _element += '</div>';
+                        _element += '</div>';
+                    });
+                    $('#checkupItem').append(_element);
+                    $('input[type=checkbox]').iCheck({
+                        checkboxClass: 'icheckbox_square-green',
+                    })
+                }
+            })
+        }
+    </script>
+}
+

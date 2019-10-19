@@ -315,33 +315,8 @@
                 }
             })
         }
-        function View(carId) {
-            window.location.href = '/ReceiveCar/View?carId=' + carId;
-        }
-        function Edit(carId) {
-            window.location.href = '/ReceiveCar/Create?carId=' + carId;
-        }
-        function Delete(carId) {
-            $.showConfirm({
-                title: "แจ้งเตือน",
-                body: "คุณต้องการลบข้อมูล ใช่หรือไม่?",
-                textTrue: "ใช่",
-                textFalse: "ไม่ใช่",
-                onSubmit: function (result) {
-                    if (result) {
-                        $.ajax({
-                            url: '/ReceiveCar/Delete',
-                            type: 'POST',
-                            data: {
-                                carId: carId
-                            },
-                            success: function (data) {
-                                ResponseDialog(data.code, window.location.href);
-                            }
-                        })
-                    }
-                }
-            })
+        function View(carCheckupId) {
+            window.location.href = '/CheckupCar/View?carCheckupId=' + carCheckupId;
         }
     </script>
 }

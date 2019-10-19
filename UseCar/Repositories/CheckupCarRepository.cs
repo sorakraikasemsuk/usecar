@@ -208,5 +208,46 @@ namespace UseCar.Repositories
                 return result;
             }
         }
+        public CheckupCarViewModel View(int carCheckupId)
+        {
+            return (from a in context.car_checkup
+                    join b in context.car on a.carId equals b.carId
+                    join c in context.brand on b.brandId equals c.brandId
+                    join d in context.generation on b.generationId equals d.generationId
+                    join e in context.face on b.faceId equals e.faceId
+                    join f in context.subface on b.subfaceId equals f.subfaceId
+                    where a.isEnable
+                    && a.carCheckupId == carCheckupId
+                    select new CheckupCarViewModel
+                    {
+                        carCheckupId = a.carCheckupId,
+                        carId = a.carId,
+                        carDetail = "[" + (from register in context.car_register
+                                           where register.carId == a.carId
+                                           && register.isEnable
+                                           orderby register.createDate descending
+                                           select new { register.registerNumber }).FirstOrDefault().registerNumber + "] " + c.brandName + " " + d.generationName + " " + e.faceName + " " + f.subfaceName,
+                        checkupDateHidden = a.checkupDate.ToString("yyyy-MM-dd"),
+                        checkupBy = a.checkupBy,
+                        remark = a.remark,
+                        checkupDetail = (from detail in context.car_checkup_detail
+                                         where detail.carCheckupId == a.carCheckupId
+                                         select new CheckupCarDetail
+                                         {
+                                             checkupId = detail.checkupId
+                                         }).ToList(),
+                        imageDisplay = (from image in context.car_image
+                                        where image.isEnable
+                                        && image.carId == a.carId
+                                        && image.menuId == MenuId.CheckupCar
+                                        select new ImageDisplay
+                                        {
+                                            imageId = image.imageId,
+                                            name = image.name,
+                                            image = file.GetImage($"{configuration["Upload:Path"]}{(from car in context.car where car.carId == a.carId select new { car.code }).FirstOrDefault().code}\\{MenuName.CheckupCar}\\{image.name}")
+                                        }
+                                     ).ToList()
+                    }).FirstOrDefault();
+        }
     }
 }
