@@ -13,12 +13,31 @@ namespace UseCar.Helper
         {
             this.context = context;
         } 
-        public void UpdateCarStatus(int carId,int carStatusId,int carProcessId)
+        public void UpdateCarStatus(int carId,int menuId,int statusId)
         {
             using(var Transaction = context.Database.BeginTransaction())
             {
                 try
                 {
+                    int carStatusId = 0, carProcessId = 0;
+                    switch (menuId)
+                    {
+                        case MenuId.MaintenanceCar:
+                            if (statusId == MaintenanceCarStatus.Send)
+                            {
+                                carStatusId = CarStatus.Maintenance;
+                                carProcessId = statusId;
+                            }else if (statusId == MaintenanceCarStatus.Success)
+                            {
+                                carStatusId = CarStatus.WaitingCleaning;
+                                carProcessId = 0;
+                            }else if (statusId == MaintenanceCarStatus.Cancel)
+                            {
+                                carStatusId = CarStatus.WaitingMaintenance;
+                                carProcessId = 0;
+                            }
+                            break;
+                    }
                     var car = (from a in context.car
                                where a.isEnable
                                && a.carId == carId
