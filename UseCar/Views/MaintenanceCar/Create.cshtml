@@ -1,4 +1,5 @@
 ﻿@using UseCar.Helper;
+@using Microsoft.AspNetCore.Http;
 @model UseCar.ViewModels.MaintenanceCarViewModel
 @inject DropdownList dropdownList;
 @{
@@ -98,7 +99,16 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>ส่งซ่อมโดย</label>
+                                <select class="form-control" asp-for="sendById" asp-items="@dropdownList.User(Convert.ToInt32(Context.Session.GetString(UseCar.Helper.Session.userId)));">
+                                    <option value="">กรุณาเลือก</option>
+                                </select>
+                                <span asp-validation-for="sendById" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label>หมายเหตุ</label>
                                 <textarea class="form-control" rows="3" asp-for="remark"></textarea>

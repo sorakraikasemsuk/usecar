@@ -20,6 +20,8 @@ namespace UseCar.ViewModels
         public string sendDateHidden { get; set; }
         public string receiveDateHidden { get; set; }
         public string remark { get; set; }
+        [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
+        public int sendById { get; set; }
         public int maintenanceStatusId { get; set; }
         public List<MaintenanceDetail> details { get; set; }
         public List<IFormFile> files { get; set; }

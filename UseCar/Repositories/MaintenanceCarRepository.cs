@@ -20,12 +20,14 @@ namespace UseCar.Repositories
         readonly HttpContext httpContext;
         readonly FileManagement file;
         readonly IConfiguration configuration;
-        public MaintenanceCarRepository(UseCarDBContext context,IHttpContextAccessor httpContext, FileManagement file, IConfiguration configuration)
+        readonly ActionCar actionCar;
+        public MaintenanceCarRepository(UseCarDBContext context,IHttpContextAccessor httpContext, FileManagement file, IConfiguration configuration,ActionCar actionCar)
         {
             this.context = context;
             this.httpContext = httpContext.HttpContext;
             this.file = file;
             this.configuration = configuration;
+            this.actionCar = actionCar;
         }
         public List<MaintenanceCarDatatableViewModel> GetDatatable(MaintenanceCarDatatableFilter filter)
         {
@@ -89,6 +91,7 @@ namespace UseCar.Repositories
                             receiveDate = DateTime.ParseExact(data.receiveDateHidden, "yyyy-MM-dd", CultureInfo.InvariantCulture),
                             remark = data.remark,
                             maintenanceStatusId = data.maintenanceStatusId,
+                            sendById = data.sendById,
                             createDate = DateTime.Now,
                             createUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId)),
                             isEnable = true
@@ -146,6 +149,7 @@ namespace UseCar.Repositories
                         maintenance.receiveDate = DateTime.ParseExact(data.receiveDateHidden, "yyyy-MM-dd", CultureInfo.InvariantCulture);
                         maintenance.remark = data.remark;
                         maintenance.maintenanceStatusId = data.maintenanceStatusId;
+                        maintenance.sendById = data.sendById;
                         maintenance.updateDate = DateTime.Now;
                         maintenance.updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId));
                         maintenance.isEnable = true;
@@ -217,6 +221,8 @@ namespace UseCar.Repositories
                     }
                     Transaction.Commit();
 
+                    //Update Car Status
+                    actionCar.UpdateCarStatus(data.carId, MenuId.MaintenanceCar, data.maintenanceStatusId);
                     result.code = ResponseCode.ok;
                 }catch(Exception ex)
                 {
