@@ -324,6 +324,8 @@ namespace UseCar.Models
 
                 entity.Property(e => e.maintenanceId).HasColumnType("int(11)");
 
+                entity.Property(e => e.cancelMessage).HasColumnType("varchar(500)");
+
                 entity.Property(e => e.carId).HasColumnType("int(11)");
 
                 entity.Property(e => e.code)

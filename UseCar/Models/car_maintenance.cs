@@ -14,6 +14,7 @@ namespace UseCar.Models
         public string remark { get; set; }
         public int maintenanceStatusId { get; set; }
         public int sendById { get; set; }
+        public string cancelMessage { get; set; }
         public DateTime createDate { get; set; }
         public int createUser { get; set; }
         public DateTime? updateDate { get; set; }
