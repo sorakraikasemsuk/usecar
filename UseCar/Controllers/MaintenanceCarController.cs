@@ -30,6 +30,10 @@ namespace UseCar.Controllers
             {
                 data.code = "MA" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString() + "-XXXX";
             }
+            else
+            {
+                data = maintenanceCarRepository.View(maintenanceId);
+            }
             return View(data);
         }
         [HttpPost]

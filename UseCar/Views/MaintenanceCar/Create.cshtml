@@ -5,7 +5,8 @@
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["id"] = Model.maintenanceId;
+    ViewData["imageDisplay"] = Model.imageDisplay;
+    ViewData["Mode"] = "Add";
 }
 
 <h1><i class="fa fa-wrench"></i> เพิ่มข้อมูลส่งซ่อม</h1>
@@ -216,7 +217,7 @@
                 </form>
                 <div class="row">
                     <div class="col-md-12 text-right">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> ปิด</button>
+                        <button type="button" class="btn btn-danger" onclick="CloseDetail();" data-dismiss="modal"><i class="fa fa-times"></i> ปิด</button>
                         <button type="button" class="btn btn-primary" onclick="AddMaDetail();"><i class="fa fa-save"></i> ตกลง</button>
                     </div>
                 </div>
@@ -241,6 +242,19 @@
             $('#receiveDate.date').datepicker().on('changeDate', function (e) {
                 $('#receiveDateHidden').val(moment(e.date).format('YYYY-MM-DD'));
             });
+
+            if ($('#maintenanceId').val() != 0) {
+                var detail = JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.details))');
+                detail.forEach(function (data, index) {
+                    MaDetail.push({
+                        maintenanceDetailId: index + 1,
+                        itemNo: data.itemNo,
+                        description: data.description,
+                        price: data.price
+                    });
+                    GenerateDetail();
+                })
+            }
         })
         function beforeSend() {
             var form = document.getElementById('MaintenanceForm');
@@ -285,12 +299,22 @@
            
             if ($('#AddDetailForm').valid()) {
                 $('#addModal').modal('hide');
-                MaDetail.push({
-                    maintenanceDetailId: $('#maintenanceDetailId').val() == 0 ? MaDetail.length + 1 : $('#maintenanceDetailId').val(),
-                    itemNo: $('#itemNo').val() == 0 ? MaDetail.length + 1 : $('#itemNo').val(),
-                    description: $('#description').val(),
-                    price: $('#price').val()
-                });
+                if ($('#maintenanceDetailId').val() == 0) {
+                    MaDetail.push({
+                        maintenanceDetailId: MaDetail.length + 1,
+                        itemNo: $('#itemNo').val() == 0 ? MaDetail.length + 1 : $('#itemNo').val(),
+                        description: $('#description').val(),
+                        price: $('#price').val()
+                    });
+                } else {
+                    var _editDetail = MaDetail.findIndex(function (detail) {
+                        return detail.maintenanceDetailId == $('#maintenanceDetailId').val();
+                    });
+                    MaDetail[_editDetail].maintenanceDetailId = $('#maintenanceDetailId').val();
+                    MaDetail[_editDetail].description = $('#description').val();
+                    MaDetail[_editDetail].price = $('#price').val();
+                }
+                
                 GenerateDetail();
             } 
         }
@@ -306,7 +330,7 @@
                 _element += '<td>' + detail.description + '</td>';
                 _element += '<td class="text-right">' + detail.price + '</td>';
                 _element += '<td class="text-center">';
-                _element += '<button typ="button" class="btn btn-light btn-sm" onclick="EditDetail(' + detail.maintenanceDetailId + ')"><i class="fa fa-edit"></i> แก้ไข</button>';
+                _element += '<button type="button" class="btn btn-light btn-sm" onclick="EditDetail(' + detail.maintenanceDetailId + ')"><i class="fa fa-edit"></i> แก้ไข</button>';
                 _element += '<button type="button" class="btn btn-danger btn-sm" onclick="DeleteDetail(' + detail.maintenanceDetailId + ')"><i class="fa fa-trash"></i> ลบ</button>';
                 _element += '</td>';
                 _element += '</tr>';
@@ -326,10 +350,10 @@
             $('#description').val(data.description);
             $('#price').val(data.price);
 
-            var _removeDetail = MaDetail.findIndex(function (detail) {
-                return detail.maintenanceDetailId == maintenanceDetailId;
-            });
-            MaDetail.splice(_removeDetail, 1);
+            //var _removeDetail = MaDetail.findIndex(function (detail) {
+            //    return detail.maintenanceDetailId == maintenanceDetailId;
+            //});
+            //MaDetail.splice(_removeDetail, 1);
             $('#addModal').modal('show');
         }
         function DeleteDetail(maintenanceDetailId) {
@@ -351,6 +375,10 @@
                 });
             })
             GenerateDetail();
+        }
+        function CloseDetail() {
+            $('#description').val('');
+            $('#price').val('');
         }
     </script>
 }

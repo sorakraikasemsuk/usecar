@@ -267,6 +267,8 @@ namespace UseCar.Repositories
                         sendDateHidden = a.sendDate.ToString("yyyy-MM-dd"),
                         receiveDateHidden = a.receiveDate.ToString("yyyy-MM-dd"),
                         maintenanceStatusId = a.maintenanceStatusId,
+                        sendById = a.sendById,
+                        remark = a.remark,
                         details = (from detail in context.car_maintenance_detail
                                    where detail.isEnable
                                    && detail.maintenanceId == maintenanceId
