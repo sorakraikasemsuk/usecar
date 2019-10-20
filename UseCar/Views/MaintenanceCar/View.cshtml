@@ -1,0 +1,197 @@
+﻿@using UseCar.Helper;
+@using Microsoft.AspNetCore.Http;
+@model UseCar.ViewModels.MaintenanceCarViewModel
+@inject DropdownList dropdownList;
+@{
+    ViewData["Title"] = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["imageDisplay"] = Model.imageDisplay;
+    ViewData["Mode"] = "View";
+}
+
+<h1><i class="fa fa-wrench"></i> รายละเอียดข้อมูลส่งซ่อม</h1>
+<hr />
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/Home">หน้าแรก</a></li>
+        <li class="breadcrumb-item"><a href="/MaintenanceCar">ส่งซ่อม</a></li>
+        <li class="breadcrumb-item active" aria-current="page">รายละเอียดข้อมูลส่งซ่อม</li>
+    </ol>
+</nav>
+
+@{
+    if (Model.maintenanceStatusId != 2)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-success" role="alert">
+                    <button type="button" class="btn btn-warning" onclick="Edit(@Model.maintenanceId)"><i class="fa fa-edit"></i> แก้ไข</button>
+                    <button type="button" class="btn btn-danger" onclick="Cancel(@Model.maintenanceId)"><i class="fa fa-times"></i> ยกเลิก</button>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<form id="MaintenanceForm" data-ajax="true" enctype="multipart/form-data" data-ajax-begin="beforeSend">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fa fa-clipboard-list"></i> ข้อมูลส่งซ่อม</h5>
+                </div>
+                <input type="hidden" asp-for="maintenanceId" />
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>รหัสใบซ่อม</label>
+                                <input type="text" class="form-control" asp-for="code" disabled />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>สถานะการส่งซ่อม</label>
+                                <select class="form-control" asp-for="maintenanceStatusId" asp-items="@dropdownList.MaintenanceStatus()" disabled>
+                                    <option value="">กรุณากรอกข้อมูล</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>รถที่ส่งซ่อม</label>
+                                <div class="input-group">
+                                    <input type="hidden" asp-for="carId" />
+                                    <input type="text" class="form-control" asp-for="carDetail" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>ร้านที่ส่งซ่อม</label>
+                                <select class="form-control" asp-for="repairShopId" asp-items="@dropdownList.RepairShop()" disabled>
+                                    <option value="">กรุณาเลือก</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>วันที่ส่งซ่อม</label>
+                                <input type="text" class="form-control" asp-for="sendDateHidden" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>วันที่เสร็จ</label>
+                                <input type="text" class="form-control" asp-for="receiveDateHidden" readonly />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>ส่งซ่อมโดย</label>
+                                <select class="form-control" asp-for="sendById" asp-items="@dropdownList.User(Convert.ToInt32(Context.Session.GetString(UseCar.Helper.Session.userId)));" disabled>
+                                    <option value="">กรุณาเลือก</option>
+                                </select>
+                                <span asp-validation-for="sendById" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>หมายเหตุ</label>
+                                <textarea class="form-control" rows="3" asp-for="remark" readonly></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fa fa-clipboard-list"></i> รายละเอียดการซ่อม</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-bordered mt-2" id="detailTable">
+                                <thead>
+                                    <tr>
+                                        <th width="10%">รายการที่</th>
+                                        <th>รายละเอียด</th>
+                                        <th width="10%">ราคา</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="2" class="text-right">รวม</td>
+                                        <td class="text-right" id="totalPrice">0</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <partial name="/Views/Shared/_FileUpload.cshtml" view-data="ViewData" />
+
+    <div class="row mt-2">
+        <div class="col-md-6">
+            <button type="button" class="btn btn-dark" onclick="window.history.back();"><i class="fa fa-arrow-left"></i> กลับ</button>
+        </div>
+    </div>
+</form>
+@section scripts{
+    <script>
+        var MaDetail = [];
+        $(document).ready(function () {
+            $('#sendDateHidden').val(moment('@Model.sendDateHidden').locale('th').format('ll'));
+            $('#receiveDateHidden').val(moment('@Model.receiveDateHidden').locale('th').format('ll'));
+
+            if ($('#maintenanceId').val() != 0) {
+                var detail = JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.details))');
+                detail.forEach(function (data, index) {
+                    MaDetail.push({
+                        maintenanceDetailId: index + 1,
+                        itemNo: data.itemNo,
+                        description: data.description,
+                        price: data.price
+                    });
+                    GenerateDetail();
+                })
+            }
+        })
+        function GenerateDetail() {
+            $('table#detailTable > tbody > tr').remove();
+            var _element = '';
+            var _totalPrice = 0;
+            MaDetail.sort(function (a, b) {
+                return a.itemNo - b.itemNo;
+            }).forEach(function (detail) {
+                _element += '<tr>';
+                _element += '<td class="text-center">' + detail.itemNo + '</td>';
+                _element += '<td>' + detail.description + '</td>';
+                _element += '<td class="text-right">' + detail.price + '</td>';
+                _element += '</tr>';
+                _totalPrice += parseFloat(detail.price);
+            });
+            $('table#detailTable > tbody').append(_element);
+            $('#totalPrice').text(_totalPrice);
+        }
+        function Edit(maintenanceId) {
+            window.location.href = '/MaintenanceCar/Create?maintenanceId=' + maintenanceId;
+        }
+    </script>
+}
+

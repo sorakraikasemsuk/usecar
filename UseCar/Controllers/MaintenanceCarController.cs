@@ -42,5 +42,9 @@ namespace UseCar.Controllers
         {
             return Json(await maintenanceCarRepository.Create(data));
         }
+        public IActionResult View(int maintenanceId)
+        {
+            return View(maintenanceCarRepository.View(maintenanceId));
+        }
     }
 }
