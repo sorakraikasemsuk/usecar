@@ -60,6 +60,7 @@ namespace Car_Somchai
             services.AddTransient<DropdownList>();
             services.AddTransient<SharedData>();
             services.AddTransient<FileManagement>();
+            services.AddTransient<ActionCar>();
             services.AddTransient<DepartmentManagementRepository>();
             services.AddTransient<UserManagementRepository>();
             services.AddTransient<PermissionManagementRepository>();
