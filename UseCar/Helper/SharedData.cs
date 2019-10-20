@@ -56,6 +56,7 @@ namespace UseCar.Helper
                 queryParameters.Add("@faceId", filter.faceId);
                 queryParameters.Add("@subfaceId", filter.subfaceId);
                 queryParameters.Add("@registerNumber", string.IsNullOrEmpty(filter.registerNumber) ? "" : filter.registerNumber);
+                queryParameters.Add("@carStatusId", filter.carStatusId);
                 var data = connection.Query<SearchCarViewModel>("st_getCarSearchList", queryParameters, commandType: CommandType.StoredProcedure);
                 return (from a in data
                         select new SearchCarViewModel
@@ -121,6 +122,7 @@ namespace UseCar.Helper
         public int faceId { get; set; }
         public int subfaceId { get; set; }
         public string registerNumber { get; set; }
+        public int carStatusId { get; set; }
     }
     public class SharedDataCheckupViewModel
     {
