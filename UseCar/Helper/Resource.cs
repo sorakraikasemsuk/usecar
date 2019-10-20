@@ -23,6 +23,8 @@ namespace UseCar.Helper
         public const int Checkup = 3;
         public const int WaitingMaintenance = 4;
         public const int Maintenance = 5;
+        public const int WaitingCleaning = 6;
+        public const int Cleaning = 7;
     }
     public static class ReceiveCarStatus
     {
