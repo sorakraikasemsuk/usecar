@@ -33,4 +33,39 @@ namespace UseCar.ViewModels
         public string description { get; set; }
         public decimal price { get; set; }
     }
+    public class MaintenanceCarDatatableViewModel
+    {
+        public int maintenanceId { get; set; }
+        public string code { get; set; }
+        public int carId { get; set; }
+        public string carCode { get; set; }
+        public int brandId { get; set; }
+        public string brandName { get; set; }
+        public int generationId { get; set; }
+        public string generationName { get; set; }
+        public int faceId { get; set; }
+        public string faceName { get; set; }
+        public int subfaceId { get; set; }
+        public string subfaceName { get; set; }
+        public DateTime sendDate { get; set; }
+        public DateTime receiveDate { get; set; }
+        public int maintenanceStatusId { get; set; }
+        public string maintenanceStatusName { get; set; }
+        public string fileName { get; set; }
+        public string registerNumber { get; set; }
+        public int sendById { get; set; }
+        public string sendByName { get; set; }
+    }
+    public class MaintenanceCarDatatableFilter
+    {
+        public int branchId { get; set; }
+        public int brandId { get; set; }
+        public int generationId { get; set; }
+        public int faceId { get; set; }
+        public int subfaceId { get; set; }
+        public int maintenanceStatusId { get; set; }
+        public string sendDate { get; set; }
+        public string receiveDate { get; set; }
+        public string registerNumber { get; set; }
+    }
 }

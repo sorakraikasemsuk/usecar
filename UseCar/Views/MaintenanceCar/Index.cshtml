@@ -1,4 +1,5 @@
-﻿
+﻿@using UseCar.Helper;
+@inject DropdownList  dropdownList;
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -22,9 +23,61 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group row">
-                    <label class="col-sm-4 col-form-label">รหัสใบซ่อม</label>
+                    <label class="col-sm-4 col-form-label">สาขา</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" />
+                        <select class="form-control" id="branchId" asp-items="@dropdownList.BranchAll()">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">ยี่ห้อรถ</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="brandId" asp-items="@dropdownList.BrandAll()" onchange="BrandSelect();">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">รุ่นรถ</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="generationId" onchange="GenerationSelect();">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">โฉมรถ</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="faceId" onchange="FaceSelect();">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">รุ่นย่อย</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="subFaceId">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">สถานะส่งซ่อม</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="maintenanceStatusId" asp-items="@dropdownList.MaintenanceStatus()">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -48,28 +101,30 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">วันที่เสร็จ</label>
                     <div class="col-sm-8">
-                        <div class="input-group date" id="completeDate">
-                            <input type="text" class="form-control" id="completeDateShow" value="" readonly>
+                        <div class="input-group date" id="receiveDate">
+                            <input type="text" class="form-control" id="receiveDateShow" value="" readonly>
                             <div class="input-group-append">
                                 <button class="btn btn-dark" type="button">
                                     <i class="fa fa-calendar-alt"></i>
                                 </button>
                             </div>
                         </div>
-                        <input type="hidden" id="completeDateHidden" value="" />
+                        <input type="hidden" id="receiveDateHidden" value="" />
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group row">
-                    <label class="col-sm-4 col-form-label">สถานะ</label>
+                    <label class="col-sm-4 col-form-label">เลขทะเบียน</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" />
+                        <input type="text" class="form-control" id="registerNumber" placeholder="" />
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <button class="btn btn-primary"><i class="fa fa-search"></i> ค้นหา</button>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-right">
+                <button class="btn btn-primary" onclick="ReloadDatatable();"><i class="fa fa-search"></i> ค้นหา</button>
             </div>
         </div>
     </div>
@@ -90,17 +145,19 @@
                 <table id="maintenanceCarTable" class="table table-bordered" style="width:100%">
                     <thead>
                         <tr>
-                            <th>รหัสใบซ่อม</th>
+                            <th>ลำดับ</th>
+                            <th>รูปรถ</th>
                             <th>ข้อมูลรถ</th>
                             <th>วันที่ส่งซ่อม</th>
                             <th>วันที่เสร็จ</th>
+                            <th>ส่งซ่อมโดย</th>
                             <th>สถานะ</th>
                             <th>
                                 จัดการ
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    @*<tbody>
                         <tr>
                             <td>MA201909-0001</td>
                             <td>[บษ 1234] toyota revo single cab</td>
@@ -145,7 +202,7 @@
                                 <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
                             </td>
                         </tr>
-                    </tbody>
+                    </tbody>*@
                 </table>
             </div>
         </div>
@@ -154,28 +211,207 @@
 
 @section scripts{
     <script>
+        var datatable;
         $(document).ready(function () {
-            $('#maintenanceCarTable').DataTable({
-                order: [],
-                searching: false,
-                ordering: true,
-                lengthChange: false,
-                pagingType: 'full_numbers',
-                bSort: false,
-            });
-
             $('#sendDateShow').val(moment().locale('th').format('ll'));
             $('#sendDateHidden').val(moment().format('YYYY-MM-DD'))
             $('#sendDate.date').datepicker().on('changeDate', function (e) {
                 $('#sendDateHidden').val(moment(e.date).format('YYYY-MM-DD'));
             });
 
-            $('#completeDateShow').val(moment().locale('th').format('ll'));
-            $('#completeDateHidden').val(moment().format('YYYY-MM-DD'))
-            $('#completeDate.date').datepicker().on('changeDate', function (e) {
-                $('#completeDateHidden').val(moment(e.date).format('YYYY-MM-DD'));
+            $('#receiveDateShow').val(moment().locale('th').format('ll'));
+            $('#receiveDateHidden').val(moment().format('YYYY-MM-DD'))
+            $('#receiveDate.date').datepicker().on('changeDate', function (e) {
+                $('#receiveDateHidden').val(moment(e.date).format('YYYY-MM-DD'));
             });
+            Datatable();
+            $('#registerNumber').keyup(function (e) {
+                if (e.keyCode === 13) {
+                    ReloadDatatable();
+                }
+            })
         });
+        function Datatable() {
+            datatable = $('#maintenanceCarTable').DataTable({
+                order: [],
+                searching: false,
+                ordering: true,
+                lengthChange: false,
+                pagingType: 'full_numbers',
+                ajax: {
+                    url: '/MaintenanceCar/GetDatatable',
+                    type: 'GET',
+                    data: function (d) {
+                        d.branchId = $('#branchId').val(),
+                            d.brandId = $('#brandId').val(),
+                            d.generationId = $('#generationId').val(),
+                            d.faceId = $('#faceId').val(),
+                            d.subFaceId = $('#subFaceId').val(),
+                            d.maintenanceStatusId = $('#maintenanceStatusId').val(),
+                            d.sendDate = $('#sendDateHidden').val(),
+                            d.receiveDate = $('#receiveDateHidden').val(),
+                            d.registerNumber = $('#registerNumber').val()
+                    },
+                    dataSrc: function (data) {
+                        return data;
+                    },
+                    statusCode: {
+                        401: function (xhr, error, thrown) {
+                            window.location.reload();
+                            return false;
+                        }
+                    }
+                },
+                columns: [
+                    {
+                        data: 'maintenanceId',
+                        className: 'text-center',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: 'fileName',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            return row.fileName == '' ? '' : '<img src="' + row.fileName + '" width="150" height="150" />';
+                        }
+                    },
+                    {
+                        data: 'brandName',
+                        render: function (data, type, row) {
+                            return '<span class="badge badge-primary"> ' + row.registerNumber + '</span>' + row.brandName + ' ' + row.generationName + ' ' + row.faceName + ' ' + row.subfaceName;
+                        }
+                    },
+                    {
+                        data: 'sendDate',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            return moment(row.sendDate).add('year', 543).locale('th').format('ll');
+                        }
+                    },
+                    {
+                        data: 'receiveDate',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            return moment(row.receiveDate).add('year', 543).locale('th').format('ll');
+                        }
+                    },
+                    {
+                        data: 'sendById',
+                        render: function (data, type, row) {
+                            return row.sendByName;
+                        }
+                    },
+                    {
+                        data: 'maintenanceStatusId',
+                        render: function (data, type, row) {
+                            var _display = '';
+                            if (row.maintenanceStatusId == 1) {
+                                _display = '<i class="fa fa-wrench status-pending"></i> ' + row.maintenanceStatusName;
+                            } else if (row.maintenanceStatusId == 2) {
+                                _display = '<i class="fa fa-check-circle status-success"></i> ' + row.maintenanceStatusName;
+                            } else if (row.maintenanceStatusId == 3) {
+                                _display = '<i class="fa fa-times status-reject"></i> ' + row.maintenanceStatusName;
+                            }
+                            return _display;
+                        }
+                    },
+                    {
+                        data: 'maintenanceId',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            if (row.maintenanceStatusId == 1) {
+                                return '<button type="button" class="btn btn-light btn-sm" onclick="View(' + row.maintenanceId + ')"><i class="fa fa-clipboard-list"></i> รายละเอียด</button>' +
+                                    ' <br /><button type = "button" class="btn btn-warning btn-sm mt-2" onclick = "Edit(' + row.maintenanceId + ')" > <i class="fa fa-edit"></i> แก้ไข</button > ' +
+                                    ' <br /><button type="button" class="btn btn-danger btn-sm mt-2" onclick="Cancel(' + row.maintenanceId + ')"><i class="fa fa-trash"></i> ลบ</button>';
+                            } else {
+                                return '<button type="button" class="btn btn-light btn-sm" onclick="View(' + row.maintenanceId + ')"><i class="fa fa-clipboard-list"></i> รายละเอียด</button>';
+                            }
+                        }
+                    }
+                ]
+            });
+        }
+        function ReloadDatatable() {
+            datatable.ajax.reload();
+        }
+        function BrandSelect() {
+            $('#generationId > option').not(':first').remove();
+            var _brandId = $('#brandId').val();
+            $.ajax({
+                url: '/SharedData/GetGenerationByBrandId',
+                type: 'GET',
+                data: {
+                    brandId: _brandId
+                },
+                success: function (data) {
+                    data.forEach(function (item) {
+                        $("#generationId").append(new Option(item.text, item.value));
+                    })
+                }
+            })
+        }
+        function GenerationSelect() {
+            $('#faceId > option').not(':first').remove();
+            var _generationId = $('#generationId').val();
+            $.ajax({
+                url: '/SharedData/GetFaceById',
+                type: 'GET',
+                data: {
+                    generationId: _generationId
+                },
+                success: function (data) {
+                    data.forEach(function (item) {
+                        $("#faceId").append(new Option(item.text, item.value));
+                    });
+                }
+            })
+        }
+        function FaceSelect() {
+            $('#subFaceId > option').not(':first').remove();
+            var _faceId = $('#faceId').val();
+            $.ajax({
+                url: '/SharedData/GetSubFaceByFaceId',
+                type: 'GET',
+                data: {
+                    faceId: _faceId
+                },
+                success: function (data) {
+                    data.forEach(function (item) {
+                        $("#subFaceId").append(new Option(item.text, item.value));
+                    });
+                }
+            })
+        }
+        function View(maintenanceId) {
+            window.location.href = '/MaintenanceCar/View?maintenanceId=' + maintenanceId;
+        }
+        function Edit(maintenanceId) {
+            window.location.href = '/MaintenanceCar/Create?maintenanceId=' + maintenanceId;
+        }
+        function Cancel(maintenanceId) {
+            $.showConfirm({
+                title: "แจ้งเตือน",
+                body: "คุณต้องการยกเลิกข้อมูล ใช่หรือไม่?",
+                textTrue: "ใช่",
+                textFalse: "ไม่ใช่",
+                onSubmit: function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '/MaintenanceCar/Cancel',
+                            type: 'POST',
+                            data: {
+                                maintenanceId: maintenanceId
+                            },
+                            success: function (data) {
+                                ResponseDialog(data.code, window.location.href);
+                            }
+                        })
+                    }
+                }
+            })
+        }
     </script>
 }
 

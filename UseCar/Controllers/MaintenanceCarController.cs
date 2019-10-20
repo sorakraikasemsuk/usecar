@@ -19,6 +19,10 @@ namespace UseCar.Controllers
         {
             return View();
         }
+        public JsonResult GetDatatable(MaintenanceCarDatatableFilter filter)
+        {
+            return Json(maintenanceCarRepository.GetDatatable(filter));
+        }
         public IActionResult Create(int maintenanceId)
         {
             MaintenanceCarViewModel data = new MaintenanceCarViewModel();
