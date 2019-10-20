@@ -344,6 +344,8 @@ namespace UseCar.Models
 
                 entity.Property(e => e.repairShopId).HasColumnType("int(11)");
 
+                entity.Property(e => e.sendById).HasColumnType("int(11)");
+
                 entity.Property(e => e.sendDate).HasColumnType("datetime");
 
                 entity.Property(e => e.updateDate).HasColumnType("datetime");

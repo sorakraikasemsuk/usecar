@@ -13,6 +13,7 @@ namespace UseCar.Models
         public DateTime receiveDate { get; set; }
         public string remark { get; set; }
         public int maintenanceStatusId { get; set; }
+        public int sendById { get; set; }
         public DateTime createDate { get; set; }
         public int createUser { get; set; }
         public DateTime? updateDate { get; set; }
