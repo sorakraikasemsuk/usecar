@@ -32,7 +32,7 @@ namespace UseCar.Controllers
         }
         public IActionResult Create()
         {
-            return View();
+            return View(new CheckupCarViewModel());
         }
         [HttpPost]
         [IgnoreAntiforgeryToken]

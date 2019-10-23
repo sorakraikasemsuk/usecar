@@ -5,7 +5,8 @@
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["id"] = 0;
+    ViewData["imageDisplay"] = Model.imageDisplay;
+    ViewData["Mode"] = "Add";
 }
 
 <h1><i class="fa fa-tasks"></i> เพิ่มข้อมูลตรวจสภาพ</h1>
@@ -113,7 +114,7 @@
     </div>
 
     <!-- Modal -->
-    <partial name="/Views/Shared/_CarSearch.cshtml" />
+    <partial name="/Views/Shared/_CarSearch.cshtml" model="@UseCar.Helper.CarStatus.WaitingCheckup" />
 </form>
 
 @section scripts{ 
