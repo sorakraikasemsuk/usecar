@@ -22,6 +22,10 @@ namespace UseCar.Helper
                     int carStatusId = 0, carProcessId = 0;
                     switch (menuId)
                     {
+                        case MenuId.CheckupCar:
+                            carStatusId = CarStatus.WaitingMaintenance;
+                            carProcessId = 0;
+                            break;
                         case MenuId.MaintenanceCar:
                             if (statusId == MaintenanceCarStatus.Send)
                             {
