@@ -20,12 +20,14 @@ namespace UseCar.Repositories
         readonly HttpContext httpContext;
         readonly FileManagement file;
         readonly IConfiguration configuration;
-        public CheckupCarRepository(UseCarDBContext context, IHttpContextAccessor httpContext, FileManagement file, IConfiguration configuration)
+        readonly ActionCar actionCar;
+        public CheckupCarRepository(UseCarDBContext context, IHttpContextAccessor httpContext, FileManagement file, IConfiguration configuration, ActionCar actionCar)
         {
             this.context = context;
             this.httpContext = httpContext.HttpContext;
             this.file = file;
             this.configuration = configuration;
+            this.actionCar = actionCar;
         }
         public List<CheckupCarDatatableViewModel> GetDatatable(CheckupCarDatatableFilter filter)
         {
@@ -197,7 +199,8 @@ namespace UseCar.Repositories
                     }
 
                     Transaction.Commit();
-
+                    //Update Car Status
+                    actionCar.UpdateCarStatus(data.carId, MenuId.CheckupCar, 0);
                     result.code = ResponseCode.ok;
                 }catch(Exception ex)
                 {
