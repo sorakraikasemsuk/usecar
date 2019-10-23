@@ -312,6 +312,8 @@ namespace UseCar.Models
                     .IsRequired()
                     .HasColumnType("varchar(250)");
 
+                entity.Property(e => e.refId).HasColumnType("int(11)");
+
                 entity.Property(e => e.updateDate).HasColumnType("datetime");
 
                 entity.Property(e => e.updateUser).HasColumnType("int(11)");

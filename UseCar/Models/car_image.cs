@@ -10,6 +10,7 @@ namespace UseCar.Models
         public string name { get; set; }
         public string contenType { get; set; }
         public int menuId { get; set; }
+        public int refId { get; set; }
         public DateTime createDate { get; set; }
         public int createUser { get; set; }
         public DateTime? updateDate { get; set; }
