@@ -278,54 +278,6 @@
         function ReloadDatatable() {
             datatable.ajax.reload();
         }
-        function BrandSelect() {
-            $('#generationId > option').not(':first').remove();
-            var _brandId = $('#brandId').val();
-            $.ajax({
-                url: '/ReceiveCar/GetGenerationByBrandId',
-                type: 'GET',
-                data: {
-                    brandId: _brandId
-                },
-                success: function (data) {
-                    data.forEach(function (item) {
-                        $("#generationId").append(new Option(item.text, item.value));
-                    })
-                }
-            })
-        }
-        function GenerationSelect() {
-            $('#faceId > option').not(':first').remove();
-            var _generationId = $('#generationId').val();
-            $.ajax({
-                url: '/ReceiveCar/GetFaceById',
-                type: 'GET',
-                data: {
-                    generationId: _generationId
-                },
-                success: function (data) {
-                    data.forEach(function (item) {
-                        $("#faceId").append(new Option(item.text, item.value));
-                    });
-                }
-            })
-        }
-        function FaceSelect() {
-            $('#subFaceId > option').not(':first').remove();
-            var _faceId = $('#faceId').val();
-            $.ajax({
-                url: '/ReceiveCar/GetSubFaceByFaceId',
-                type: 'GET',
-                data: {
-                    faceId: _faceId
-                },
-                success: function (data) {
-                    data.forEach(function (item) {
-                        $("#subFaceId").append(new Option(item.text, item.value));
-                    });
-                }
-            })
-        }
         function View(carId) {
             window.location.href = '/ReceiveCar/View?carId=' + carId;
         }
