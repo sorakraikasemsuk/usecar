@@ -23,6 +23,7 @@ namespace UseCar.ViewModels
         [Required(ErrorMessage = "กรุณากรอกข้อมูล")]
         public int sendById { get; set; }
         public int maintenanceStatusId { get; set; }
+        public string cancelMessage { get; set; }
         public List<MaintenanceDetail> details { get; set; }
         public List<IFormFile> files { get; set; }
         public List<int> deleteFile { get; set; }

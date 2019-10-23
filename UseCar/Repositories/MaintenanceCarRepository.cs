@@ -126,6 +126,7 @@ namespace UseCar.Repositories
                                     name = image.FileName,
                                     contenType = image.ContentType,
                                     menuId = MenuId.MaintenanceCar,
+                                    refId = maintenance.maintenanceId,
                                     createDate = DateTime.Now,
                                     createUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId)),
                                     isEnable = true
@@ -188,6 +189,7 @@ namespace UseCar.Repositories
                                            where a.isEnable
                                            && a.carId == data.carId
                                            && a.menuId == MenuId.MaintenanceCar
+                                           && a.refId == maintenance.maintenanceId
                                            && data.deleteFile.Contains(a.imageId)
                                            select a).ToList();
                             foreach (var item in delFile)
@@ -208,6 +210,7 @@ namespace UseCar.Repositories
                                     name = image.FileName,
                                     contenType = image.ContentType,
                                     menuId = MenuId.MaintenanceCar,
+                                    refId = maintenance.maintenanceId,
                                     createDate = DateTime.Now,
                                     createUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId)),
                                     isEnable = true
@@ -250,7 +253,6 @@ namespace UseCar.Repositories
                     join e in context.face on b.faceId equals e.faceId
                     join f in context.subface on b.subfaceId equals f.subfaceId
                     where a.isEnable
-                    && a.maintenanceStatusId == MaintenanceCarStatus.Send
                     && a.maintenanceId == maintenanceId
                     && b.isEnable
                     select new MaintenanceCarViewModel
@@ -269,6 +271,7 @@ namespace UseCar.Repositories
                         maintenanceStatusId = a.maintenanceStatusId,
                         sendById = a.sendById,
                         remark = a.remark,
+                        cancelMessage = a.cancelMessage,
                         details = (from detail in context.car_maintenance_detail
                                    where detail.isEnable
                                    && detail.maintenanceId == maintenanceId
@@ -283,6 +286,7 @@ namespace UseCar.Repositories
                                         where image.isEnable
                                         && image.carId == a.carId
                                         && image.menuId == MenuId.MaintenanceCar
+                                        && image.refId == maintenanceId
                                         select new ImageDisplay
                                         {
                                             imageId = image.imageId,
@@ -291,6 +295,64 @@ namespace UseCar.Repositories
                                         }
                                      ).ToList()
                     }).FirstOrDefault();
+        }
+        public ResponseResult Cancel(int maintenanceId,string message)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    var cancel = (from a in context.car_maintenance
+                                  where a.isEnable
+                                  && a.maintenanceId == maintenanceId
+                                  select a).FirstOrDefault();
+                    cancel.maintenanceStatusId = MaintenanceCarStatus.Cancel;
+                    cancel.cancelMessage = message;
+                    cancel.updateDate = DateTime.Now;
+                    cancel.updateUser= Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                    context.SaveChanges();
+                    Transaction.Commit();
+                    //Update Car Status
+                    actionCar.UpdateCarStatus(cancel.carId, MenuId.MaintenanceCar, MaintenanceCarStatus.Cancel);
+                    result.code = ResponseCode.ok;
+                }catch(Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
+        }
+        public ResponseResult Success(int maintenanceId)
+        {
+            using (var Transaction = context.Database.BeginTransaction())
+            {
+                ResponseResult result = new ResponseResult();
+                try
+                {
+                    var success = (from a in context.car_maintenance
+                                  where a.isEnable
+                                  && a.maintenanceId == maintenanceId
+                                  select a).FirstOrDefault();
+                    success.maintenanceStatusId = MaintenanceCarStatus.Success;
+                    success.updateDate = DateTime.Now;
+                    success.updateUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId));
+                    context.SaveChanges();
+                    Transaction.Commit();
+                    //Update Car Status
+                    actionCar.UpdateCarStatus(success.carId, MenuId.MaintenanceCar, MaintenanceCarStatus.Success);
+                    result.code = ResponseCode.ok;
+                }
+                catch (Exception ex)
+                {
+                    Transaction.Rollback();
+
+                    result.code = ResponseCode.error;
+                }
+                return result;
+            }
         }
     }
 }

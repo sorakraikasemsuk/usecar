@@ -46,5 +46,17 @@ namespace UseCar.Controllers
         {
             return View(maintenanceCarRepository.View(maintenanceId));
         }
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public JsonResult Cancel(int maintenanceId, string message)
+        {
+            return Json(maintenanceCarRepository.Cancel(maintenanceId, message));
+        }
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public JsonResult Success(int maintenanceId)
+        {
+            return Json(maintenanceCarRepository.Success(maintenanceId));
+        }
     }
 }

@@ -21,13 +21,24 @@
 </nav>
 
 @{
-    if (Model.maintenanceStatusId != 2)
+    if (Model.maintenanceStatusId == MaintenanceCarStatus.Send)
     {
         <div class="row">
             <div class="col-md-12">
                 <div class="alert alert-success" role="alert">
                     <button type="button" class="btn btn-warning" onclick="Edit(@Model.maintenanceId)"><i class="fa fa-edit"></i> แก้ไข</button>
+                    <button type="button" class="btn btn-success" onclick="Success(@Model.maintenanceId)"><i class="fa fa-check-circle"> ซ่อมเรียบร้อย</i></button>
                     <button type="button" class="btn btn-danger" onclick="Cancel(@Model.maintenanceId)"><i class="fa fa-times"></i> ยกเลิก</button>
+                </div>
+            </div>
+        </div>
+    }
+    else if (Model.maintenanceStatusId == MaintenanceCarStatus.Cancel)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger" role="alert">
+                    หมายเหตุ : @Model.cancelMessage
                 </div>
             </div>
         </div>
@@ -191,6 +202,73 @@
         }
         function Edit(maintenanceId) {
             window.location.href = '/MaintenanceCar/Create?maintenanceId=' + maintenanceId;
+        }
+        function Cancel(maintenanceId) {
+            $.showModal({
+                title: "คุณต้องการยกเลิกข้อมูล ใช่หรือไม่?",
+                body:'<form id="cancelForm">'
+                    +'<div class="row">'
+                    + '<div class="col-md-12">'
+                    + '<div class="form-group">'
+                    + '<label>หมายเหตุ</label>'
+                    + '<textarea class="form-control" rows="3" id="message"></textarea>'
+                    +' </div>'
+                    +'</div>'
+                    + '</div>'
+                    + '</form>',
+                footer: '<button class="btn btn-secondary btn-false" data-dismiss="modal">ไม่ใช่</button><button type="submit" class="btn btn-primary btn-true">ใช่</button>',
+                onCreate: function (modal) {
+                    // create event handler for form submit and handle values
+                    $(modal.element).on("click", "button[type='submit']", function (event) {
+                        event.preventDefault()
+                        $("#cancelForm").validate({
+                            errorClass: 'text-danger',
+                        }); //sets up the validator
+                        $("#message").rules("add", {
+                            required: true,
+                            messages: {
+                                required: 'กรุณากรอกข้อมูล'
+                            }
+                        });
+                        if ($('#cancelForm').valid()) {
+                            $.ajax({
+                                url: '/MaintenanceCar/Cancel',
+                                type: 'POST',
+                                data: {
+                                    maintenanceId: maintenanceId,
+                                    message: $('#message').val()
+                                },
+                                success: function (data) {
+                                    ResponseDialog(data.code, window.location.href);
+                                    modal.hide()
+                                }
+                            })
+                        }
+                    })
+                }
+            })
+        }
+        function Success(maintenanceId) {
+            $.showConfirm({
+                title: "แจ้งเตือน",
+                body: "คุณต้องการบันทึกข้อมูล ใช่หรือไม่?",
+                textTrue: "ใช่",
+                textFalse: "ไม่ใช่",
+                onSubmit: function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: '/MaintenanceCar/Success',
+                            type: 'POST',
+                            data: {
+                                maintenanceId: maintenanceId
+                            },
+                            success: function (data) {
+                                ResponseDialog(data.code, window.location.href);
+                            }
+                        })
+                    }
+                }
+            })
         }
     </script>
 }
