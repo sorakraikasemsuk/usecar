@@ -1,4 +1,5 @@
-﻿
+﻿@using UseCar.Helper
+@inject DropdownList dropdownList
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -24,23 +25,9 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">สาขา</label>
                     <div class="col-sm-8">
-                        <select class="form-control"></select>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group row">
-                    <label class="col-sm-4 col-form-label">สถานะ</label>
-                    <div class="col-sm-8">
-                        <select class="form-control"></select>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group row">
-                    <label class="col-sm-4 col-form-label">ประเภท</label>
-                    <div class="col-sm-8">
-                        <select class="form-control"></select>
+                        <select class="form-control" id="branchId" asp-items="@dropdownList.BranchAll()">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -48,7 +35,9 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">ยี่ห้อรถ</label>
                     <div class="col-sm-8">
-                        <select class="form-control"></select>
+                        <select class="form-control" id="brandId" asp-items="@dropdownList.BrandAll()" onchange="BrandSelect();">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -56,7 +45,9 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">รุ่นรถ</label>
                     <div class="col-sm-8">
-                        <select class="form-control"></select>
+                        <select class="form-control" id="generationId" onchange="GenerationSelect();">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -64,20 +55,42 @@
                 <div class="form-group row">
                     <label class="col-sm-4 col-form-label">โฉมรถ</label>
                     <div class="col-sm-8">
-                        <select class="form-control"></select>
+                        <select class="form-control" id="faceId" onchange="FaceSelect();">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group row">
-                    <label class="col-sm-4 col-form-label">ค้นหา</label>
+                    <label class="col-sm-4 col-form-label">รุ่นย่อย</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" placeholder="" />
+                        <select class="form-control" id="subFaceId">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">สถานะรถ</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="carStatusId" asp-items="@dropdownList.CarStatus()">
+                            <option value="0">ทั้งหมด</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">เลขทะเบียน</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="registerNumber" placeholder="" />
                     </div>
                 </div>
             </div>
             <div class="col-md-4 text-right">
-                <button class="btn btn-primary"><i class="fa fa-search"></i> ค้นหา</button>
+                <button class="btn btn-primary" onclick="ReloadDatatable();"><i class="fa fa-search"></i> ค้นหา</button>
             </div>
         </div>
     </div>
@@ -88,18 +101,14 @@
         <h5><i class="fa fa-clipboard-list"></i> ข้อมูลรถ</h5>
     </div>
     <div class="card-body">
-        <div class="row">
-            <div class="col-md-12">
-                <a href="/Car/Create" class="btn btn-success"><i class="fa fa-plus"></i> เพิ่มข้อมูลรถ</a>
-            </div>
-        </div>
         <div class="row mt-1">
             <div class="col-md-12">
                 <table id="carTable" class="table table-bordered table-hover" style="width:100%">
                     <thead>
                         <tr>
+                            <th>ลำดับ</th>
                             <th>รูปรถ</th>
-                            <th>ชื่อรถ</th>
+                            <th>ข้อมูลรถ</th>
                             <th>ราคาซื้อ</th>
                             <th>ราคาขาย</th>
                             <th>สถานะ</th>
@@ -108,7 +117,7 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    @*<tbody>
                         <tr>
                             <td><img src="https://www.checkraka.com/uploaded/logo/43/43f469bb05bcda9b93891a59816e9ac6.jpg" height="150" /></td>
                             <td class="align-middle">[บษ 1234] toyota revo single cab</td>
@@ -133,7 +142,7 @@
                                 <button type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> ลบ</button>
                             </td>
                         </tr>
-                    </tbody>
+                    </tbody>*@
                 </table>
             </div>
         </div>
@@ -142,15 +151,97 @@
 
 @section scripts{
     <script>
+        var datatable;
         $(document).ready(function () {
-            $('#carTable').DataTable({
+            Datatable();
+            $('#registerNumber').keyup(function (e) {
+                if (e.keyCode === 13) {
+                    ReloadDatatable();
+                }
+            })
+        });
+        function Datatable() {
+            datatable = $('#carTable').DataTable({
                 order: [],
                 searching: false,
                 ordering: true,
                 lengthChange: false,
                 pagingType: 'full_numbers',
-                bSort: false,
+                ajax: {
+                    url: '/Car/GetDatatable',
+                    type: 'GET',
+                    data: function (d) {
+                        d.branchId = $('#branchId').val(),
+                            d.brandId = $('#brandId').val(),
+                            d.generationId = $('#generationId').val(),
+                            d.faceId = $('#faceId').val(),
+                            d.subFaceId = $('#subFaceId').val(),
+                            d.carStatusId = $('#carStatusId').val(),
+                            d.registerNumber = $('#registerNumber').val()
+                    },
+                    dataSrc: function (data) {
+                        return data;
+                    },
+                    statusCode: {
+                        401: function (xhr, error, thrown) {
+                            window.location.reload();
+                            return false;
+                        }
+                    }
+                },
+                columns: [
+                    {
+                        data: 'carId',
+                        className: 'text-center',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: 'fileName',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            return row.fileName == '' ? '' : '<img src="' + row.fileName + '" width="150" height="150" />';
+                        }
+                    },
+                    {
+                        data: 'brandName',
+                        render: function (data, type, row) {
+                            return '<span class="badge badge-primary"> ' + row.registerNumber + '</span>' + row.brandName + ' ' + row.generationName + ' ' + row.faceName + ' ' + row.subfaceName;
+                        }
+                    },
+                    {
+                        data: 'buyPrice',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            return row.buyPrice;
+                        }
+                    },
+                    {
+                        data: 'sellPrice',
+                        render: function (data, type, row) {
+                            return row.sellPrice;
+                        }
+                    },
+                    {
+                        data: 'carStatusId',
+                        render: function (data, type, row) {
+                            return row.statusName;
+                        }
+                    },
+                    {
+                        data: 'carId',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            return '<button type="button" class="btn btn-light btn-sm" onclick="View(' + row.carCheckupId + ')"><i class="fa fa-clipboard-list"></i> รายละเอียด</button>';
+                        }
+                    }
+                ]
             });
-        });
+        }
+        function ReloadDatatable() {
+            datatable.ajax.reload();
+        }
+        
     </script>
 }
