@@ -21,12 +21,14 @@ namespace UseCar.Repositories
         readonly HttpContext httpContext;
         readonly FileManagement file;
         readonly IConfiguration configuration;
-        public ReceiveCarRepository(UseCarDBContext context, IHttpContextAccessor httpContext, FileManagement file, IConfiguration configuration)
+        readonly ActionCar actionCar;
+        public ReceiveCarRepository(UseCarDBContext context, IHttpContextAccessor httpContext, FileManagement file, IConfiguration configuration, ActionCar actionCar)
         {
             this.context = context;
             this.httpContext = httpContext.HttpContext;
             this.file = file;
             this.configuration = configuration;
+            this.actionCar = actionCar;
         }
         public List<ReceiveCarDatatableViewModel> GetDatatable(ReceiveCarDatatableFilter filter)
         {
@@ -98,8 +100,8 @@ namespace UseCar.Repositories
                             natureId = data.natureId,
                             year = data.year,
                             receiveDate = DateTime.ParseExact(data.receiveDateHidden,"yyyy-MM-dd",CultureInfo.InvariantCulture),
-                            carStatusId = data.receiveCarStatusId == ReceiveCarStatus.Success ? CarStatus.WaitingCheckup : CarStatus.Receive,
-                            carProcessId = data.receiveCarStatusId,
+                            //carStatusId = data.receiveCarStatusId == ReceiveCarStatus.Success ? CarStatus.WaitingCheckup : CarStatus.Receive,
+                            //carProcessId = data.receiveCarStatusId,
                             receiveCarStatusId = data.receiveCarStatusId,
                             vendorId = data.vendorId,
                             vendorName = data.vendorName,
@@ -210,8 +212,8 @@ namespace UseCar.Repositories
                         car.natureId = data.natureId;
                         car.year = data.year;
                         car.receiveDate = DateTime.ParseExact(data.receiveDateHidden, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-                        car.carStatusId = data.receiveCarStatusId == ReceiveCarStatus.Success ? CarStatus.WaitingCheckup : CarStatus.Receive;
-                        car.carProcessId = data.receiveCarStatusId;
+                        //car.carStatusId = data.receiveCarStatusId == ReceiveCarStatus.Success ? CarStatus.WaitingCheckup : CarStatus.Receive;
+                        //car.carProcessId = data.receiveCarStatusId;
                         car.receiveCarStatusId = data.receiveCarStatusId;
                         car.vendorId = data.vendorId;
                         car.vendorName = data.vendorName;
@@ -316,7 +318,8 @@ namespace UseCar.Repositories
                         }
                     }
                     Transaction.Commit();
-
+                    //Update Car Status
+                    actionCar.UpdateCarStatus(data.carId, MenuId.ReceiveCar, data.receiveCarStatusId);
                     result.code = ResponseCode.ok;
                 }catch(Exception ex)
                 {
