@@ -233,7 +233,7 @@
                         data: 'carId',
                         className: 'text-center',
                         render: function (data, type, row) {
-                            return '<button type="button" class="btn btn-light btn-sm" onclick="View(' + row.carCheckupId + ')"><i class="fa fa-clipboard-list"></i> รายละเอียด</button>';
+                            return '<button type="button" class="btn btn-light btn-sm" onclick="View(' + row.carId + ')"><i class="fa fa-clipboard-list"></i> รายละเอียด</button>';
                         }
                     }
                 ]
@@ -242,6 +242,8 @@
         function ReloadDatatable() {
             datatable.ajax.reload();
         }
-        
+        function View(carId) {
+            window.location.href = '/Car/View?carId=' + carId;
+        }
     </script>
 }

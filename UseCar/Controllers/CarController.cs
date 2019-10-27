@@ -27,5 +27,9 @@ namespace UseCar.Controllers
         {
             return View();
         }
+        public IActionResult View(int carId)
+        {
+            return View(carRepository.View(carId));
+        }
     }
 }

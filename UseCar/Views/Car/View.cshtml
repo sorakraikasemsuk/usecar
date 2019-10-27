@@ -1,0 +1,473 @@
+﻿@model UseCar.ViewModels.CarDetailViewModel
+@{
+    ViewData["Title"] = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1><i class="fa fa-car"></i> รายละเอียดข้อมูลรถ</h1>
+<hr />
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/Home">หน้าแรก</a></li>
+        <li class="breadcrumb-item"><a href="/Car">ข้อมูลรถ</a></li>
+        <li class="breadcrumb-item active" aria-current="page">รายละเอียดข้อมูลรถ</li>
+    </ol>
+</nav>
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="car-tab" data-toggle="tab" href="#car" role="tab" aria-controls="car" aria-selected="true">ข้อมูลทั่วไป</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="owner-tab" data-toggle="tab" href="#owner" role="tab" aria-controls="owner" aria-selected="false">ข้อมูลเจ้าของรถ</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="image-tab" data-toggle="tab" href="#image" role="tab" aria-controls="image" aria-selected="false">รูปรถ</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="history-tab" data-toggle="tab" href="#history" role="tab" aria-controls="history" aria-selected="false">ประวัติการเปลี่ยนสถานะ</a>
+    </li>
+</ul>
+<div class="tab-content bg-white" id="myTabContent">
+    <div class="tab-pane fade show active p-3" id="car" role="tabpanel" aria-labelledby="car-tab">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fa fa-clipboard-list"></i> ข้อมูลรถ</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label font-weight-bold">รหัสรถ :</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control-plaintext" asp-for="code">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label font-weight-bold">สาขา :</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control-plaintext" asp-for="branchName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label font-weight-bold">ประเภทรถ :</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control-plaintext" asp-for="categoryName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label font-weight-bold">ยี่ห้อ :</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control-plaintext" asp-for="brandName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label font-weight-bold">รุ่นรถ :</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control-plaintext" asp-for="generationName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label font-weight-bold">โฉมรถยนต์ :</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control-plaintext" asp-for="faceName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label font-weight-bold">รุ่นย่อย :</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control-plaintext" asp-for="subfaceName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label font-weight-bold">เลขตัวรถ :</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control-plaintext" asp-for="serialNumber">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label font-weight-bold">เลขเครื่องยนต์ :</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control-plaintext" asp-for="engineNumber">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label font-weight-bold">เลขไมล์ปัจจุบัน :</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control-plaintext" asp-for="mileNumber">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label font-weight-bold">ยี่ห้อเครื่องยนต์ :</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control-plaintext" asp-for="brandEngine" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label font-weight-bold">เลขถังแก๊ส :</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control-plaintext" asp-for="gasNumber">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label font-weight-bold">น้ำหนักรถ :</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control-plaintext" asp-for="weight">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label font-weight-bold">สี :</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control-plaintext" asp-for="colorName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label font-weight-bold">ระบบเกียร์ :</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control-plaintext" asp-for="gearName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label font-weight-bold">เบาะ :</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control-plaintext" asp-for="seatName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label font-weight-bold">ระบบขับเคลื่อน :</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control-plaintext" asp-for="driveSystemName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label font-weight-bold">ประเภทเครื่องยนต์ :</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control-plaintext" asp-for="engineTypeName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label font-weight-bold">ขนาดเครื่องยนต์ :</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control-plaintext" asp-for="capacityEngineName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label font-weight-bold">ประเภทรถตามจดทะเบียน(รย.1-รย.17) :</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control-plaintext" asp-for="typeName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label font-weight-bold">ลักษณะ :</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control-plaintext" asp-for="natureName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label font-weight-bold">รถปี ค.ศ. :</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control-plaintext" asp-for="year">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label font-weight-bold">ข้อมูลอื่นๆ :</label>
+                            <div class="col-sm-8">
+                                <input type="text" disabled class="form-control-plaintext" asp-for="remark">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-2">
+            <div class="card-header">
+                <h5><i class="fa fa-clipboard-list"></i> อุปกรณ์เสริมเพิ่มเติมอื่นๆ</h5>
+            </div>
+            <div class="card-body">
+                <div class="row" id="optionBody">
+                    @*<div class="col-md-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="add" checked>
+                            <label class="form-check-label" for="add">
+                                เพิ่มข้อมูล
+                            </label>
+                        </div>
+                    </div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade p-3" id="owner" role="tabpanel" aria-labelledby="owner-tab">
+        @foreach(var register in Model.registers)
+        {
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fa fa-clipboard-list"></i> [@register.registerNumber]@register.provinceName</h5>
+            </div>
+            <div class="card-body">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="font-weight-bold">รายการจดทะเบียน</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label for="" class="col-sm-4 col-form-label font-weight-bold">วันจดทะเบียน :</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" disabled class="form-control-plaintext" value="@register.registerDate">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label for="" class="col-sm-4 col-form-label font-weight-bold">เลขทะเบียน :</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" disabled class="form-control-plaintext" value="@register.registerNumber">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label for="" class="col-sm-4 col-form-label font-weight-bold">จังหวัด :</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" disabled class="form-control-plaintext" value="@register.provinceName">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @foreach (var owner in register.owners)
+                {
+                    <div class="card mt-2">
+                        <div class="card-header">
+                            <h6 class="font-weight-bold">เจ้าของรถ ลำดับที่ @owner.order</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                @*<div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-4 col-form-label font-weight-bold">ลำดับที่ :</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" disabled class="form-control-plaintext" id="" value="1111">
+                                        </div>
+                                    </div>
+                                </div>*@
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-4 col-form-label font-weight-bold">วันที่ครอบครองรถ :</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" disabled class="form-control-plaintext" value="@owner.ownerDate">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-4 col-form-label font-weight-bold">ชื่อผู้ครอบครอง :</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" disabled class="form-control-plaintext" value="@owner.ownerName">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-4 col-form-label font-weight-bold">ที่อยู่ :</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" disabled class="form-control-plaintext" value="@owner.ownerAddress">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        }
+    </div>
+    <div class="tab-pane fade p-3" id="image" role="tabpanel" aria-labelledby="image-tab">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label for="" class="col-sm-4 col-form-label">ประเภทรูป :</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" id="imageMenuSelect" onchange="ReloadDatatable();">
+                            <option value="0">ทั้งหมด</option>
+                            <option value="@UseCar.Helper.MenuId.ReceiveCar">รับรถ</option>
+                            <option value="@UseCar.Helper.MenuId.CheckupCar">ตรวจสภาพ</option>
+                            <option value="@UseCar.Helper.MenuId.MaintenanceCar">ส่งซ่อม</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table id="imageTable" class="table table-bordered table-hover" style="width:100%"">
+                    <thead>
+                        <tr>
+                            <th>ลำดับ</th>
+                            <th>รูป</th>
+                            <th>ชื่อรูป</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade p-3" id="history" role="tabpanel" aria-labelledby="history-tab">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ลำดับ</th>
+                            <th>รายละเอียด</th>
+                            <th>สถานะ</th>
+                            <th>วันที่สร้าง</th>
+                            <th>โดย</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>รับรถ</td>
+                            <td>รับรถ</td>
+                            <td>23 ต.ค. 62</td>
+                            <td>admin admin</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{ 
+    <script>
+        var datatable;
+        var data = JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.images))');
+        $(document).ready(function () {
+            GenerateOption();
+            Datatable();
+        });
+        function GenerateOption() {
+            var car_option = '@Model.options' == '' ? [] : JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.options))');
+            $.ajax({
+                url: '/SharedData/GetOption',
+                type: 'GET',
+                success: function (data) {
+                    var _element = '';
+                    data.forEach(function (item, index) {
+                        var _check = car_option.filter(function (option) {
+                            return option.optionId == item.optionId
+                        }).length > 0 ? '<i class="fa fa-check text-success"></i>' : '<i class="fa fa-times text-success"></i>';
+                        _element += '<div class="col-md-3">';
+                        _element += '<div class="form-check">';
+                        //_element += '<input class="form-check-input" type="checkbox" name="options[' + index + '].optionId" value="' + item.optionId + '" id="optionId_' + item.optionId + '" ' + _check +'>';
+                        _element += _check;
+                        _element += '<label class="form-check-label" for="optionId_' + item.optionId + '">&nbsp;' + item.optionName + '</label>';
+                        _element += '</div>';
+                        _element += '</div>';
+                    });
+                    $('#optionBody').append(_element);
+                    $('input[type=checkbox]').iCheck({
+                        checkboxClass: 'icheckbox_square-green',
+                    })
+                }
+            })
+        }
+        function Datatable() {
+            datatable = $('#imageTable').DataTable({
+                order: [],
+                searching: false,
+                ordering: true,
+                lengthChange: false,
+                pagingType: 'full_numbers',
+                data: data,
+                columns: [
+                    {
+                        data: 'imageId',
+                        className: 'text-center',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: 'image',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            return row.image == '' ? '' : '<img src="' + row.image + '" width="150" height="150" />';
+                        }
+                    },
+                    {
+                        data: 'name',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            return row.name;
+                        }
+                    }
+                ]
+            });
+        }
+        function ReloadDatatable() {
+            var _imageMenuId = $('#imageMenuSelect').val();
+            if (_imageMenuId == 0) {
+                data = JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.images))');
+            } else {
+                data = JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.images))').filter(function (image) {
+                    return image.menuId == _imageMenuId;
+                });
+            }
+            datatable.clear();
+            datatable.rows.add(data);
+            datatable.draw(); 
+
+        }
+    </script>
+}
