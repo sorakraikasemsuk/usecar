@@ -77,6 +77,7 @@ namespace UseCar.ViewModels
         public List<CarOption> options { get; set; }
         public List<CarRegister> registers { get; set; }
         public List<CarImage> images { get; set; }
+        public List<CarHistory> histories { get; set; }
     }
     public class CarOption
     {
@@ -106,5 +107,17 @@ namespace UseCar.ViewModels
         public string name { get; set; }
         public int menuId { get; set; }
         public string image { get; set; }
+    }
+    public class CarHistory
+    {
+        public int historyId { get; set; }
+        public int menuId { get; set; }
+        public string menuName { get; set; }
+        public string icon { get; set; }
+        public int statusId { get; set; }
+        public string statusName { get; set; }
+        public DateTime createDate { get; set; }
+        public int createUserId { get; set; }
+        public string createUserName { get; set; }
     }
 }

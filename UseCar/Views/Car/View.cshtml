@@ -349,7 +349,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <table id="imageTable" class="table table-bordered table-hover" style="width:100%"">
+                <table id="imageTable" class="table table-bordered table-hover" style="width:100%">
                     <thead>
                         <tr>
                             <th>ลำดับ</th>
@@ -364,17 +364,17 @@
     <div class="tab-pane fade p-3" id="history" role="tabpanel" aria-labelledby="history-tab">
         <div class="row">
             <div class="col-md-12">
-                <table class="table table-bordered">
+                <table id="historyTable" class="table table-bordered table-hover" style="width:100%">
                     <thead>
                         <tr>
                             <th>ลำดับ</th>
-                            <th>รายละเอียด</th>
+                            <th>ดำเนินการ</th>
                             <th>สถานะ</th>
                             <th>วันที่สร้าง</th>
                             <th>โดย</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    @*<tbody>
                         <tr>
                             <td>1</td>
                             <td>รับรถ</td>
@@ -382,7 +382,7 @@
                             <td>23 ต.ค. 62</td>
                             <td>admin admin</td>
                         </tr>
-                    </tbody>
+                    </tbody>*@
                 </table>
             </div>
         </div>
@@ -391,10 +391,12 @@
 @section scripts{ 
     <script>
         var datatable;
+        var datatableHistory;
         var data = JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.images))');
         $(document).ready(function () {
             GenerateOption();
             Datatable();
+            DatatableHistory();
         });
         function GenerateOption() {
             var car_option = '@Model.options' == '' ? [] : JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.options))');
@@ -468,6 +470,53 @@
             datatable.rows.add(data);
             datatable.draw(); 
 
+        }
+        function DatatableHistory() {
+            datatable = $('#historyTable').DataTable({
+                order: [],
+                searching: false,
+                ordering: true,
+                lengthChange: false,
+                pagingType: 'full_numbers',
+                data: JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.histories))'),
+                columns: [
+                    {
+                        data: 'historyId',
+                        className: 'text-center',
+                        render: function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: 'menuName',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            return row.menuName;
+                        }
+                    },
+                    {
+                        data: 'statusName',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            return row.statusName;
+                        }
+                    },
+                    {
+                        data: 'createDate',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            return moment(row.createDate).add('year', 543).locale('th').format('lll');
+                        }
+                    },
+                    {
+                        data: 'createUserName',
+                        className: 'text-center',
+                        render: function (data, type, row) {
+                            return row.createUserName;
+                        }
+                    }
+                ]
+            });
         }
     </script>
 }

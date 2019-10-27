@@ -59,6 +59,26 @@ namespace UseCar.Repositories
         }
         public CarDetailViewModel View(int carId)
         {
+            var history = (from his in context.car_history
+                           join menu in context.m_menu on his.menuId equals menu.menuId
+                           join user in context.user on his.createUser equals user.userId
+                           where his.isEnable
+                           && his.carId == carId
+                           select new CarHistory
+                           {
+                               historyId = his.historyId,
+                               menuId = his.menuId,
+                               menuName = menu.menuName,
+                               icon = menu.icon,
+                               statusId = his.statusId,
+                               createDate = his.createDate,
+                               createUserId = his.createUser,
+                               createUserName = $"{user.firstName} {user.lastName}"
+                           }).ToList();
+            foreach(var item in history)
+            {
+                item.statusName = StatusInHistory(item.menuId, item.statusId);
+            }
             return (from a in context.car
                     join b in context.branch on a.branchId equals b.branchId
                     join c in context.category on a.categoryId equals c.categoryId
@@ -157,8 +177,24 @@ namespace UseCar.Repositories
                                       name = image.name,
                                       menuId = image.menuId,
                                       image = file.GetImageByMenu(image.menuId, a.code, image.name, image.refId)
-                                  }).ToList()
+                                  }).ToList(),
+                        histories = history
                     }).FirstOrDefault();
+        }
+        public string StatusInHistory(int menuId,int statusId)
+        {
+            string statusName = "";
+            if (statusId == 0)
+            {
+                statusName = "-";
+            }else if (menuId == MenuId.ReceiveCar)
+            {
+                statusName = context.m_receivecar_status.FirstOrDefault(a => a.receiveCarStatusId == statusId).statusName;
+            }else if (menuId == MenuId.MaintenanceCar)
+            {
+                statusName = context.m_maintenance_status.FirstOrDefault(a => a.maintenanceStatusId == statusId).statusName;
+            }
+            return statusName;
         }
     }
 }
