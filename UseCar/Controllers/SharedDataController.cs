@@ -36,5 +36,9 @@ namespace UseCar.Controllers
         {
             return Json(dropdownList.NatureByType(typeId));
         }
+        public JsonResult GetOption()
+        {
+            return Json(shared.OptionData());
+        }
     }
 }
