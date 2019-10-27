@@ -2,7 +2,206 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row">
+    <div class="col-md-6">
+        <h1> Dashboard</h1>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group row">
+            <label class="col-sm-6 col-form-label text-right font-weight-bold">ข้อมูลถึงวันที่ : </label>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <div class="input-group date" id="dataDate">
+                        <input type="text" class="form-control" id="dataDateShow" value="" readonly>
+                        <div class="input-group-append">
+                            <button class="btn btn-dark" type="button">
+                                <i class="fa fa-calendar-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <input type="hidden" id="dataDateHidden" value="" />
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<hr class="mt-0" />
+
+<div class="row">
+    <div class="col-md-4 mb-1">
+        <div class="card rounded border-left-color border-top-0 border-right-0 border-bottom-0 border-width-5">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">จำนวนรถทั้งหมด</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">250 คัน</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-car fa-2x text-secondary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-1">
+        <div class="card rounded border-left-color border-top-0 border-right-0 border-bottom-0 border-width-5">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">รอตรวจสภาพ</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">5 คัน</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-tasks fa-2x text-secondary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-1">
+        <div class="card rounded border-left-color border-top-0 border-right-0 border-bottom-0 border-width-5">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">รอส่งซ่อม</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">10 คัน</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-wrench fa-2x text-secondary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-1">
+        <div class="card rounded border-left-color border-top-0 border-right-0 border-bottom-0 border-width-5">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">รอล้างทำความสะอาด</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">8 คัน</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-spray-can fa-2x text-secondary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-1">
+        <div class="card rounded border-left-color border-top-0 border-right-0 border-bottom-0 border-width-5">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">รอถ่ายรูป</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">2 คัน</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-camera fa-2x text-secondary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-1">
+        <div class="card rounded border-left-color border-top-0 border-right-0 border-bottom-0 border-width-5">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">พร้อมขาย</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">150 คัน</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-file-invoice fa-2x text-secondary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fa fa-chart-bar"></i> 10 อันดับประเภทรถที่ขายดีที่สุด</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="myChart1"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fa fa-chart-bar"></i> สัดส่วนประเภทรถทั้งหมด</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="myChart2"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{ 
+    <script>
+        $(document).ready(function(){
+            $('#dataDateShow').val(moment().locale('th').format('ll'));
+            $('#dataDateHidden').val(moment().format('YYYY-MM-DD'))
+            $('#dataDate.date').datepicker().on('changeDate', function (e) {
+                $('#dataDateHidden').val(moment(e.date).format('YYYY-MM-DD'));
+            });
+
+            var ctx1 = document.getElementById('myChart1').getContext('2d');
+            var myBarChart = new Chart(ctx1, {
+                // The type of chart we want to create
+                type: 'bar',
+
+                // The data for our dataset
+                data: {
+                    labels: ['รถกระบะ cab เตี้ย', 'รถกระบะตอนเดียว', 'รถครอบครัว 7 ที่นั่ง', 'รถเก๋ง 4 ประตู', 'รถเก๋ง 5 ประตู', 'รถกระบะ 4 ประตูสูง', 'รถกระบะ 4 ประตูเตี้ย','รถกระบะ cab สูง'],
+                    datasets: [{
+                        label: '10 อันดับประเภทรถที่ขายดีที่สุด',
+                        //backgroundColor: 'rgb(255, 99, 132)',
+                        //borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: '#4e73df',
+                        data: [212, 183, 120, 111, 91, 61,50, 17],
+                    }]
+                },
+
+                // Configuration options go here
+                options: {}
+            });
+
+            var ctx2 = document.getElementById('myChart2').getContext('2d');
+            var myBarChart = new Chart(ctx2, {
+                // The type of chart we want to create
+                type: 'doughnut',
+
+                // The data for our dataset
+                data: {
+                    labels: ['รถกระบะ cab เตี้ย', 'รถกระบะตอนเดียว', 'รถครอบครัว 7 ที่นั่ง', 'รถเก๋ง 4 ประตู', 'รถเก๋ง 5 ประตู', 'รถกระบะ 4 ประตูสูง', 'รถกระบะ 4 ประตูเตี้ย', 'รถกระบะ cab สูง'],
+                    datasets: [{
+                        label: '10 อันดับประเภทรถที่ขายดีที่สุด',
+                        //backgroundColor: 'rgb(255, 99, 132)',
+                        //borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: [
+                            '#ff6384',
+                            '#FF5733',
+                            '#AFFF33',
+                            '#33FFFC',
+                            '#FF33E0',
+                            '#F0FF33',
+                            '#FF3346',
+                            '#FF9633'
+                        ],
+                        data: [212, 183, 120, 111, 91, 61, 50, 17],
+                    }]
+                },
+
+                // Configuration options go here
+                options: {}
+            });
+        });
+    </script>
+}
