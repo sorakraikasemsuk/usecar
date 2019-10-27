@@ -22,6 +22,7 @@ namespace UseCar.Models
         public virtual DbSet<car> car { get; set; }
         public virtual DbSet<car_checkup> car_checkup { get; set; }
         public virtual DbSet<car_checkup_detail> car_checkup_detail { get; set; }
+        public virtual DbSet<car_history> car_history { get; set; }
         public virtual DbSet<car_image> car_image { get; set; }
         public virtual DbSet<car_maintenance> car_maintenance { get; set; }
         public virtual DbSet<car_maintenance_detail> car_maintenance_detail { get; set; }
@@ -285,6 +286,26 @@ namespace UseCar.Models
                 entity.Property(e => e.carCheckupId).HasColumnType("int(11)");
 
                 entity.Property(e => e.checkupId).HasColumnType("int(11)");
+            });
+
+            modelBuilder.Entity<car_history>(entity =>
+            {
+                entity.HasKey(e => e.historyId)
+                    .HasName("PRIMARY");
+
+                entity.Property(e => e.historyId).HasColumnType("int(11)");
+
+                entity.Property(e => e.carId).HasColumnType("int(11)");
+
+                entity.Property(e => e.createDate).HasColumnType("datetime");
+
+                entity.Property(e => e.createUser).HasColumnType("int(11)");
+
+                entity.Property(e => e.isEnable).HasColumnType("bit(1)");
+
+                entity.Property(e => e.menuId).HasColumnType("int(11)");
+
+                entity.Property(e => e.statusId).HasColumnType("int(11)");
             });
 
             modelBuilder.Entity<car_image>(entity =>
