@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,9 +10,11 @@ namespace UseCar.Helper
     public class ActionCar
     {
         readonly UseCarDBContext context;
-        public ActionCar(UseCarDBContext context)
+        readonly HttpContext httpContext;
+        public ActionCar(UseCarDBContext context,IHttpContextAccessor httpContext)
         {
             this.context = context;
+            this.httpContext = httpContext.HttpContext;
         } 
         public void UpdateCarStatus(int carId,int menuId,int statusId)
         {
@@ -59,6 +62,33 @@ namespace UseCar.Helper
                                select a).FirstOrDefault();
                     car.carStatusId = carStatusId;
                     car.carProcessId = carProcessId;
+                    context.SaveChanges();
+                    Transaction.Commit();
+                    //History
+                    CarHistory(carId, menuId, statusId);
+                }
+                catch(Exception ex)
+                {
+                    Transaction.Rollback();
+                }
+            }
+        }
+        public void CarHistory(int carId,int menuId,int statusId)
+        {
+            using(var Transaction = context.Database.BeginTransaction())
+            {
+                try
+                {
+                    car_history history = new car_history
+                    {
+                        carId = carId,
+                        menuId = menuId,
+                        statusId = statusId,
+                        createDate = DateTime.Now,
+                        createUser = Convert.ToInt32(httpContext.Session.GetString(Session.userId)),
+                        isEnable = true
+                    };
+                    context.car_history.Add(history);
                     context.SaveChanges();
                     Transaction.Commit();
                 }catch(Exception ex)
