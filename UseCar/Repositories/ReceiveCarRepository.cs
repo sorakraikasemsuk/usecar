@@ -73,6 +73,7 @@ namespace UseCar.Repositories
                 ResponseResult result = new ResponseResult();
                 try
                 {
+                    int carId = 0;
                     if (data.carId == 0)
                     {
                         car car = new car
@@ -183,6 +184,7 @@ namespace UseCar.Repositories
                                 await file.Upload(image, car.code, MenuName.ReceiveCar);
                             }
                         }
+                        carId = car.carId;
                     }
                     else
                     {
@@ -316,10 +318,11 @@ namespace UseCar.Repositories
                                 await file.Upload(image, car.code, MenuName.ReceiveCar);
                             }
                         }
+                        carId = car.carId;
                     }
                     Transaction.Commit();
                     //Update Car Status
-                    actionCar.UpdateCarStatus(data.carId, MenuId.ReceiveCar, data.receiveCarStatusId);
+                    actionCar.UpdateCarStatus(carId, MenuId.ReceiveCar, data.receiveCarStatusId);
                     result.code = ResponseCode.ok;
                 }catch(Exception ex)
                 {
